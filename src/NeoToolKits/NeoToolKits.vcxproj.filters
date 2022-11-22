@@ -20,6 +20,12 @@
     <Filter Include="Dialog">
       <UniqueIdentifier>{525d480c-6014-466d-a353-13c361eecf27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form Files\Page">
+      <UniqueIdentifier>{b7ea1934-d611-47fe-a3d6-aea72ddd99fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\Page">
+      <UniqueIdentifier>{1eceddb0-84c0-4c1e-9454-246841fbb0fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
@@ -42,10 +48,30 @@
     <ClCompile Include="Dialog\MainWindowDialog.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
+    <ClCompile Include="Dialog\DbScriptEditorPageForm.cpp">
+      <Filter>Dialog\Page</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp">
+      <Filter>Dialog\Page</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Dialog\MainWindowDialog.h">
       <Filter>Dialog</Filter>
     </QtMoc>
+    <QtMoc Include="Dialog\DbScriptEditorPageForm.h">
+      <Filter>Dialog\Page</Filter>
+    </QtMoc>
+    <QtMoc Include="Dialog\ExcelDataUploadPageForm.h">
+      <Filter>Dialog\Page</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="DbScriptEditorPageForm.ui">
+      <Filter>Form Files\Page</Filter>
+    </QtUic>
+    <QtUic Include="ExcelDataUploadPageForm.ui">
+      <Filter>Form Files\Page</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

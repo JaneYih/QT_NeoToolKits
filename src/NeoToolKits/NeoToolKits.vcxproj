@@ -88,14 +88,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc" />
+    <QtUic Include="ExcelDataUploadPageForm.ui" />
     <QtUic Include="MainWindowDialog.ui" />
+    <ClCompile Include="Dialog\DbScriptEditorPageForm.cpp" />
+    <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp" />
     <ClCompile Include="Dialog\MainWindowDialog.cpp" />
     <ClCompile Include="main.cpp" />
     <None Include="NeoToolKits.ico" />
+    <QtUic Include="DbScriptEditorPageForm.ui" />
     <ResourceCompile Include="NeoToolKits.rc" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Dialog\MainWindowDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dialog\DbScriptEditorPageForm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dialog\ExcelDataUploadPageForm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
