@@ -6,69 +6,23 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
-    <height>589</height>
+    <width>917</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindowDialog</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
-    <item>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="minimumSize">
-       <size>
-        <width>130</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>128</width>
-         <height>512</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QPushButton" name="btnDbScriptEditor">
-          <property name="text">
-           <string>测试脚本编辑器</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btnExcelDataUpload">
-          <property name="text">
-           <string>Excel数据导入工具</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>433</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1">
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
+      <property name="statusTip">
+       <string/>
+      </property>
+      <property name="whatsThis">
+       <string/>
+      </property>
       <property name="currentIndex">
        <number>1</number>
       </property>
@@ -83,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>813</width>
+     <width>917</width>
      <height>23</height>
     </rect>
    </property>
@@ -97,18 +51,74 @@
      <string>设置</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="actionDbScriptEditor"/>
+    <addaction name="actionExcelDataUpload"/>
+   </widget>
    <addaction name="menuSetting"/>
+   <addaction name="menuTools"/>
    <addaction name="menuAbout"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="statusTip">
+    <string/>
+   </property>
+   <property name="whatsThis">
+    <string/>
+   </property>
+  </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
+   <property name="toolTipDuration">
+    <number>-1</number>
+   </property>
+   <property name="floatable">
+    <bool>true</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionDbScriptEditor"/>
+   <addaction name="actionExcelDataUpload"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionDbScriptEditor">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindowDialog.qrc">
+     <normaloff>:/MainWindowDialog/rc/2.png</normaloff>:/MainWindowDialog/rc/2.png</iconset>
+   </property>
+   <property name="text">
+    <string>测试脚本编辑器</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionExcelDataUpload">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindowDialog.qrc">
+     <normaloff>:/MainWindowDialog/rc/1.ico</normaloff>:/MainWindowDialog/rc/1.ico</iconset>
+   </property>
+   <property name="text">
+    <string>Excel数据导入工具</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>

@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/MainWindowDialog">
-        <file>rc/NeoToolKits.ico</file>
-    </qresource>
+  <qresource prefix="/MainWindowDialog">
+    <file>rc/1.ico</file>
+    <file>rc/2.png</file>
+    <file>rc/NeoToolKits.ico</file>
+  </qresource>
 </RCC>

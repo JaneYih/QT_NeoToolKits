@@ -8,9 +8,9 @@ MainWindowDialog::MainWindowDialog(QWidget *parent)
     m_pExcelDataUploadPage(new ExcelDataUploadPageForm)
 {
     initView();
-	connect(ui->btnDbScriptEditor, &QPushButton::clicked, this, &MainWindowDialog::PageChangeBtnClickedSlot);
-	connect(ui->btnExcelDataUpload, &QPushButton::clicked, this, &MainWindowDialog::PageChangeBtnClickedSlot);
-    emit ui->btnExcelDataUpload->clicked(true);
+	connect(ui->actionDbScriptEditor, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
+	connect(ui->actionExcelDataUpload, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
+	ui->actionExcelDataUpload->setChecked(true);
 }
 
 MainWindowDialog::~MainWindowDialog()
@@ -21,20 +21,42 @@ MainWindowDialog::~MainWindowDialog()
 void MainWindowDialog::initView(void)
 {
     ui->setupUi(this);
+	m_mapToolsPageDictionary.clear();
     ui->stackedWidget->addWidget(m_pDbScriptEditPage);
+	m_mapToolsPageDictionary[ui->actionDbScriptEditor] = m_pDbScriptEditPage;
     ui->stackedWidget->addWidget(m_pExcelDataUploadPage);
+	m_mapToolsPageDictionary[ui->actionExcelDataUpload] = m_pExcelDataUploadPage;
 }
 
-void MainWindowDialog::PageChangeBtnClickedSlot(bool checked)
+void MainWindowDialog::PageChangeActionToggledSlot(bool toggled)
 {
-    QPushButton* btn = static_cast<QPushButton*>(sender());
-
-	if (btn == ui->btnDbScriptEditor)
+	QAction* curAct = static_cast<QAction*>(sender());
+	if (toggled)
 	{
-		ui->stackedWidget->setCurrentWidget(m_pDbScriptEditPage);
+		QList<QAction*> actions = ui->menuTools->actions();
+		foreach(QAction * act, actions)
+		{
+			if (curAct == act)
+			{
+				QWidget* w = m_mapToolsPageDictionary[curAct];
+				if (w != nullptr)
+				{
+					ui->stackedWidget->setCurrentWidget(w);
+					ui->stackedWidget->setStatusTip(curAct->text());
+				}
+				act->setChecked(true);
+			}
+			else
+			{
+				act->setChecked(false);
+			}
+		}
 	}
-	else if (btn == ui->btnExcelDataUpload)
+	else
 	{
-		ui->stackedWidget->setCurrentWidget(m_pExcelDataUploadPage);
+		if (m_mapToolsPageDictionary[curAct] == ui->stackedWidget->currentWidget())
+		{
+			curAct->setChecked(true);
+		}
 	}
 }
