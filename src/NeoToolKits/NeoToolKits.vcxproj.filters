@@ -26,6 +26,12 @@
     <Filter Include="Dialog\Page">
       <UniqueIdentifier>{1eceddb0-84c0-4c1e-9454-246841fbb0fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form Files\PopDialog">
+      <UniqueIdentifier>{05028173-1ff6-495d-955c-dce8e44d8268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog\PopDialog">
+      <UniqueIdentifier>{15c1111c-f72c-482e-9644-1414415c8583}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
@@ -54,6 +60,12 @@
     <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp">
       <Filter>Dialog\Page</Filter>
     </ClCompile>
+    <ClCompile Include="Dialog\ExcelDataUploadConfigPopDialog.cpp">
+      <Filter>Dialog\PopDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialog\MysqlInfoPopDialog.cpp">
+      <Filter>Dialog\PopDialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Dialog\MainWindowDialog.h">
@@ -65,6 +77,12 @@
     <QtMoc Include="Dialog\ExcelDataUploadPageForm.h">
       <Filter>Dialog\Page</Filter>
     </QtMoc>
+    <QtMoc Include="Dialog\ExcelDataUploadConfigPopDialog.h">
+      <Filter>Dialog\PopDialog</Filter>
+    </QtMoc>
+    <QtMoc Include="Dialog\MysqlInfoPopDialog.h">
+      <Filter>Dialog\PopDialog</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DbScriptEditorPageForm.ui">
@@ -72,6 +90,12 @@
     </QtUic>
     <QtUic Include="ExcelDataUploadPageForm.ui">
       <Filter>Form Files\Page</Filter>
+    </QtUic>
+    <QtUic Include="MysqlInfoPopDialog.ui">
+      <Filter>Form Files\PopDialog</Filter>
+    </QtUic>
+    <QtUic Include="ExcelDataUploadConfigPopDialog.ui">
+      <Filter>Form Files\PopDialog</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

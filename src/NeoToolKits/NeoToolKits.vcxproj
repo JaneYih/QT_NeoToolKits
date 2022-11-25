@@ -88,14 +88,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc" />
+    <QtUic Include="ExcelDataUploadConfigPopDialog.ui" />
     <QtUic Include="ExcelDataUploadPageForm.ui" />
     <QtUic Include="MainWindowDialog.ui" />
     <ClCompile Include="Dialog\DbScriptEditorPageForm.cpp" />
+    <ClCompile Include="Dialog\ExcelDataUploadConfigPopDialog.cpp" />
     <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp" />
     <ClCompile Include="Dialog\MainWindowDialog.cpp" />
+    <ClCompile Include="Dialog\MysqlInfoPopDialog.cpp" />
     <ClCompile Include="main.cpp" />
     <None Include="NeoToolKits.ico" />
     <QtUic Include="DbScriptEditorPageForm.ui" />
+    <QtUic Include="MysqlInfoPopDialog.ui" />
     <ResourceCompile Include="NeoToolKits.rc" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Dialog\ExcelDataUploadPageForm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dialog\ExcelDataUploadConfigPopDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Dialog\MysqlInfoPopDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

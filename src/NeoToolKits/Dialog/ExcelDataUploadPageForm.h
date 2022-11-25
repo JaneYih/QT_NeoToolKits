@@ -11,6 +11,9 @@ public:
 	ExcelDataUploadPageForm(QWidget *parent = nullptr);
 	~ExcelDataUploadPageForm();
 
+public slots:
+	void PushbuttonClickedSlot(bool checked = false);
+
 private:
 	Ui::ExcelDataUploadPageForm* ui;
 	void initView(void);
