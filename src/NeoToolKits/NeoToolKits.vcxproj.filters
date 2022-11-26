@@ -107,6 +107,18 @@
     <ClCompile Include="UI\Class\MainWindowDialog.cpp">
       <Filter>Main\UI\Class</Filter>
     </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp">
+      <Filter>Common\Unit\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp">
+      <Filter>Common\Unit\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp">
+      <Filter>Common\Unit\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp">
+      <Filter>Common\Unit\Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -123,6 +135,9 @@
     </QtMoc>
     <QtMoc Include="UI\Class\MainWindowDialog.h">
       <Filter>Main\UI\Class</Filter>
+    </QtMoc>
+    <QtMoc Include="Common\Unit\DataBase\SQLiteDatabase.h">
+      <Filter>Common\Unit\Database</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -141,5 +156,22 @@
     <QtUic Include="UI\Form\DbScriptEditorPageForm.ui">
       <Filter>Tools\DbScriptEditor\UI\Form</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h">
+      <Filter>Common\Unit\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h">
+      <Filter>Common\Unit\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\ITableManage.h">
+      <Filter>Common\Unit\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h">
+      <Filter>Common\Unit\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\usersDataTable.h">
+      <Filter>Common\Unit\Database</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

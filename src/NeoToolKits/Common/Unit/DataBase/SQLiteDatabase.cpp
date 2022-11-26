@@ -1,0 +1,165 @@
+#include "SQLiteDatabase.h"
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QDebug>
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlResult>
+
+
+CSQLiteDatabase::CSQLiteDatabase(const string& db, QObject *parent)
+	: QObject(parent)
+{
+	m_strDataBaseName = QString::fromStdString(db);
+	InitErr = Init();
+}
+
+bool CSQLiteDatabase::IsInit()
+{
+	return !InitErr;
+}
+
+int CSQLiteDatabase::Init()
+{
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(m_strDataBaseName);
+	if (!db.open())
+	{
+		QSqlError err = db.lastError();
+		QString errMsg = tr("SQLite Database open  failure(%2): %1").arg(err.text()).arg(err.type());
+		qDebug() << errMsg;
+		QMessageBox::critical(nullptr, tr("critical"), errMsg);
+
+		return  static_cast<int>(err.type());
+	}
+	return 0;
+}
+
+int CSQLiteDatabase::UnInit()
+{
+	if (!InitErr)
+	{
+		QSqlDatabase db = QSqlDatabase::database();
+		db.close();
+		QSqlDatabase::removeDatabase(m_strDataBaseName);
+	}
+	return 0;
+}
+
+
+bool CSQLiteDatabase::IsExistTable(const char* TableName)
+{
+	QStringList tableList;
+	tableList = QSqlDatabase::database().tables(QSql::Tables);
+	for each (QString table in tableList)
+	{
+		if (table == QString(TableName))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+int CSQLiteDatabase::ExcuteCommand(const char*  command)
+{
+	QSqlQuery query(QSqlDatabase::database());
+	if (query.exec(QString(command)))
+	{
+		return 0;   //success
+	}
+	return -1;
+}
+
+int CSQLiteDatabase::GetResultData(const char*  command, DataTable& ResultData)
+{
+	QSqlQuery query(command);
+	QSqlRecord record = query.record();
+	int FieldCount = record.count();
+
+	if (!query.isActive())
+	{
+		FieldCount = 0;
+	}
+
+	if (FieldCount)
+	{
+		//字段行
+		ResultData.FieldName.FieldListValue.clear();
+		for (int i = 0; i < FieldCount; i++)   //字段值
+		{
+			ResultData.FieldName.FieldListValue.push_back(record.fieldName(i).toStdString());
+		}
+
+		//数据表装载
+		ResultData.RowList.clear();
+		while (query.next())
+		{
+			FieldList RowValue;
+			RowValue.FieldListValue.clear();
+			for (int i = 0; i < FieldCount; i++)   //字段值
+			{
+				RowValue.FieldListValue.push_back(query.value(i).toString().toStdString());
+			}
+			ResultData.RowList.push_back(RowValue);
+		}
+
+		query.clear();
+	}
+	else
+	{
+		QSqlError err = QSqlDatabase::database().lastError();
+		QString errMsg = tr("SQLite Database read failure(%2): %1").arg(err.text()).arg(err.type());
+		qDebug() << errMsg;
+		QMessageBox::critical(nullptr, tr("critical"), errMsg);
+		return -1;
+	}
+
+	return 0;
+}
+
+int CSQLiteDatabase::BeginTransaction()
+{
+	QSqlDatabase::database().transaction();
+	return 0;
+}
+
+int CSQLiteDatabase::RollBackTransaction(const char* PointName)
+{
+	QSqlDatabase::database().rollback();
+	return 0;
+}
+
+int CSQLiteDatabase::SetRollBackPoint(const char* PointName)
+{
+	return 0;
+}
+
+int CSQLiteDatabase::CommitTransaction()
+{
+	QSqlDatabase::database().commit();
+	return 0;
+}
+
+int CSQLiteDatabase::CreateIndex(const char* TableName, const char* FieldName, const char* IndexName)
+{
+	QString command = QString("CREATE INDEX %1  ON %2(%3)").arg(QString(IndexName))
+															.arg(QString(TableName))
+															.arg(QString(FieldName));
+	return ExcuteCommand(command.toStdString().c_str());
+}
+
+int CSQLiteDatabase::DeleteIndex(const char* TableName, const char* FieldName, const char* IndexName)
+{
+	QString command = QString("DROP INDEX %1  ON %2(%3)").arg(QString(IndexName))
+		.arg(QString(TableName))
+		.arg(QString(FieldName));
+	return ExcuteCommand(command.toStdString().c_str());
+}
+
+int CSQLiteDatabase::ShowIndex(const char* TableName)
+{
+	return 0;
+}
