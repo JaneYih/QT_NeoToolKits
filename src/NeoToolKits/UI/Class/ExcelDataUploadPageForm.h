@@ -17,4 +17,6 @@ public slots:
 private:
 	Ui::ExcelDataUploadPageForm* ui;
 	void initView(void);
+
+	QString m_strExcelFileName;
 };

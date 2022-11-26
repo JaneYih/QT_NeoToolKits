@@ -1,10 +1,12 @@
 #include "ExcelDataUploadPageForm.h"
 #include "MysqlInfoPopDialog.h"
 #include "ExcelDataUploadConfigPopDialog.h"
+#include <QFileDialog>
 
 ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget *parent)
 	: QWidget(parent),
-	ui(new Ui::ExcelDataUploadPageForm)
+	ui(new Ui::ExcelDataUploadPageForm),
+	m_strExcelFileName("")
 {
 	initView();
 	connect(ui->btn_SelectExcelFile, &QPushButton::clicked, this, &ExcelDataUploadPageForm::PushbuttonClickedSlot);
@@ -20,6 +22,7 @@ ExcelDataUploadPageForm::~ExcelDataUploadPageForm()
 void ExcelDataUploadPageForm::initView(void)
 {
 	ui->setupUi(this);
+	ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
 }
 
 void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
@@ -27,7 +30,13 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	QPushButton* curBtn = static_cast<QPushButton*>(sender());
 	if (curBtn == ui->btn_SelectExcelFile)
 	{
-
+		QString fileName = QFileDialog::getOpenFileName(this,
+			tr("Open Excel File"), "", tr("Excel Files (*.xls *.xlsx)"));
+		if (!fileName.isNull())
+		{
+			m_strExcelFileName = fileName;
+			ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
+		}
 	}
 	else if (curBtn == ui->btn_SetDbInfo)
 	{

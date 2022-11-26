@@ -1,45 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Form Files">
-      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
-      <Extensions>ui</Extensions>
     </Filter>
     <Filter Include="Translation Files">
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
-    <Filter Include="Dialog">
+    <Filter Include="Tools">
+      <UniqueIdentifier>{68bda583-423d-47b8-82dd-719905a2482f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload">
+      <UniqueIdentifier>{6c325684-5121-4303-8a19-32160f9bbefc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor">
+      <UniqueIdentifier>{19a7b572-cc67-47da-bfcd-42d40aa1c1e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI">
+      <UniqueIdentifier>{3897c8a1-3e8d-4921-b63e-3750a6e7d8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\Business">
+      <UniqueIdentifier>{f58df11d-ec57-45ac-9a71-dfbd849adca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI">
+      <UniqueIdentifier>{5a7e3201-2558-47d9-8f0b-c62aaf7cccef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI\Form">
+      <UniqueIdentifier>{d1b87116-4271-43e4-b79a-d37e8666b097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI\Form">
+      <UniqueIdentifier>{43fbcf7d-c0f6-4657-a318-aca128ef2c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI\Class">
+      <UniqueIdentifier>{dad1b366-a661-41d1-8b23-329f427834fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI\Class">
+      <UniqueIdentifier>{9870f7ac-709e-4a5b-92fc-7f47569ffee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Main\UI">
       <UniqueIdentifier>{525d480c-6014-466d-a353-13c361eecf27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Form Files\Page">
-      <UniqueIdentifier>{b7ea1934-d611-47fe-a3d6-aea72ddd99fc}</UniqueIdentifier>
+    <Filter Include="Main\UI\Class">
+      <UniqueIdentifier>{dbd7e41a-5e78-47d2-9bad-679b072040dd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialog\Page">
-      <UniqueIdentifier>{1eceddb0-84c0-4c1e-9454-246841fbb0fe}</UniqueIdentifier>
+    <Filter Include="Main\UI\Form">
+      <UniqueIdentifier>{bb710dc9-aea6-4209-9837-76677c841dd7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Form Files\PopDialog">
-      <UniqueIdentifier>{05028173-1ff6-495d-955c-dce8e44d8268}</UniqueIdentifier>
+    <Filter Include="Tools\DbScriptEditor\Business">
+      <UniqueIdentifier>{2e398d8c-0e9e-4384-848b-1707e02e05fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialog\PopDialog">
-      <UniqueIdentifier>{15c1111c-f72c-482e-9644-1414415c8583}</UniqueIdentifier>
+    <Filter Include="Common">
+      <UniqueIdentifier>{af37161b-305e-4d16-8e72-834b5f7416e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\UI">
+      <UniqueIdentifier>{d6dd6453-30ce-4cdf-aafa-c4c5b746d443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\UI\Form">
+      <UniqueIdentifier>{0cdeb6fb-8870-4fed-be07-6654e79ff32a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\UI\Class">
+      <UniqueIdentifier>{9760005a-b9a4-4fe1-9cee-f75017c6bef1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Type">
+      <UniqueIdentifier>{48ec3621-d5d5-4a9f-a0c4-d2ae964823b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Unit">
+      <UniqueIdentifier>{1d82ef86-2b4a-4061-8514-3dd1aa2244d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Unit\Database">
+      <UniqueIdentifier>{da1fdd8c-11aa-4080-b09f-77f8d39eccff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="MainWindowDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <None Include="NeoToolKits.ico">
       <Filter>Resource Files</Filter>
     </None>
@@ -49,53 +90,56 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="Dialog\MainWindowDialog.cpp">
-      <Filter>Dialog</Filter>
+    <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp">
+      <Filter>Tools\ExcelDataUpload\UI\Class</Filter>
     </ClCompile>
-    <ClCompile Include="Dialog\DbScriptEditorPageForm.cpp">
-      <Filter>Dialog\Page</Filter>
+    <ClCompile Include="UI\Class\ExcelDataUploadPageForm.cpp">
+      <Filter>Tools\ExcelDataUpload\UI\Class</Filter>
     </ClCompile>
-    <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp">
-      <Filter>Dialog\Page</Filter>
+    <ClCompile Include="UI\Class\MysqlInfoPopDialog.cpp">
+      <Filter>Common\UI\Class</Filter>
     </ClCompile>
-    <ClCompile Include="Dialog\ExcelDataUploadConfigPopDialog.cpp">
-      <Filter>Dialog\PopDialog</Filter>
+    <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp">
+      <Filter>Tools\DbScriptEditor\UI\Class</Filter>
     </ClCompile>
-    <ClCompile Include="Dialog\MysqlInfoPopDialog.cpp">
-      <Filter>Dialog\PopDialog</Filter>
+    <ClCompile Include="UI\Class\MainWindowDialog.cpp">
+      <Filter>Main\UI\Class</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Dialog\MainWindowDialog.h">
-      <Filter>Dialog</Filter>
+    <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
+      <Filter>Tools\ExcelDataUpload\UI\Class</Filter>
     </QtMoc>
-    <QtMoc Include="Dialog\DbScriptEditorPageForm.h">
-      <Filter>Dialog\Page</Filter>
+    <QtMoc Include="UI\Class\ExcelDataUploadPageForm.h">
+      <Filter>Tools\ExcelDataUpload\UI\Class</Filter>
     </QtMoc>
-    <QtMoc Include="Dialog\ExcelDataUploadPageForm.h">
-      <Filter>Dialog\Page</Filter>
+    <QtMoc Include="UI\Class\MysqlInfoPopDialog.h">
+      <Filter>Common\UI\Class</Filter>
     </QtMoc>
-    <QtMoc Include="Dialog\ExcelDataUploadConfigPopDialog.h">
-      <Filter>Dialog\PopDialog</Filter>
+    <QtMoc Include="UI\Class\DbScriptEditorPageForm.h">
+      <Filter>Tools\DbScriptEditor\UI\Class</Filter>
     </QtMoc>
-    <QtMoc Include="Dialog\MysqlInfoPopDialog.h">
-      <Filter>Dialog\PopDialog</Filter>
+    <QtMoc Include="UI\Class\MainWindowDialog.h">
+      <Filter>Main\UI\Class</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="DbScriptEditorPageForm.ui">
-      <Filter>Form Files\Page</Filter>
+    <QtUic Include="UI\Form\ExcelDataUploadConfigPopDialog.ui">
+      <Filter>Tools\ExcelDataUpload\UI\Form</Filter>
     </QtUic>
-    <QtUic Include="ExcelDataUploadPageForm.ui">
-      <Filter>Form Files\Page</Filter>
+    <QtUic Include="UI\Form\ExcelDataUploadPageForm.ui">
+      <Filter>Tools\ExcelDataUpload\UI\Form</Filter>
     </QtUic>
-    <QtUic Include="MysqlInfoPopDialog.ui">
-      <Filter>Form Files\PopDialog</Filter>
+    <QtUic Include="UI\Form\MysqlInfoPopDialog.ui">
+      <Filter>Common\UI\Form</Filter>
     </QtUic>
-    <QtUic Include="ExcelDataUploadConfigPopDialog.ui">
-      <Filter>Form Files\PopDialog</Filter>
+    <QtUic Include="UI\Form\MainWindowDialog.ui">
+      <Filter>Main\UI\Form</Filter>
+    </QtUic>
+    <QtUic Include="UI\Form\DbScriptEditorPageForm.ui">
+      <Filter>Tools\DbScriptEditor\UI\Form</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

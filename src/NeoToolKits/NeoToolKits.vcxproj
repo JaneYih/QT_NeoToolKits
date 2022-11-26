@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\Dialog;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\Dialog;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
     <ClCompile>
@@ -87,35 +87,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
+    <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
+    <ClCompile Include="UI\Class\ExcelDataUploadPageForm.cpp" />
+    <ClCompile Include="UI\Class\MainWindowDialog.cpp" />
+    <ClCompile Include="UI\Class\MysqlInfoPopDialog.cpp" />
     <QtRcc Include="MainWindowDialog.qrc" />
-    <QtUic Include="ExcelDataUploadConfigPopDialog.ui" />
-    <QtUic Include="ExcelDataUploadPageForm.ui" />
-    <QtUic Include="MainWindowDialog.ui" />
-    <ClCompile Include="Dialog\DbScriptEditorPageForm.cpp" />
-    <ClCompile Include="Dialog\ExcelDataUploadConfigPopDialog.cpp" />
-    <ClCompile Include="Dialog\ExcelDataUploadPageForm.cpp" />
-    <ClCompile Include="Dialog\MainWindowDialog.cpp" />
-    <ClCompile Include="Dialog\MysqlInfoPopDialog.cpp" />
     <ClCompile Include="main.cpp" />
     <None Include="NeoToolKits.ico" />
-    <QtUic Include="DbScriptEditorPageForm.ui" />
-    <QtUic Include="MysqlInfoPopDialog.ui" />
+    <QtUic Include="UI\Form\DbScriptEditorPageForm.ui" />
+    <QtUic Include="UI\Form\ExcelDataUploadConfigPopDialog.ui" />
+    <QtUic Include="UI\Form\ExcelDataUploadPageForm.ui" />
+    <QtUic Include="UI\Form\MainWindowDialog.ui" />
+    <QtUic Include="UI\Form\MysqlInfoPopDialog.ui" />
     <ResourceCompile Include="NeoToolKits.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Dialog\MainWindowDialog.h" />
+    <QtMoc Include="UI\Class\DbScriptEditorPageForm.h" />
+    <QtMoc Include="UI\Class\MysqlInfoPopDialog.h" />
+    <QtMoc Include="UI\Class\ExcelDataUploadPageForm.h" />
+    <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Dialog\DbScriptEditorPageForm.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Dialog\ExcelDataUploadPageForm.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Dialog\ExcelDataUploadConfigPopDialog.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Dialog\MysqlInfoPopDialog.h" />
+    <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
