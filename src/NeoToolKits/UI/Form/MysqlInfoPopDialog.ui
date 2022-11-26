@@ -172,7 +172,7 @@
      <item>
       <widget class="QPushButton" name="btn_ok">
        <property name="text">
-        <string>确定</string>
+        <string>保存</string>
        </property>
       </widget>
      </item>

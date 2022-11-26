@@ -8,11 +8,11 @@ class CSQLiteDatabase : public QObject, public IDatabase
 {
 	Q_OBJECT
 public:
-	explicit CSQLiteDatabase(const string& db, QObject *parent = nullptr);
+	explicit CSQLiteDatabase(const SqlBaseInfo& info, QObject *parent = nullptr);
 	virtual ~CSQLiteDatabase() { UnInit(); }
 
 private:
-	int InitErr;
+	int m_InitErr;
 	QString m_strDataBaseName;
 
 public:

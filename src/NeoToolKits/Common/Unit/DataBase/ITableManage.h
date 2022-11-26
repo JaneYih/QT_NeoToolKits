@@ -8,13 +8,9 @@ using namespace std;
 class ITableManage
 {
 public:
-	ITableManage(const string& host,
-				const string& user,
-				const string& passwd,
-				const string& db,
-				const unsigned int port)
+	ITableManage(const SqlBaseInfo& info)
 	{
-		DatabaseInstence = CDatabaseFactory::CreatDatabase(SqlTypes::eSQLITE, host, user, passwd, db, port);
+		DatabaseInstence = CDatabaseFactory::CreatDatabase(info);
 	}
 
 	virtual ~ITableManage()
@@ -26,11 +22,12 @@ public:
 	IDatabase* DatabaseInstence;
 
 public:
-	virtual bool CreateTable() = 0;  
-	virtual bool InsertData(vector<string> para) = 0;  
-	virtual bool DeleteData(vector<string> para) = 0; 
-	virtual bool UpdataData(vector<string> para) = 0;  
-	virtual bool SelectData(vector<string> para, DataTable& outputData) = 0; 
+	bool TestConnect();
+	virtual bool CreateTable() = 0;
+	virtual bool InsertData(vector<string> para) = 0; 
+	virtual bool DeleteData(vector<string> para) = 0;
+	virtual bool UpdataData(vector<string> para) = 0;
+	virtual bool SelectData(vector<string> para, DataTable& outputData) = 0;
 
 protected:
 	bool IsExistTable(const char* TableName);

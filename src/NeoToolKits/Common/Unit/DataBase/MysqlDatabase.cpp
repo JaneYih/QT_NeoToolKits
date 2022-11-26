@@ -1,19 +1,14 @@
 #include "MysqlDatabase.h"
 
-CMysqlDatabase::CMysqlDatabase(
-	const string& host,
-	const string& user,
-	const string& passwd,
-	const string& db,
-	const unsigned int port) :InitErr(0)
-{
-	m_strServiceIp = host; 
-	m_strLoginName = user;       
-	m_strLoginPassword = passwd; 
-	m_strDataBaseName = db;  
-	m_iLoginPort = port;
-
-	InitErr = Init();
+CMysqlDatabase::CMysqlDatabase(const SqlBaseInfo& info)
+	:m_InitErr(0),
+	m_strServiceIp(info.host),
+	m_strLoginName(info.user),
+	m_strLoginPassword(info.passwd),
+	m_strDataBaseName(info.db),
+	m_iLoginPort(info.port)
+{       
+	m_InitErr = Init();
 	InitializeCriticalSection(&m_Critical); 
 	InitializeCriticalSection(&m_Transaction_Critical);
 }
@@ -27,7 +22,7 @@ CMysqlDatabase::~CMysqlDatabase()
 
 bool CMysqlDatabase::IsInit()
 {
-	return !InitErr;
+	return !m_InitErr;
 }
 
 //0:成功   其他:错误码

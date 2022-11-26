@@ -24,3 +24,12 @@ bool ITableManage::AnalysisPara(list<string> para, const int paraNum, string Sql
 
 	return true;
 }
+
+bool ITableManage::TestConnect()
+{
+	if (DatabaseInstence)
+	{
+		return DatabaseInstence->IsInit();
+	}
+	return false;
+}

@@ -41,7 +41,10 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	else if (curBtn == ui->btn_SetDbInfo)
 	{
 		MysqlInfoPopDialog dlg(this);
-		dlg.exec();
+		if (dlg.exec() == QDialog::Accepted)
+		{
+			ui->lineEdit_DbInfo->setText(dlg.infoString());
+		}
 	}
 	else if (curBtn == ui->btn_Upload)
 	{

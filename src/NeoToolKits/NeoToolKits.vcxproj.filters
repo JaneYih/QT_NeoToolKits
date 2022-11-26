@@ -76,6 +76,9 @@
     <Filter Include="Common\Unit\Database">
       <UniqueIdentifier>{da1fdd8c-11aa-4080-b09f-77f8d39eccff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Unit\Database\Driver">
+      <UniqueIdentifier>{1cdeffc9-bd0a-4fd4-800a-2107e87f7056}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
@@ -110,13 +113,19 @@
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp">
       <Filter>Common\Unit\Database</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp">
+    <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp">
       <Filter>Common\Unit\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp">
+      <Filter>Common\Unit\Database\Driver</Filter>
     </ClCompile>
     <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp">
-      <Filter>Common\Unit\Database</Filter>
+      <Filter>Common\Unit\Database\Driver</Filter>
     </ClCompile>
-    <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp">
+    <ClCompile Include="Common\IniOperation.cpp">
+      <Filter>Common\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp">
       <Filter>Common\Unit\Database</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,7 +146,7 @@
       <Filter>Main\UI\Class</Filter>
     </QtMoc>
     <QtMoc Include="Common\Unit\DataBase\SQLiteDatabase.h">
-      <Filter>Common\Unit\Database</Filter>
+      <Filter>Common\Unit\Database\Driver</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -158,19 +167,28 @@
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h">
-      <Filter>Common\Unit\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h">
-      <Filter>Common\Unit\Database</Filter>
-    </ClInclude>
     <ClInclude Include="Common\Unit\DataBase\ITableManage.h">
       <Filter>Common\Unit\Database</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h">
+    <ClInclude Include="Common\Unit\DataBase\usersDataTable.h">
       <Filter>Common\Unit\Database</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Unit\DataBase\usersDataTable.h">
+    <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h">
+      <Filter>Common\Unit\Database\Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h">
+      <Filter>Common\Unit\Database\Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h">
+      <Filter>Common\Unit\Database\Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\Database_def.h">
+      <Filter>Common\Unit\Database\Driver</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\IniOperation.h">
+      <Filter>Common\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\DataBase\DataTableTest.h">
       <Filter>Common\Unit\Database</Filter>
     </ClInclude>
   </ItemGroup>

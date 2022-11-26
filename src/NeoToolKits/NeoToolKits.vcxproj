@@ -55,18 +55,18 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
-      <AdditionalDependencies>libmysqld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\Common\Unit\DataBase\MySQLPackage\x86\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y $(ProjectDir)Common\Unit\DataBase\MySQLPackage\x86\dll\libmysqld.dll $(OutDir)libmysqld.dll</Command>
+      <Command>copy /y $(ProjectDir)Common\Unit\DataBase\MySQLPackage\x86\dll\libmysql.dll $(OutDir)libmysql.dll</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -96,7 +96,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>None</DebugInformationFormat>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -105,6 +105,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\IniOperation.cpp" />
+    <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp" />
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp" />
     <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp" />
@@ -134,8 +136,11 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common\IniOperation.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h" />
+    <ClInclude Include="Common\Unit\DataBase\Database_def.h" />
+    <ClInclude Include="Common\Unit\DataBase\DataTableTest.h" />
     <ClInclude Include="Common\Unit\DataBase\ITableManage.h" />
     <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h" />
     <ClInclude Include="Common\Unit\DataBase\usersDataTable.h" />

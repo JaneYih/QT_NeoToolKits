@@ -1,26 +1,19 @@
 #pragma once
 
-#include <windows.h>
 #include "DatabaseBaseClass.h"
 #include "MySQLPackage/include/mysql.h"
-#include <iostream>
 
 using namespace std;
 
 class CMysqlDatabase : public IDatabase
 {
 public:
-	CMysqlDatabase(
-		const string& host,
-		const string& user,
-		const string& passwd,
-		const string& db,
-		const unsigned int port);
+	explicit CMysqlDatabase(const SqlBaseInfo& info);
 	virtual ~CMysqlDatabase();
 
 private:
 	MYSQL m_mySql;
-	int InitErr;
+	int m_InitErr;
 
 	string m_strServiceIp;
 	string m_strDataBaseName;

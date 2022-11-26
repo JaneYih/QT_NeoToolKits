@@ -8,16 +8,16 @@
 #include <QSqlResult>
 
 
-CSQLiteDatabase::CSQLiteDatabase(const string& db, QObject *parent)
-	: QObject(parent)
+CSQLiteDatabase::CSQLiteDatabase(const SqlBaseInfo& info, QObject *parent)
+	: QObject(parent),
+	m_strDataBaseName(QString::fromStdString(info.db))
 {
-	m_strDataBaseName = QString::fromStdString(db);
-	InitErr = Init();
+	m_InitErr = Init();
 }
 
 bool CSQLiteDatabase::IsInit()
 {
-	return !InitErr;
+	return !m_InitErr;
 }
 
 int CSQLiteDatabase::Init()
@@ -38,7 +38,7 @@ int CSQLiteDatabase::Init()
 
 int CSQLiteDatabase::UnInit()
 {
-	if (!InitErr)
+	if (!m_InitErr)
 	{
 		QSqlDatabase db = QSqlDatabase::database();
 		db.close();

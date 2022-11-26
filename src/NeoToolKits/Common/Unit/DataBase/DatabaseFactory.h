@@ -4,15 +4,6 @@
 #include "MysqlDatabase.h"
 #include "SQLiteDatabase.h"
 
-typedef enum 
-{
-	eMYSQL,
-	//eORACLE,
-	eSQLITE,
-	//ePostgreSQL,
-	//eMSSQL,
-}SqlTypes;
-
 class CDatabaseFactory
 {
 public:
@@ -20,20 +11,14 @@ public:
 	~CDatabaseFactory(){}
 
 public:
-	static IDatabase* CreatDatabase(
-		SqlTypes sql, 
-		const string& host,
-		const string& user,
-		const string& passwd,
-		const string& db,
-		const unsigned int port)
+	static IDatabase* CreatDatabase(const SqlBaseInfo& info)
 	{
-		switch (sql)
+		switch (info.type)
 		{
 		case eMYSQL:
-			return new CMysqlDatabase(host,user,passwd,db,port);
+			return new CMysqlDatabase(info);
 		case eSQLITE:
-			return new CSQLiteDatabase(db);
+			return new CSQLiteDatabase(info);
 		default:
 			return nullptr;
 		}

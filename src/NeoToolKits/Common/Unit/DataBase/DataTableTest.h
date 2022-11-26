@@ -2,15 +2,16 @@
 
 #include "ITableManage.h"
 
-class CUsersDataTable :public ITableManage
+class CDataTableTest :public ITableManage
 {
 public:
-	CUsersDataTable(const string& db) :ITableManage(SqlBaseInfo({ SqlTypes::eSQLITE, "localhost", "root", "root", db, 3306 }))
+	explicit CDataTableTest(const SqlBaseInfo& info) 
+		:ITableManage(info)
 	{
 		CreateTable();
 	}
 
-	virtual ~CUsersDataTable()
+	virtual ~CDataTableTest()
 	{
 	}
 
