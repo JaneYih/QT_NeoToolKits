@@ -34,7 +34,7 @@ typedef struct _SqlTableInfo_
 
 	QString toString()
 	{
-		return QString::fromStdWString(L"%1表名:%2")
+		return QString::fromStdWString(L"%1表名:%2;")
 			.arg(baseInfo.toString()).arg(tableName);
 	}
 }SqlTableInfo, * pSqlTableInfo;

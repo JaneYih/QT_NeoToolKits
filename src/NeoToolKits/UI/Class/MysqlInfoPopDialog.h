@@ -3,30 +3,35 @@
 #include <QDialog>
 #include "ui_MysqlInfoPopDialog.h"
 #include "Database_def.h"
-#include "IniOperation.h"
 
 class MysqlInfoPopDialog  : public QDialog
 {
 	Q_OBJECT
 
 public:
-	MysqlInfoPopDialog(QWidget *parent = nullptr);
+	explicit MysqlInfoPopDialog(QWidget* parent = nullptr, bool bUseDefaultIni = true, SqlTableInfo* pTableInfo = nullptr);
 	~MysqlInfoPopDialog();
 
-	QString infoString();
+	void setIniFileName(const QString& fileName);
+	void setIniPrefix(const QString& prefix);
+	bool LoadIniCfg();
+	void UpdataUiData();
+	SqlTableInfo getSqlTableInfo() const;
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);
 
 private:
 	void initView(void);
-	bool LoadCfg();
-	bool SaveCfg();
-	void LoadUiData();
+	void GetUiData();
+	bool SaveIniCfg();
 
 private:
 	Ui::MysqlInfoPopDlg* ui;
 	SqlTableInfo m_stTableInfo;
-	IniOperation* m_pCfg;
+
+	bool m_bUseDefaultIni;
+	QString m_strIniFileName;
+	QString m_strIniPrefix;
 };
 
