@@ -16,9 +16,10 @@ public:
 		switch (info.type)
 		{
 		case eMYSQL:
-			return new CMysqlDatabase(info);
+			return new CMysqlDatabase(info.host.toStdString(), info.user.toStdString(),
+				info.passwd.toStdString(), info.dbName.toStdString(), info.port.toInt());
 		case eSQLITE:
-			return new CSQLiteDatabase(info);
+			return new CSQLiteDatabase(info.dbName);
 		default:
 			return nullptr;
 		}

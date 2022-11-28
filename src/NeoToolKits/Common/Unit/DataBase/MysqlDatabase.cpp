@@ -1,12 +1,13 @@
 #include "MysqlDatabase.h"
 
-CMysqlDatabase::CMysqlDatabase(const SqlBaseInfo& info)
+CMysqlDatabase::CMysqlDatabase(const string& host, const string& user,
+							const string& passwd, const string& db, unsigned int port)
 	:m_InitErr(0),
-	m_strServiceIp(info.host),
-	m_strLoginName(info.user),
-	m_strLoginPassword(info.passwd),
-	m_strDataBaseName(info.db),
-	m_iLoginPort(info.port)
+	m_strServiceIp(host),
+	m_strLoginName(user),
+	m_strLoginPassword(passwd),
+	m_strDataBaseName(db),
+	m_iLoginPort(port)
 {       
 	m_InitErr = Init();
 	InitializeCriticalSection(&m_Critical); 
@@ -58,6 +59,11 @@ int CMysqlDatabase::UnInit()
 	mysql_close(&m_mySql);  
 	mysql_library_end(); 
 	return 0;
+}
+
+string CMysqlDatabase::GetLastError()
+{
+	return mysql_error(&m_mySql);
 }
 
 int CMysqlDatabase::ExcuteCommand(const char*  command)

@@ -191,5 +191,8 @@
     <ClInclude Include="Common\Unit\DataBase\DataTableTest.h">
       <Filter>Common\Unit\Database</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Type\common_def.h">
+      <Filter>Common\Type</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ class CSQLiteDatabase : public QObject, public IDatabase
 {
 	Q_OBJECT
 public:
-	explicit CSQLiteDatabase(const SqlBaseInfo& info, QObject *parent = nullptr);
+	explicit CSQLiteDatabase(const QString& dbName, QObject *parent = nullptr);
 	virtual ~CSQLiteDatabase() { UnInit(); }
 
 private:
@@ -19,6 +19,7 @@ public:
 	virtual bool IsInit();
 	virtual int Init();
 	virtual int UnInit();
+	virtual std::string GetLastError();
 	virtual int ExcuteCommand(const char*  command);
 	virtual int GetResultData(const char*  command, DataTable& ResultData);
 	virtual int BeginTransaction();

@@ -1,7 +1,10 @@
 #pragma  once
 
-#include "Database_def.h"
+#include <windows.h>
+#include <iostream>
+#include <string.h>
 #include <vector>
+#include "Database_def.h"
 using namespace std;
 
 typedef struct 
@@ -39,4 +42,5 @@ public:
 	virtual int ShowIndex(const char* TableName) = 0;
 
 	virtual bool IsExistTable(const char* TableName) = 0;
+	virtual string GetLastError() = 0;
 };

@@ -25,11 +25,16 @@ bool ITableManage::AnalysisPara(list<string> para, const int paraNum, string Sql
 	return true;
 }
 
-bool ITableManage::TestConnect()
+bool ITableManage::TestConnect(string& errMsg)
 {
 	if (DatabaseInstence)
 	{
-		return DatabaseInstence->IsInit();
+		if (!DatabaseInstence->IsInit())
+		{
+			errMsg = DatabaseInstence->GetLastError();
+			return false;
+		}
+		return true;
 	}
 	return false;
 }

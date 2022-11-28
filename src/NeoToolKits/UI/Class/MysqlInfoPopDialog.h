@@ -13,7 +13,7 @@ public:
 	MysqlInfoPopDialog(QWidget *parent = nullptr);
 	~MysqlInfoPopDialog();
 
-	QString infoString() const;
+	QString infoString();
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);

@@ -8,9 +8,9 @@
 #include <QSqlResult>
 
 
-CSQLiteDatabase::CSQLiteDatabase(const SqlBaseInfo& info, QObject *parent)
+CSQLiteDatabase::CSQLiteDatabase(const QString& dbName, QObject *parent)
 	: QObject(parent),
-	m_strDataBaseName(QString::fromStdString(info.db))
+	m_strDataBaseName(dbName)
 {
 	m_InitErr = Init();
 }
@@ -47,6 +47,11 @@ int CSQLiteDatabase::UnInit()
 	return 0;
 }
 
+string CSQLiteDatabase::GetLastError()
+{
+	QSqlDatabase db = QSqlDatabase::database();
+	return db.lastError().text().toStdString();
+}
 
 bool CSQLiteDatabase::IsExistTable(const char* TableName)
 {

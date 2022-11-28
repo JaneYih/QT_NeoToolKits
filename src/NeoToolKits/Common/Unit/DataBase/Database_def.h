@@ -1,8 +1,6 @@
 #pragma once
 
-#include <windows.h>
-#include <iostream>
-#include <string.h>
+#include <QString>
 
 typedef enum
 {
@@ -16,15 +14,27 @@ typedef enum
 typedef struct _SqlBaseInfo_
 {
 	SqlTypes type;
-	std::string host;
-	std::string user;
-	std::string passwd;
-	std::string db;
-	unsigned int port;
+	QString host;
+	QString user;
+	QString passwd;
+	QString dbName;
+	QString port;
+
+	QString toString()
+	{
+		return QString::fromStdWString(L"IP地址:%1;端口:%2;用户名:%3;数据库名:%4;")
+			.arg(host).arg(port).arg(user).arg(dbName);
+	}
 }SqlBaseInfo, *pSqlBaseInfo;
 
 typedef struct _SqlTableInfo_
 {
 	SqlBaseInfo baseInfo;
-	std::string table;
-}SqlTableInfo, *pSqlTableInfo;
+	QString tableName;
+
+	QString toString()
+	{
+		return QString::fromStdWString(L"%1表名:%2")
+			.arg(baseInfo.toString()).arg(tableName);
+	}
+}SqlTableInfo, * pSqlTableInfo;

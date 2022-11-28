@@ -8,7 +8,8 @@ using namespace std;
 class CMysqlDatabase : public IDatabase
 {
 public:
-	explicit CMysqlDatabase(const SqlBaseInfo& info);
+	explicit CMysqlDatabase(const string& host, const string& user,
+						const string& passwd, const string& db, unsigned int port);
 	virtual ~CMysqlDatabase();
 
 private:
@@ -28,6 +29,7 @@ public:
 	virtual bool IsInit(); //初始化完成
 	virtual int Init();    //初始化
 	virtual int UnInit();  //反初始化
+	virtual string GetLastError();
 
 	virtual int ExcuteCommand(const char*  command);
 	virtual int GetResultData(const char*  command, DataTable& ResultData);

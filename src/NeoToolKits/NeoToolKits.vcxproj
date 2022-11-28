@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\IniOperation.h" />
+    <ClInclude Include="Common\Type\common_def.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h" />
     <ClInclude Include="Common\Unit\DataBase\Database_def.h" />

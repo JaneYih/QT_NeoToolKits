@@ -22,7 +22,7 @@ public:
 	IDatabase* DatabaseInstence;
 
 public:
-	bool TestConnect();
+	bool TestConnect(string& errMsg);
 	virtual bool CreateTable() = 0;
 	virtual bool InsertData(vector<string> para) = 0; 
 	virtual bool DeleteData(vector<string> para) = 0;

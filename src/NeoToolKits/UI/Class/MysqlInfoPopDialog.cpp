@@ -28,20 +28,19 @@ bool MysqlInfoPopDialog::LoadCfg()
 {
 	QString strPrefix = QString::fromStdWString(L"MySQL配置");
 	m_stTableInfo.baseInfo.type = SqlTypes::eMYSQL;
-	m_stTableInfo.baseInfo.host = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"IP地址"), "Not Set").toString().toStdString();
-	m_stTableInfo.baseInfo.port = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"端口"), "Not Set").toInt();
-	m_stTableInfo.baseInfo.user = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"用户名"), "Not Set").toString().toStdString();
-	m_stTableInfo.baseInfo.passwd = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"密码"), "Not Set").toString().toStdString();
+	m_stTableInfo.baseInfo.host = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"IP地址"), "Not Set").toString();
+	m_stTableInfo.baseInfo.port = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"端口"), "Not Set").toString();
+	m_stTableInfo.baseInfo.user = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"用户名"), "Not Set").toString();
+	m_stTableInfo.baseInfo.passwd = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"密码"), "Not Set").toString();
+	m_stTableInfo.baseInfo.dbName= m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"数据库名称"), "Not Set").toString();
+	m_stTableInfo.tableName = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"数据表名称"), "Not Set").toString();
 	
-	m_stTableInfo.baseInfo.db = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"数据库名称"), "Not Set").toString().toStdString();
-	m_stTableInfo.table = m_pCfg->ReadValue(strPrefix, QString::fromStdWString(L"数据表名称"), "Not Set").toString().toStdString();
-	
-	ui->lineEdit_DbIP->setText(QString::fromStdString(m_stTableInfo.baseInfo.host));
-	ui->lineEdit_DbPort->setText(QString("%1").arg(m_stTableInfo.baseInfo.port));
-	ui->lineEdit_DbUserName->setText(QString::fromStdString(m_stTableInfo.baseInfo.user));
-	ui->lineEdit_DbPassword->setText(QString::fromStdString(m_stTableInfo.baseInfo.passwd));
-	ui->lineEdit_DbName->setText(QString::fromStdString(m_stTableInfo.baseInfo.db));
-	ui->lineEdit_DbTableName->setText(QString::fromStdString(m_stTableInfo.table));
+	ui->lineEdit_DbIP->setText(m_stTableInfo.baseInfo.host);
+	ui->lineEdit_DbPort->setText(m_stTableInfo.baseInfo.port);
+	ui->lineEdit_DbUserName->setText(m_stTableInfo.baseInfo.user);
+	ui->lineEdit_DbPassword->setText(m_stTableInfo.baseInfo.passwd);
+	ui->lineEdit_DbName->setText(m_stTableInfo.baseInfo.dbName);
+	ui->lineEdit_DbTableName->setText(m_stTableInfo.tableName);
 	return true;
 }
 
@@ -49,30 +48,23 @@ bool MysqlInfoPopDialog::SaveCfg()
 {
 	LoadUiData();
 	QString strPrefix = QString::fromStdWString(L"MySQL配置");
-	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"IP地址"), QString::fromStdString(m_stTableInfo.baseInfo.host));
+	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"IP地址"), m_stTableInfo.baseInfo.host);
 	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"端口"), m_stTableInfo.baseInfo.port);
-	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"用户名"), QString::fromStdString(m_stTableInfo.baseInfo.user));
-	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"密码"), QString::fromStdString(m_stTableInfo.baseInfo.passwd));
-	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"数据库名称"), QString::fromStdString(m_stTableInfo.baseInfo.db));
-	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"数据表名称"), QString::fromStdString(m_stTableInfo.table));
+	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"用户名"), m_stTableInfo.baseInfo.user);
+	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"密码"), m_stTableInfo.baseInfo.passwd);
+	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"数据库名称"), m_stTableInfo.baseInfo.dbName);
+	m_pCfg->WriteValue(strPrefix, QString::fromStdWString(L"数据表名称"), m_stTableInfo.tableName);
 	return true;
 }
 
 void MysqlInfoPopDialog::LoadUiData()
 {
-	QString DbIP = ui->lineEdit_DbIP->text();
-	QString DbPort = ui->lineEdit_DbPort->text();
-	QString DbUserName = ui->lineEdit_DbUserName->text();
-	QString DbPassword = ui->lineEdit_DbPassword->text();
-	QString DbName = ui->lineEdit_DbName->text();
-	QString DbTableName = ui->lineEdit_DbTableName->text();
-
-	m_stTableInfo.baseInfo.host = DbIP.toStdString();
-	m_stTableInfo.baseInfo.port = DbPort.toInt();
-	m_stTableInfo.baseInfo.user = DbUserName.toStdString();
-	m_stTableInfo.baseInfo.passwd = DbPassword.toStdString();
-	m_stTableInfo.baseInfo.db = DbName.toStdString();
-	m_stTableInfo.table = DbTableName.toStdString();
+	m_stTableInfo.baseInfo.host = ui->lineEdit_DbIP->text();
+	m_stTableInfo.baseInfo.port = ui->lineEdit_DbPort->text();
+	m_stTableInfo.baseInfo.user = ui->lineEdit_DbUserName->text();
+	m_stTableInfo.baseInfo.passwd = ui->lineEdit_DbPassword->text();
+	m_stTableInfo.baseInfo.dbName = ui->lineEdit_DbName->text();
+	m_stTableInfo.tableName = ui->lineEdit_DbTableName->text();
 }
 
 void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
@@ -82,7 +74,15 @@ void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
 	{
 		LoadUiData();
 		CDataTableTest db(m_stTableInfo.baseInfo);
-		QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), db.TestConnect() ? QString::fromStdWString(L"连接成功！") : QString::fromStdWString(L"连接失败！"));
+		std::string strErrMsg;
+		if (!db.TestConnect(strErrMsg))
+		{
+			QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接失败：%1").arg(QString::fromStdString(strErrMsg)));
+		}
+		else
+		{
+			QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接成功！"));
+		}
 	}
 	else if (curBtn == ui->btn_ok)
 	{
@@ -97,12 +97,7 @@ void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
 	}
 }
 
-QString MysqlInfoPopDialog::infoString() const
+QString MysqlInfoPopDialog::infoString()
 {
-	return QString::fromStdWString(L"IP地址:%1;端口:%2;用户名:%3;数据库名:%4;表名:%5")
-		.arg(QString::fromStdString(m_stTableInfo.baseInfo.host))
-		.arg(m_stTableInfo.baseInfo.port)
-		.arg(QString::fromStdString(m_stTableInfo.baseInfo.user))
-		.arg(QString::fromStdString(m_stTableInfo.baseInfo.db))
-		.arg(QString::fromStdString(m_stTableInfo.table));
+	return m_stTableInfo.toString();
 }
