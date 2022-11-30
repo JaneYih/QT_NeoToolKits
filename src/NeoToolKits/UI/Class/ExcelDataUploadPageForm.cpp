@@ -2,35 +2,12 @@
 #include "ExcelDataUploadConfigPopDialog.h"
 #include <QFileDialog>
 #include <QDebug>
-#include <QMessageBox>
-
-#include "xlsxdocument.h"
-#include "xlsxchartsheet.h"
-#include "xlsxcellrange.h"
-#include "xlsxchart.h"
-#include "xlsxrichstring.h"
-#include "xlsxworkbook.h"
-using namespace QXlsx;
-
-
-//ini prefixs
-const QString s_ini_prefix_excel = "Excel";
-
-//ini keys
-const QString s_ini_key_excelFile = "ExcelFlie";
 
 ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 	: QWidget(parent),
 	ui(new Ui::ExcelDataUploadPageForm),
-	m_strIniFileName(QCoreApplication::applicationDirPath() + "/ExcelDataUploadTool.ini"),
-	m_pCfg(new IniOperation(m_strIniFileName)),
-	m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString())
+	m_app(new ExcelDataUploadApp(this))
 {
-	m_pMysqlInfoDlg = new MysqlInfoPopDialog(this, false);
-	m_pMysqlInfoDlg->setIniFileName(m_strIniFileName);
-	m_pMysqlInfoDlg->setIniPrefix(QString::fromStdWString(L"MySQLÅäÖÃ"));
-	m_pMysqlInfoDlg->LoadIniCfg();
-
 	initView();
 	connect(ui->btn_SelectExcelFile, &QPushButton::clicked, this, &ExcelDataUploadPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_SetDbInfo, &QPushButton::clicked, this, &ExcelDataUploadPageForm::PushbuttonClickedSlot);
@@ -39,15 +16,15 @@ ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 
 ExcelDataUploadPageForm::~ExcelDataUploadPageForm()
 {
-	delete m_pCfg;
+	delete m_app;
 	delete ui;
 }
 
 void ExcelDataUploadPageForm::initView(void)
 {
 	ui->setupUi(this);
-	ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
-	ui->lineEdit_DbInfo->setText(m_pMysqlInfoDlg->getSqlTableInfo().toString());
+	ui->lineEdit_ExcelFile->setText(m_app->getExcelFileName());
+	ui->lineEdit_DbInfo->setText(m_app->getMysqlInfoDlg()->getSqlTableInfo().toString());
 }
 
 void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
@@ -56,42 +33,23 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	if (curBtn == ui->btn_SelectExcelFile)
 	{
 		QString fileName = QFileDialog::getOpenFileName(this,
-			tr("Open Excel File"), "", tr("Excel Files (*.xls *.xlsx)"));
+			tr("Open Excel File"), "", tr("Excel Files (*.xlsx)"));
 		if (!fileName.isNull())
 		{
-			QXlsx::Document xlsx(fileName);
-			if (xlsx.load()) // load excel file
+			QStringList ExcelColumns = m_app->LoadExcelColumns(fileName);
+			if (!ExcelColumns.isEmpty())
 			{
-				m_strExcelFileName = fileName;
-				m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, m_strExcelFileName);
-				ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
-
-				QXlsx::Workbook* workBook = xlsx.workbook();
-				QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(0));
-				CellRange* cellRange = &(workSheet->dimension());
-				int rowCount = cellRange->rowCount();
-				int columnCount = cellRange->columnCount();
-				for (int col = 1; col <= columnCount; col++)
-				{
-					Cell* cell = xlsx.cellAt(1, col);
-					if (cell != NULL)
-					{
-						QVariant var = cell->readValue();
-						qDebug() << QString("col %1:").arg(col) << var.toString();
-					}
-				}
-			}
-			else
-			{
-				QMessageBox::critical(this, "error", "excel open fail:" + fileName);
+				ui->lineEdit_ExcelFile->setText(m_app->getExcelFileName());
+				qDebug() << ExcelColumns;
 			}
 		}
 	}
 	else if (curBtn == ui->btn_SetDbInfo)
 	{
-		m_pMysqlInfoDlg->UpdataUiData();
-		m_pMysqlInfoDlg->exec();
-		ui->lineEdit_DbInfo->setText(m_pMysqlInfoDlg->getSqlTableInfo().toString());
+		MysqlInfoPopDialog* pDlg = m_app->getMysqlInfoDlg();
+		pDlg->UpdataUiData();
+		pDlg->exec();
+		ui->lineEdit_DbInfo->setText(pDlg->getSqlTableInfo().toString());
 	}
 	else if (curBtn == ui->btn_Upload)
 	{

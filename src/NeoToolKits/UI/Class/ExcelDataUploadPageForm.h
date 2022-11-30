@@ -2,8 +2,7 @@
 
 #include <QWidget>
 #include "ui_ExcelDataUploadPageForm.h"
-#include "MysqlInfoPopDialog.h"
-#include "IniOperation.h"
+#include "ExcelDataUploadApp.h"
 
 class ExcelDataUploadPageForm  : public QWidget
 {
@@ -18,10 +17,7 @@ public slots:
 
 private:
 	Ui::ExcelDataUploadPageForm* ui;
-	void initView(void);
+	ExcelDataUploadApp* m_app;
 
-	QString m_strIniFileName;
-	IniOperation* m_pCfg;
-	QString m_strExcelFileName;
-	MysqlInfoPopDialog* m_pMysqlInfoDlg;
+	void initView(void);
 };

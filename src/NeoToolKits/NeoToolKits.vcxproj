@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
     <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp" />
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp" />
@@ -175,6 +176,7 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="Business\ExcelDataUploadApp.h" />
     <ClInclude Include="Common\IniOperation.h" />
     <ClInclude Include="Common\Type\common_def.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />
