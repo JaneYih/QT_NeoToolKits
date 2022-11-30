@@ -2,6 +2,7 @@
 #include "ExcelDataUploadConfigPopDialog.h"
 #include <QFileDialog>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "xlsxdocument.h"
 #include "xlsxchartsheet.h"
@@ -58,13 +59,13 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 			tr("Open Excel File"), "", tr("Excel Files (*.xls *.xlsx)"));
 		if (!fileName.isNull())
 		{
-			m_strExcelFileName = fileName;
-			m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, m_strExcelFileName);
-			ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
-
 			QXlsx::Document xlsx(fileName);
 			if (xlsx.load()) // load excel file
 			{
+				m_strExcelFileName = fileName;
+				m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, m_strExcelFileName);
+				ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
+
 				QXlsx::Workbook* workBook = xlsx.workbook();
 				QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(0));
 				CellRange* cellRange = &(workSheet->dimension());
@@ -79,6 +80,10 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 						qDebug() << QString("col %1:").arg(col) << var.toString();
 					}
 				}
+			}
+			else
+			{
+				QMessageBox::critical(this, "error", "excel open fail:" + fileName);
 			}
 		}
 	}
