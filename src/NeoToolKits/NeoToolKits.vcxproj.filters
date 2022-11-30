@@ -79,6 +79,9 @@
     <Filter Include="Common\Unit\Database\Driver">
       <UniqueIdentifier>{1cdeffc9-bd0a-4fd4-800a-2107e87f7056}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Unit\xlsx">
+      <UniqueIdentifier>{3281486d-23ac-47e2-9290-886e4e054c49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
@@ -128,6 +131,99 @@
     <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp">
       <Filter>Common\Unit\Database</Filter>
     </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxabstractooxmlfile.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxabstractsheet.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcell.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellformula.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellrange.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellreference.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxchart.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxchartsheet.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcolor.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxconditionalformatting.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxcontenttypes.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdatavalidation.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocpropsapp.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocpropscore.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocument.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdrawing.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxdrawinganchor.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxformat.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxmediafile.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxnumformatparser.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxrelationships.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxrichstring.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxsharedstrings.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxsimpleooxmlfile.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxstyles.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxtheme.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxutility.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxworkbook.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxworksheet.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxzipreader.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\xlsxzipwriter.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -147,6 +243,9 @@
     </QtMoc>
     <QtMoc Include="Common\Unit\DataBase\SQLiteDatabase.h">
       <Filter>Common\Unit\Database\Driver</Filter>
+    </QtMoc>
+    <QtMoc Include="Common\Unit\xlsx\xlsxdocument.h">
+      <Filter>Common\Unit\xlsx</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +292,138 @@
     </ClInclude>
     <ClInclude Include="Common\Type\common_def.h">
       <Filter>Common\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractooxmlfile.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractooxmlfile_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractsheet.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractsheet_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcell.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcell_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellformula.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellformula_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellrange.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellreference.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxchart.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxchart_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxchartsheet.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxchartsheet_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcolor_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxconditionalformatting.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxconditionalformatting_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxcontenttypes_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdatavalidation.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdatavalidation_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocpropsapp_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocpropscore_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocument_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdrawing_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxdrawinganchor_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxformat.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxformat_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxglobal.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxmediafile_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxnumformatparser_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxrelationships_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxrichstring.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxrichstring_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxsharedstrings_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxsimpleooxmlfile_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxstyles_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxtheme_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxutility_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxworkbook.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxworkbook_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxworksheet.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxworksheet_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxzipreader_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Unit\xlsx\xlsxzipwriter_p.h">
+      <Filter>Common\Unit\xlsx</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="QtSettings">
     <QtInstall>msvc2017</QtInstall>
-    <QtModules>core;sql;gui;widgets</QtModules>
+    <QtModules>core;sql;gui;widgets;gui-private</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'" Label="QtSettings">
     <QtInstall>msvc2017</QtInstall>
-    <QtModules>core;sql;gui;widgets</QtModules>
+    <QtModules>core;sql;gui;widgets;gui-private</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -68,6 +68,9 @@
     <PostBuildEvent>
       <Command>copy /y $(ProjectDir)Common\Unit\DataBase\MySQLPackage\x86\dll\libmysql.dll $(OutDir)libmysql.dll</Command>
     </PostBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>XLSX_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Link>
@@ -77,6 +80,9 @@
     <PostBuildEvent>
       <Command>copy /y $(ProjectDir)Common\Unit\DataBase\MySQLPackage\x86\dll\libmysql.dll $(OutDir)libmysql.dll</Command>
     </PostBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>XLSX_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'" Label="Configuration">
     <ClCompile>
@@ -111,6 +117,37 @@
     <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxabstractooxmlfile.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxabstractsheet.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcell.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellformula.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellrange.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcellreference.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxchart.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxchartsheet.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcolor.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxconditionalformatting.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxcontenttypes.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdatavalidation.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocpropsapp.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocpropscore.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdocument.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdrawing.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxdrawinganchor.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxformat.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxmediafile.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxnumformatparser.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxrelationships.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxrichstring.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxsharedstrings.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxsimpleooxmlfile.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxstyles.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxtheme.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxutility.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxworkbook.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxworksheet.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxzipreader.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\xlsxzipwriter.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadPageForm.cpp" />
@@ -145,6 +182,51 @@
     <ClInclude Include="Common\Unit\DataBase\ITableManage.h" />
     <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h" />
     <ClInclude Include="Common\Unit\DataBase\usersDataTable.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractooxmlfile.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractooxmlfile_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractsheet.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxabstractsheet_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcell.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellformula.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellformula_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellrange.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcellreference.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcell_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxchart.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxchartsheet.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxchartsheet_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxchart_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcolor_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxconditionalformatting.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxconditionalformatting_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxcontenttypes_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdatavalidation.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdatavalidation_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocpropsapp_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocpropscore_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdocument_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdrawinganchor_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxdrawing_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxformat.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxformat_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxglobal.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxmediafile_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxnumformatparser_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxrelationships_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxrichstring.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxrichstring_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxsharedstrings_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxsimpleooxmlfile_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxstyles_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxtheme_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxutility_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxworkbook.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxworkbook_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxworksheet.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxworksheet_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxzipreader_p.h" />
+    <ClInclude Include="Common\Unit\xlsx\xlsxzipwriter_p.h" />
+    <QtMoc Include="Common\Unit\xlsx\xlsxdocument.h" />
     <QtMoc Include="Common\Unit\DataBase\SQLiteDatabase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
