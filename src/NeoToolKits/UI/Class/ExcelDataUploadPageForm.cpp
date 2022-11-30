@@ -1,6 +1,16 @@
 #include "ExcelDataUploadPageForm.h"
 #include "ExcelDataUploadConfigPopDialog.h"
 #include <QFileDialog>
+#include <QDebug>
+
+#include "xlsxdocument.h"
+#include "xlsxchartsheet.h"
+#include "xlsxcellrange.h"
+#include "xlsxchart.h"
+#include "xlsxrichstring.h"
+#include "xlsxworkbook.h"
+using namespace QXlsx;
+
 
 //ini prefixs
 const QString s_ini_prefix_excel = "Excel";
@@ -51,6 +61,25 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 			m_strExcelFileName = fileName;
 			m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, m_strExcelFileName);
 			ui->lineEdit_ExcelFile->setText(m_strExcelFileName);
+
+			QXlsx::Document xlsx(fileName);
+			if (xlsx.load()) // load excel file
+			{
+				QXlsx::Workbook* workBook = xlsx.workbook();
+				QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(0));
+				CellRange* cellRange = &(workSheet->dimension());
+				int rowCount = cellRange->rowCount();
+				int columnCount = cellRange->columnCount();
+				for (int col = 1; col <= columnCount; col++)
+				{
+					Cell* cell = xlsx.cellAt(1, col);
+					if (cell != NULL)
+					{
+						QVariant var = cell->readValue();
+						qDebug() << QString("col %1:").arg(col) << var.toString();
+					}
+				}
+			}
 		}
 	}
 	else if (curBtn == ui->btn_SetDbInfo)
