@@ -11,25 +11,23 @@ using namespace QXlsx;
 
 //ini prefixs
 const QString s_ini_prefix_excel = "Excel";
+const QString s_ini_prefix_sql = QString::fromStdWString(L"MySQLÅäÖÃ");
 
 //ini keys
 const QString s_ini_key_excelFile = "ExcelFlie";
 
-ExcelDataUploadApp::ExcelDataUploadApp(QObject *parent)
+ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 	: QObject(parent),
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/ExcelDataUploadTool.ini"),
 	m_pCfg(new IniOperation(m_strIniFileName)),
 	m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString())
 {
-	m_pMysqlInfoDlg = new MysqlInfoPopDialog(static_cast<QWidget*>(parent), false);
-	m_pMysqlInfoDlg->setIniFileName(m_strIniFileName);
-	m_pMysqlInfoDlg->setIniPrefix(QString::fromStdWString(L"MySQLÅäÖÃ"));
-	m_pMysqlInfoDlg->LoadIniCfg();
+
 }
 
 ExcelDataUploadApp::~ExcelDataUploadApp()
 {
-	delete m_pMysqlInfoDlg;
+	//delete m_pMysqlInfoDlg;
 	delete m_pCfg;
 }
 
@@ -44,9 +42,19 @@ QString ExcelDataUploadApp::getExcelFileName() const
 	return m_strExcelFileName;
 }
 
-MysqlInfoPopDialog* ExcelDataUploadApp::getMysqlInfoDlg() const
+QString ExcelDataUploadApp::getIniFileName() const
 {
-	return m_pMysqlInfoDlg;
+	return m_strIniFileName;
+}
+
+QString ExcelDataUploadApp::getIniSqlCfgPrefix() const
+{
+	return s_ini_prefix_sql;
+}
+
+SqlTableInfo* ExcelDataUploadApp::getSqlTableInfoPointer() const
+{
+	return (SqlTableInfo*)(&m_stTableInfo);
 }
 
 QStringList ExcelDataUploadApp::LoadExcelColumns(const QString& fileName)

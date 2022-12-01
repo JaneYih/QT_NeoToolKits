@@ -16,6 +16,7 @@ ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 
 ExcelDataUploadPageForm::~ExcelDataUploadPageForm()
 {
+	delete m_pMysqlInfoDlg;
 	delete m_app;
 	delete ui;
 }
@@ -24,7 +25,12 @@ void ExcelDataUploadPageForm::initView(void)
 {
 	ui->setupUi(this);
 	ui->lineEdit_ExcelFile->setText(m_app->getExcelFileName());
-	ui->lineEdit_DbInfo->setText(m_app->getMysqlInfoDlg()->getSqlTableInfo().toString());
+
+	m_pMysqlInfoDlg = new MysqlInfoPopDialog(m_app->getSqlTableInfoPointer(), this, false);
+	m_pMysqlInfoDlg->setIniFileName(m_app->getIniFileName());
+	m_pMysqlInfoDlg->setIniPrefix(m_app->getIniSqlCfgPrefix());
+	m_pMysqlInfoDlg->LoadIniCfg();
+	ui->lineEdit_DbInfo->setText(m_app->getSqlTableInfoPointer()->toString());
 }
 
 void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
@@ -46,10 +52,9 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_SetDbInfo)
 	{
-		MysqlInfoPopDialog* pDlg = m_app->getMysqlInfoDlg();
-		pDlg->UpdataUiData();
-		pDlg->exec();
-		ui->lineEdit_DbInfo->setText(pDlg->getSqlTableInfo().toString());
+		m_pMysqlInfoDlg->UpdataUiData();
+		m_pMysqlInfoDlg->exec();
+		ui->lineEdit_DbInfo->setText(m_app->getSqlTableInfoPointer()->toString());
 	}
 	else if (curBtn == ui->btn_Upload)
 	{

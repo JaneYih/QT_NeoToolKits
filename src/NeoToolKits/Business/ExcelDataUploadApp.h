@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QObject>
-#include "MysqlInfoPopDialog.h"
 #include "IniOperation.h"
+#include "Database_def.h"
 
 class ExcelDataUploadApp  : public QObject
 {
@@ -15,14 +15,16 @@ public:
 	QStringList LoadExcelColumns(const QString& fileName);
 
 	QString getExcelFileName() const;
-	MysqlInfoPopDialog* getMysqlInfoDlg() const;
+	QString getIniFileName() const;
+	QString getIniSqlCfgPrefix() const;
+	SqlTableInfo* getSqlTableInfoPointer() const;
 
 private:
 	void setExcelFileName(const QString& filename);
 
 private:
+	SqlTableInfo m_stTableInfo;
 	QString m_strIniFileName;
 	IniOperation* m_pCfg;
 	QString m_strExcelFileName;
-	MysqlInfoPopDialog* m_pMysqlInfoDlg;
 };

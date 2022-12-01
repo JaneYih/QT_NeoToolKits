@@ -9,14 +9,14 @@ class MysqlInfoPopDialog  : public QDialog
 	Q_OBJECT
 
 public:
-	explicit MysqlInfoPopDialog(QWidget* parent = nullptr, bool bUseDefaultIni = true, SqlTableInfo* pTableInfo = nullptr);
+	explicit MysqlInfoPopDialog(SqlTableInfo* pTableInfo, QWidget* parent = nullptr, bool bUseDefaultIni = true);
 	~MysqlInfoPopDialog();
 
+	void setUseDefaultIni(bool enable);
 	void setIniFileName(const QString& fileName);
 	void setIniPrefix(const QString& prefix);
 	bool LoadIniCfg();
 	void UpdataUiData();
-	SqlTableInfo getSqlTableInfo() const;
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);
@@ -28,10 +28,12 @@ private:
 
 private:
 	Ui::MysqlInfoPopDlg* ui;
-	SqlTableInfo m_stTableInfo;
+	SqlTableInfo* m_pstTableInfo;
 
 	bool m_bUseDefaultIni;
 	QString m_strIniFileName;
 	QString m_strIniPrefix;
+	QString m_strIniFileNameDef;
+	QString m_strIniPrefixDef;
 };
 
