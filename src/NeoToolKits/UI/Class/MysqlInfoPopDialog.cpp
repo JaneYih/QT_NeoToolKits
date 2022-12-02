@@ -36,47 +36,59 @@ void MysqlInfoPopDialog::setUseDefaultIni(bool enable)
 
 void MysqlInfoPopDialog::setIniFileName(const QString& fileName)
 {
-	m_strIniFileName = m_bUseDefaultIni ? m_strIniFileNameDef : fileName;
+	m_strIniFileName = fileName;
+}
+
+QString MysqlInfoPopDialog::getIniFileName() const
+{
+	return m_bUseDefaultIni ? m_strIniFileNameDef : m_strIniFileName;
 }
 
 void MysqlInfoPopDialog::setIniPrefix(const QString& prefix)
 {
-	m_strIniPrefix = m_bUseDefaultIni ? m_strIniPrefixDef : prefix;
+	m_strIniPrefix = prefix;
+}
+
+QString MysqlInfoPopDialog::getIniPrefix() const
+{
+	return m_bUseDefaultIni ? m_strIniPrefixDef : m_strIniPrefix;
 }
 
 bool MysqlInfoPopDialog::LoadIniCfg()
 {
-	IniOperation ini(m_strIniFileName);
+	IniOperation ini(getIniFileName());
+	QString prefix = getIniPrefix();
 	m_pstTableInfo->baseInfo.type = SqlTypes::eMYSQL;
-	m_pstTableInfo->baseInfo.host = ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"IP地址"), "Not Set").toString();
-	m_pstTableInfo->baseInfo.port = ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"端口"), "Not Set").toString();
-	m_pstTableInfo->baseInfo.user = ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"用户名"), "Not Set").toString();
-	m_pstTableInfo->baseInfo.passwd = ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"密码"), "Not Set").toString();
-	m_pstTableInfo->baseInfo.dbName= ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"数据库名称"), "Not Set").toString();
-	m_pstTableInfo->tableName = ini.ReadValue(m_strIniPrefix, QString::fromStdWString(L"数据表名称"), "Not Set").toString();
+	m_pstTableInfo->baseInfo.host = ini.ReadValue(prefix, QString::fromStdWString(L"IP地址"), "Not Set").toString();
+	m_pstTableInfo->baseInfo.port = ini.ReadValue(prefix, QString::fromStdWString(L"端口"), "Not Set").toString();
+	m_pstTableInfo->baseInfo.user = ini.ReadValue(prefix, QString::fromStdWString(L"用户名"), "Not Set").toString();
+	m_pstTableInfo->baseInfo.passwd = ini.ReadValue(prefix, QString::fromStdWString(L"密码"), "Not Set").toString();
+	m_pstTableInfo->baseInfo.dbName= ini.ReadValue(prefix, QString::fromStdWString(L"数据库名称"), "Not Set").toString();
+	m_pstTableInfo->tableName = ini.ReadValue(prefix, QString::fromStdWString(L"数据表名称"), "Not Set").toString();
 	return true;
 }
 
-bool MysqlInfoPopDialog::SaveIniCfg()
+bool MysqlInfoPopDialog::SaveIniCfg(const SqlTableInfo& info)
 {
-	IniOperation ini(m_strIniFileName);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"IP地址"), m_pstTableInfo->baseInfo.host);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"端口"), m_pstTableInfo->baseInfo.port);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"用户名"), m_pstTableInfo->baseInfo.user);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"密码"), m_pstTableInfo->baseInfo.passwd);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"数据库名称"), m_pstTableInfo->baseInfo.dbName);
-	ini.WriteValue(m_strIniPrefix, QString::fromStdWString(L"数据表名称"), m_pstTableInfo->tableName);
+	IniOperation ini(getIniFileName());
+	QString prefix = getIniPrefix();
+	ini.WriteValue(prefix, QString::fromStdWString(L"IP地址"), info.baseInfo.host);
+	ini.WriteValue(prefix, QString::fromStdWString(L"端口"), info.baseInfo.port);
+	ini.WriteValue(prefix, QString::fromStdWString(L"用户名"), info.baseInfo.user);
+	ini.WriteValue(prefix, QString::fromStdWString(L"密码"), info.baseInfo.passwd);
+	ini.WriteValue(prefix, QString::fromStdWString(L"数据库名称"), info.baseInfo.dbName);
+	ini.WriteValue(prefix, QString::fromStdWString(L"数据表名称"), info.tableName);
 	return true;
 }
 
-void MysqlInfoPopDialog::GetUiData()
+void MysqlInfoPopDialog::GetUiData(SqlTableInfo& info)
 {
-	m_pstTableInfo->baseInfo.host = ui->lineEdit_DbIP->text();
-	m_pstTableInfo->baseInfo.port = ui->lineEdit_DbPort->text();
-	m_pstTableInfo->baseInfo.user = ui->lineEdit_DbUserName->text();
-	m_pstTableInfo->baseInfo.passwd = ui->lineEdit_DbPassword->text();
-	m_pstTableInfo->baseInfo.dbName = ui->lineEdit_DbName->text();
-	m_pstTableInfo->tableName = ui->lineEdit_DbTableName->text();
+	info.baseInfo.host = ui->lineEdit_DbIP->text();
+	info.baseInfo.port = ui->lineEdit_DbPort->text();
+	info.baseInfo.user = ui->lineEdit_DbUserName->text();
+	info.baseInfo.passwd = ui->lineEdit_DbPassword->text();
+	info.baseInfo.dbName = ui->lineEdit_DbName->text();
+	info.tableName = ui->lineEdit_DbTableName->text();
 }
 
 void MysqlInfoPopDialog::UpdataUiData()
@@ -94,8 +106,9 @@ void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
 	QPushButton* curBtn = static_cast<QPushButton*>(sender());
 	if (curBtn == ui->btn_test)
 	{
-		GetUiData();
-		CDataTableTest db(m_pstTableInfo->baseInfo);
+		SqlTableInfo tempInfo;
+		GetUiData(tempInfo);
+		CDataTableTest db(tempInfo.baseInfo);
 		std::string strErrMsg;
 		if (!db.TestConnect(strErrMsg))
 		{
@@ -108,8 +121,8 @@ void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_ok)
 	{
-		GetUiData();
-		SaveIniCfg();
+		GetUiData(*m_pstTableInfo);
+		SaveIniCfg(*m_pstTableInfo);
 		setResult(QDialog::Accepted);
 		close();
 	}

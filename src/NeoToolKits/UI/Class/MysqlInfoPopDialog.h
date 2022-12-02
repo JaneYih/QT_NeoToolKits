@@ -12,19 +12,22 @@ public:
 	explicit MysqlInfoPopDialog(SqlTableInfo* pTableInfo, QWidget* parent = nullptr, bool bUseDefaultIni = true);
 	~MysqlInfoPopDialog();
 
+	bool LoadIniCfg();
+	void UpdataUiData();
+
 	void setUseDefaultIni(bool enable);
 	void setIniFileName(const QString& fileName);
 	void setIniPrefix(const QString& prefix);
-	bool LoadIniCfg();
-	void UpdataUiData();
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);
 
 private:
 	void initView(void);
-	void GetUiData();
-	bool SaveIniCfg();
+	void GetUiData(SqlTableInfo& info);
+	bool SaveIniCfg(const SqlTableInfo& info);
+	QString getIniFileName() const;
+	QString getIniPrefix() const;
 
 private:
 	Ui::MysqlInfoPopDlg* ui;

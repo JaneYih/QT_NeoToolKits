@@ -27,7 +27,6 @@ ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 
 ExcelDataUploadApp::~ExcelDataUploadApp()
 {
-	//delete m_pMysqlInfoDlg;
 	delete m_pCfg;
 }
 
