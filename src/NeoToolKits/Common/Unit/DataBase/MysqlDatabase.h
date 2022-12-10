@@ -2,6 +2,7 @@
 
 #include "DatabaseBaseClass.h"
 #include "MySQLPackage/include/mysql.h"
+#include <list>
 
 using namespace std;
 
@@ -44,5 +45,6 @@ public:
 	virtual int ShowIndex(const char* TableName);
 
 	virtual bool IsExistTable(const char* TableName);
+	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
 };
 

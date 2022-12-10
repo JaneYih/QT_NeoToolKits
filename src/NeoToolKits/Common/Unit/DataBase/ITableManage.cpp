@@ -38,3 +38,17 @@ bool ITableManage::TestConnect(string& errMsg)
 	}
 	return false;
 }
+
+bool ITableManage::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+{
+	if (DatabaseInstence)
+	{
+		if (!DatabaseInstence->GetTableFullFields(TableName, Fields))
+		{
+			string errMsg = DatabaseInstence->GetLastError();
+			return false;
+		}
+		return true;
+	}
+	return false;
+}

@@ -153,6 +153,8 @@
     <ClCompile Include="Common\Unit\xlsx\source\xlsxzipwriter.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
+    <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp" />
+    <ClCompile Include="UI\Class\ExcelDataUploadDataModel.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadPageForm.cpp" />
     <ClCompile Include="UI\Class\MainWindowDialog.cpp" />
     <ClCompile Include="UI\Class\MysqlInfoPopDialog.cpp" />
@@ -176,6 +178,8 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h" />
+    <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h" />
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
     <ClInclude Include="Common\IniOperation.h" />
     <ClInclude Include="Common\Type\common_def.h" />

@@ -88,6 +88,12 @@
     <Filter Include="Common\Unit\xlsx\source">
       <UniqueIdentifier>{df29e061-4cdc-4ec0-8c12-dbab057edc9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI\Class\model">
+      <UniqueIdentifier>{d643c8d9-654b-4f48-a7d8-424f54681e09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI\Class\Delegat">
+      <UniqueIdentifier>{bb56c688-a2f8-4624-9991-1a4e6c745e92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
@@ -239,6 +245,12 @@
     <ClCompile Include="Business\ExcelDataUploadApp.cpp">
       <Filter>Tools\ExcelDataUpload\Business</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Class\ExcelDataUploadDataModel.cpp">
+      <Filter>Tools\ExcelDataUpload\UI\Class\model</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp">
+      <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -264,6 +276,12 @@
     </QtMoc>
     <QtMoc Include="Business\ExcelDataUploadApp.h">
       <Filter>Tools\ExcelDataUpload\Business</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h">
+      <Filter>Tools\ExcelDataUpload\UI\Class\model</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h">
+      <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

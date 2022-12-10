@@ -67,6 +67,10 @@ bool CSQLiteDatabase::IsExistTable(const char* TableName)
 	return false;
 }
 
+bool CSQLiteDatabase::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+{
+	return false;
+}
 
 int CSQLiteDatabase::ExcuteCommand(const char*  command)
 {

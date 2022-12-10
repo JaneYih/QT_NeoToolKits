@@ -76,11 +76,10 @@ QStringList ExcelDataUploadApp::LoadExcelColumns(const QString& fileName)
 				strOutList.push_back(var.toString());
 			}
 		}
-		setExcelFileName(fileName);
 	}
 	else
 	{
-		QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
+	//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
 	}
 	return strOutList;
 }

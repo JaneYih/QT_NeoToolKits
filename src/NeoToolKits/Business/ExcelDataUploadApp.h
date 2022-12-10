@@ -15,12 +15,10 @@ public:
 	QStringList LoadExcelColumns(const QString& fileName);
 
 	QString getExcelFileName() const;
+	void setExcelFileName(const QString& filename);
 	QString getIniFileName() const;
 	QString getIniSqlCfgPrefix() const;
 	SqlTableInfo* getSqlTableInfoPointer() const;
-
-private:
-	void setExcelFileName(const QString& filename);
 
 private:
 	SqlTableInfo m_stTableInfo;

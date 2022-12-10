@@ -30,7 +30,7 @@ public:
 	virtual int DeleteIndex(const char* TableName, const char* FieldName, const char* IndexName);
 	virtual int ShowIndex(const char* TableName);
 	virtual bool IsExistTable(const char* TableName);
-
+	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
 signals:
 
 public slots:

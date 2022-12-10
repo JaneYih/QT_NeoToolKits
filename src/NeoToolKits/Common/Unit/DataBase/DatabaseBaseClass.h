@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <list>
 #include "Database_def.h"
 using namespace std;
 
@@ -42,5 +43,6 @@ public:
 	virtual int ShowIndex(const char* TableName) = 0;
 
 	virtual bool IsExistTable(const char* TableName) = 0;
+	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields) = 0;
 	virtual string GetLastError() = 0;
 };

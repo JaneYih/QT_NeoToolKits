@@ -231,9 +231,37 @@ bool CMysqlDatabase::IsExistTable(const char* TableName)
 	OutData.RowList.clear();
 	if (!GetResultData(command, OutData))
 	{
-		{if (OutData.RowList.size() >= 1)
-
+		if (OutData.RowList.size() >= 1)
+		{
 			return true;    //数据表已存在
+		}
+	}
+
+	return false;
+}
+
+//查询表的字段名称
+bool CMysqlDatabase::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+{
+	char command[1024] = { 0 };
+	sprintf_s(command, "SHOW FULL COLUMNS FROM %s", TableName);
+
+	DataTable OutData;
+	OutData.RowList.clear();
+	if (!GetResultData(command, OutData))
+	{
+		int index = 0;
+		foreach (auto var, OutData.FieldName.FieldListValue)
+		{
+			if (var == "Field")
+			{
+				foreach(auto value, OutData.RowList)
+				{
+					Fields.push_back(value.FieldListValue[index]);
+				}
+				return true;
+			}
+			++index;
 		}
 	}
 

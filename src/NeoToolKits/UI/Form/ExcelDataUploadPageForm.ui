@@ -33,7 +33,7 @@
        <item>
         <widget class="QLabel" name="label_ExcelFile">
          <property name="text">
-          <string>Excel文件：</string>
+          <string> Excel文件：</string>
          </property>
         </widget>
        </item>
