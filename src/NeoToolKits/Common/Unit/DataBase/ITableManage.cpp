@@ -36,6 +36,7 @@ bool ITableManage::TestConnect(string& errMsg)
 		}
 		return true;
 	}
+	errMsg = "DatabaseInstence is null.";
 	return false;
 }
 

@@ -108,15 +108,16 @@ void MysqlInfoPopDialog::PushbuttonClickedSlot(bool checked)
 	{
 		SqlTableInfo tempInfo;
 		GetUiData(tempInfo);
+		tempInfo.baseInfo.type = SqlTypes::eMYSQL;
 		CDataTableTest db(tempInfo.baseInfo);
 		std::string strErrMsg;
 		if (!db.TestConnect(strErrMsg))
 		{
-			QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接失败：%1").arg(QString::fromStdString(strErrMsg)));
+			QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接失败：%1").arg(QString::fromLocal8Bit(strErrMsg.c_str())));
 		}
 		else
 		{
-			QMessageBox::critical(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接成功！"));
+			QMessageBox::information(this, QString::fromStdWString(L"连接测试"), QString::fromStdWString(L"连接成功！"));
 		}
 	}
 	else if (curBtn == ui->btn_ok)

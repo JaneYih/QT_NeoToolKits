@@ -13,7 +13,7 @@ typedef enum
 
 typedef struct _SqlBaseInfo_
 {
-	SqlTypes type;
+	SqlTypes type = SqlTypes::eMYSQL;
 	QString host;
 	QString user;
 	QString passwd;
