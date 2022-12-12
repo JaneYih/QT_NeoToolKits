@@ -2,17 +2,18 @@
 #include "ExcelDataUploadConfigPopDialog.h"
 #include <QFileDialog>
 #include <QDebug>
-#include "DataTableTest.h"
+#include "ExcelDataUploadDbOperate.h"
+#include <QMessageBox>
 
 ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 	: QWidget(parent),
 	ui(new Ui::ExcelDataUploadPageForm),
-	m_app(new ExcelDataUploadApp(this)),
+	m_pApp(new ExcelDataUploadApp(this)),
 	m_pDataModel(new ExcelDataUploadDataModel),
 	m_pDataDelegate(new ExcelDataUploadDataDelegate),
 	m_bFirstShowData(true)
 {
-	Q_ASSERT(m_app);
+	Q_ASSERT(m_pApp);
 	Q_ASSERT(m_pDataModel);
 	Q_ASSERT(m_pDataDelegate);
 	initView();
@@ -26,7 +27,7 @@ ExcelDataUploadPageForm::~ExcelDataUploadPageForm()
 	delete m_pMysqlInfoDlg;
 	delete m_pDataDelegate;
 	delete m_pDataModel;
-	delete m_app;
+	delete m_pApp;
 	delete ui;
 }
 
@@ -40,13 +41,11 @@ void ExcelDataUploadPageForm::showEvent(QShowEvent* event)
 	Q_UNUSED(event);
 	if (m_bFirstShowData)
 	{
-		m_pMysqlInfoDlg = new MysqlInfoPopDialog(m_app->getSqlTableInfoPointer(), this, false);
-		m_pMysqlInfoDlg->setIniFileName(m_app->getIniFileName());
-		m_pMysqlInfoDlg->setIniPrefix(m_app->getIniSqlCfgPrefix());
-		m_pMysqlInfoDlg->LoadIniCfg();
+		m_pMysqlInfoDlg = new MysqlInfoPopDialog(m_pApp->getSqlTableInfoPointer(), this, false);
+		m_pMysqlInfoDlg->LoadIniCfg(m_pApp->getIniFileName(), m_pApp->getIniSqlCfgPrefix());
 
 		EditTableViewByDbConnect();  //加载数据库的字段信息
-		EditTableViewByExcel(m_app->getExcelFileName()); //加载Excel的列信息
+		EditTableViewByExcel(m_pApp->getExcelFileName()); //加载Excel的列信息
 
 		ui->tableView->setModel(m_pDataModel);
 		ui->tableView->setItemDelegateForColumn(1, m_pDataDelegate);
@@ -64,13 +63,15 @@ void ExcelDataUploadPageForm::EditTableViewByExcel(const QString& excelFileName)
 {
 	if (!excelFileName.isNull())
 	{
-		m_app->setExcelFileName(excelFileName);
+		m_pApp->setExcelFileName(excelFileName);
 		ui->lineEdit_ExcelFile->setText(excelFileName);
 
-		QStringList ExcelColumns = m_app->LoadExcelColumns(excelFileName);
+		QStringList ExcelColumns = m_pApp->LoadExcelColumns(excelFileName);
 		m_pDataModel->initData(ExcelColumns);
 		if (ExcelColumns.isEmpty())
 		{
+			QString strTemp(ui->lineEdit_ExcelFile->text());
+			ui->lineEdit_ExcelFile->setText(QString("%1-->%2").arg(strTemp).arg("excel open fail!"));
 			ui->lineEdit_ExcelFile->setStyleSheet("background-color: rgb(255, 0, 0);");
 			return;
 		}
@@ -80,11 +81,11 @@ void ExcelDataUploadPageForm::EditTableViewByExcel(const QString& excelFileName)
 
 void ExcelDataUploadPageForm::EditTableViewByDbConnect()
 {
-	ui->lineEdit_DbInfo->setText(m_app->getSqlTableInfoPointer()->toString());
+	ui->lineEdit_DbInfo->setText(m_pApp->getSqlTableInfoPointer()->toString());
 
-	CDataTableTest db(m_app->getSqlTableInfoPointer()->baseInfo);
+	ExcelDataUploadDbOperate db(*(m_pApp->getSqlTableInfoPointer()));
 	std::list<std::string> fields;
-	if (db.GetTableFullFields(m_app->getSqlTableInfoPointer()->tableName.toUtf8(), fields))
+	if (db.GetTableFullFields(m_pApp->getSqlTableInfoPointer()->tableName.toUtf8(), fields))
 	{
 		QStringList options;
 		options.push_back("");
@@ -97,6 +98,12 @@ void ExcelDataUploadPageForm::EditTableViewByDbConnect()
 	}
 	else
 	{
+		QString strErrMsg;
+		if (!db.test(strErrMsg))
+		{
+			QString strTemp(ui->lineEdit_DbInfo->text());
+			ui->lineEdit_DbInfo->setText(QString("%1-->%2").arg(strTemp).arg(strErrMsg));
+		}
 		m_pDataDelegate->setComboCtrlOptions(QStringList());
 		ui->lineEdit_DbInfo->setStyleSheet("background-color: rgb(255, 0, 0);");
 	}
@@ -119,10 +126,8 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_Upload)
 	{
-		QVector<ExcelDataUploadInfo> dataMap = m_pDataModel->getData();
-		SqlTableInfo dbInfo = *(m_app->getSqlTableInfoPointer());
-
-		ExcelDataUploadConfigPopDialog dlg(this);
+		m_pApp->setDataMap(m_pDataModel->getData());
+		ExcelDataUploadConfigPopDialog dlg(this, m_pApp);
 		dlg.exec();
 	}
 }

@@ -20,7 +20,8 @@ ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 	: QObject(parent),
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/ExcelDataUploadTool.ini"),
 	m_pCfg(new IniOperation(m_strIniFileName)),
-	m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString())
+	m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString()),
+	m_bUploading(false)
 {
 
 }
@@ -28,6 +29,16 @@ ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 ExcelDataUploadApp::~ExcelDataUploadApp()
 {
 	delete m_pCfg;
+}
+
+void ExcelDataUploadApp::setDataMap(const QVector<ExcelDataUploadInfo>& dataMap)
+{
+	m_vecDataMap = dataMap;
+}
+
+const QVector<ExcelDataUploadInfo> ExcelDataUploadApp::getDataMap() const
+{
+	return m_vecDataMap;
 }
 
 void ExcelDataUploadApp::setExcelFileName(const QString& filename)
@@ -56,15 +67,44 @@ SqlTableInfo* ExcelDataUploadApp::getSqlTableInfoPointer() const
 	return (SqlTableInfo*)(&m_stTableInfo);
 }
 
+void ExcelDataUploadApp::setUploadConfig(const ExcelDataUploadConfig& stUploadConfig)
+{
+	m_stUploadConfig = stUploadConfig;
+}
+
+const ExcelDataUploadConfig ExcelDataUploadApp::getUploadConfig() const
+{
+	return m_stUploadConfig;
+}
+
+CellRange* ExcelDataUploadApp::OpenExcelSheet(const QXlsx::Document& xlsx, int index)
+{
+	if (xlsx.load())
+	{
+		QXlsx::Workbook* workBook = xlsx.workbook();
+		if (workBook)
+		{
+			QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(index));
+			if (workSheet)
+			{
+				return &(workSheet->dimension());
+			}
+		}
+	}
+	else
+	{
+		//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
+	}
+	return nullptr;
+}
+
 QStringList ExcelDataUploadApp::LoadExcelColumns(const QString& fileName)
 {
 	QStringList strOutList;
 	QXlsx::Document xlsx(fileName);
-	if (xlsx.load())
+	CellRange* cellRange = OpenExcelSheet(xlsx);
+	if (cellRange)
 	{
-		QXlsx::Workbook* workBook = xlsx.workbook();
-		QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(0));
-		CellRange* cellRange = &(workSheet->dimension());
 		int rowCount = cellRange->rowCount();
 		int columnCount = cellRange->columnCount();
 		for (int col = 1; col <= columnCount; col++)
@@ -77,9 +117,29 @@ QStringList ExcelDataUploadApp::LoadExcelColumns(const QString& fileName)
 			}
 		}
 	}
-	else
-	{
-	//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
-	}
 	return strOutList;
 }
+
+int ExcelDataUploadApp::LoadExcelRowCount(const QString& fileName)
+{
+	QXlsx::Document xlsx(fileName);
+	CellRange* cellRange = OpenExcelSheet(xlsx);
+	if (cellRange)
+	{
+		return cellRange->rowCount();
+	}
+	return 0;
+}
+
+bool ExcelDataUploadApp::StartUpload()
+{
+	m_bUploading = true;
+	return false;
+}
+
+bool ExcelDataUploadApp::StopUpload()
+{
+	m_bUploading = false;
+	return false;
+}
+

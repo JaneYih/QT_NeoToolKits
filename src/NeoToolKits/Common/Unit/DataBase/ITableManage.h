@@ -23,14 +23,14 @@ public:
 
 public:
 	bool TestConnect(string& errMsg);
+	bool IsExistTable(const char* TableName);
 	bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
-	virtual bool CreateTable() = 0;
-	virtual bool InsertData(vector<string> para) = 0; 
-	virtual bool DeleteData(vector<string> para) = 0;
-	virtual bool UpdataData(vector<string> para) = 0;
-	virtual bool SelectData(vector<string> para, DataTable& outputData) = 0;
+	virtual bool CreateTable();
+	virtual bool InsertData(vector<string> para);
+	virtual bool DeleteData(vector<string> para);
+	virtual bool UpdataData(vector<string> para);
+	virtual bool SelectData(vector<string> para, DataTable& outputData);
 
 protected:
-	bool IsExistTable(const char* TableName);
 	bool AnalysisPara(list<string> para, const int paraNum, string Sqlpara[]);
 };

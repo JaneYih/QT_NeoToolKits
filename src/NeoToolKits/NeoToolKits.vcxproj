@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
+    <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
     <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp" />
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp" />
@@ -181,6 +182,8 @@
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h" />
     <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h" />
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
+    <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
+    <ClInclude Include="Business\ExcelDataUpload_def.h" />
     <ClInclude Include="Common\IniOperation.h" />
     <ClInclude Include="Common\Type\common_def.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />

@@ -13,6 +13,7 @@ public:
 	~MysqlInfoPopDialog();
 
 	bool LoadIniCfg();
+	bool LoadIniCfg(const QString& fileName, const QString& prefix);
 	void UpdataUiData();
 
 	void setUseDefaultIni(bool enable);

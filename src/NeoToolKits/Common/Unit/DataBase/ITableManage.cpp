@@ -53,3 +53,28 @@ bool ITableManage::GetTableFullFields(const char* TableName, std::list<string>& 
 	}
 	return false;
 }
+
+bool ITableManage::CreateTable()
+{
+	return false;
+}
+
+bool ITableManage::InsertData(vector<string> para)
+{
+	return false;
+}
+
+bool ITableManage::DeleteData(vector<string> para)
+{
+	return false;
+}
+
+bool ITableManage::UpdataData(vector<string> para)
+{
+	return false;
+}
+
+bool ITableManage::SelectData(vector<string> para, DataTable& outputData)
+{
+	return false;
+}

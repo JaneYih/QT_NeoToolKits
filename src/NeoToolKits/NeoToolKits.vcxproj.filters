@@ -251,6 +251,9 @@
     <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp">
       <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
     </ClCompile>
+    <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp">
+      <Filter>Tools\ExcelDataUpload\Business</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -466,6 +469,12 @@
     </ClInclude>
     <ClInclude Include="Common\Unit\xlsx\header\xlsxzipwriter_p.h">
       <Filter>Common\Unit\xlsx\header</Filter>
+    </ClInclude>
+    <ClInclude Include="Business\ExcelDataUpload_def.h">
+      <Filter>Tools\ExcelDataUpload\Business</Filter>
+    </ClInclude>
+    <ClInclude Include="Business\ExcelDataUploadDbOperate.h">
+      <Filter>Tools\ExcelDataUpload\Business</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

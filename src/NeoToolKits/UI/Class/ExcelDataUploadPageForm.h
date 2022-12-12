@@ -28,7 +28,7 @@ private:
 
 private:
 	Ui::ExcelDataUploadPageForm* ui;
-	ExcelDataUploadApp* m_app;
+	ExcelDataUploadApp* m_pApp;
 	MysqlInfoPopDialog* m_pMysqlInfoDlg;
 	ExcelDataUploadDataModel* m_pDataModel;
 	ExcelDataUploadDataDelegate* m_pDataDelegate;

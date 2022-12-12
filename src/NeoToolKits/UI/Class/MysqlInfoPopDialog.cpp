@@ -68,6 +68,13 @@ bool MysqlInfoPopDialog::LoadIniCfg()
 	return true;
 }
 
+bool MysqlInfoPopDialog::LoadIniCfg(const QString& fileName, const QString& prefix)
+{
+	setIniFileName(fileName);
+	setIniPrefix(prefix);
+	return LoadIniCfg();
+}
+
 bool MysqlInfoPopDialog::SaveIniCfg(const SqlTableInfo& info)
 {
 	IniOperation ini(getIniFileName());

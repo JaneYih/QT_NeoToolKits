@@ -2,18 +2,7 @@
 
 #include <QAbstractTableModel>
 #include <QVector>
-
-
-typedef struct _ExcelDataUploadInfo_
-{
-	QString ExcelColumnName; //Excel数据列名称
-	QString DbFieldName; //数据库字段名
-	explicit _ExcelDataUploadInfo_(const QString& excelColumnName, const QString& dbFieldName = "")
-		: ExcelColumnName(excelColumnName),
-		DbFieldName(dbFieldName)
-	{
-	}
-}ExcelDataUploadInfo, * pExcelDataUploadInfo;
+#include "ExcelDataUpload_def.h"
 
 class ExcelDataUploadDataModel  : public QAbstractTableModel
 {
