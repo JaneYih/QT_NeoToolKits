@@ -34,6 +34,7 @@ ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 
 ExcelDataUploadApp::~ExcelDataUploadApp()
 {
+	delete m_pstUploadingInfo;
 	delete m_pCfg;
 }
 
