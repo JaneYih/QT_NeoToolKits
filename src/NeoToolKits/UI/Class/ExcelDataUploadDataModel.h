@@ -4,6 +4,8 @@
 #include <QVector>
 #include "ExcelDataUpload_def.h"
 
+using namespace ExcelDataUpload;
+
 class ExcelDataUploadDataModel  : public QAbstractTableModel
 {
 	Q_OBJECT

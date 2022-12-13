@@ -2,6 +2,8 @@
 #include "ExcelDataUploadDataModel.h"
 #include <QComboBox>
 
+using namespace ExcelDataUpload;
+
 ExcelDataUploadDataDelegate::ExcelDataUploadDataDelegate(QObject *parent)
 	: QStyledItemDelegate(parent)
 {}

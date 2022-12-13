@@ -15,9 +15,10 @@ ExcelDataUploadDataModel::~ExcelDataUploadDataModel()
 void ExcelDataUploadDataModel::initData(const QStringList& excelColumns)
 {
 	QVector<ExcelDataUploadInfo> data;
+	int index = 0;
 	foreach (QString var, excelColumns)
 	{
-		data.append(ExcelDataUploadInfo(var));
+		data.append(ExcelDataUploadInfo(++index, var));
 	}
 	setData(data);
 }

@@ -17,6 +17,8 @@ protected:
 
 private:
 	void initView(void);
+	void ClearDisplay(int rowCount);
+	void UploadingView(bool uploading);
 
 private:
 	Ui::ExcelDataUploadConfigPopDlg* ui;
@@ -24,4 +26,6 @@ private:
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);
+	void DisplayItemSlot(const QString& text, int count, int countMax);
+	void DisplayFinishSlot();
 };

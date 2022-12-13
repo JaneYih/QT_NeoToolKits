@@ -126,7 +126,20 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_Upload)
 	{
-		m_pApp->setDataMap(m_pDataModel->getData());
+		QVector<ExcelDataUploadInfo> dataMap;
+		foreach (auto var, m_pDataModel->getData())
+		{
+			if (var.isValid())
+			{
+				dataMap.push_back(var);
+			}
+		}
+		if (dataMap.isEmpty())
+		{
+			QMessageBox::critical(this, "critical", QString::fromStdWString(L"请先选择数据库字段") );
+			return;
+		}
+		m_pApp->setDataMap(dataMap);
 		ExcelDataUploadConfigPopDialog dlg(this, m_pApp);
 		dlg.exec();
 	}

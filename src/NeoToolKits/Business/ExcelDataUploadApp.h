@@ -6,6 +6,9 @@
 #include "ExcelDataUpload_def.h"
 #include "xlsxdocument.h"
 #include "xlsxcellrange.h"
+#include <QThread>
+
+using namespace ExcelDataUpload;
 
 class ExcelDataUploadApp  : public QObject
 {
@@ -17,6 +20,7 @@ public:
 
 	bool StartUpload();
 	bool StopUpload();
+	void PackingUploadDataList(QList<QVector<UploadData>>& dataList);
 
 	QStringList LoadExcelColumns(const QString& fileName);
 	int LoadExcelRowCount() {
@@ -25,27 +29,51 @@ public:
 
 	QString getExcelFileName() const;
 	void setExcelFileName(const QString& filename);
+
 	QString getIniFileName() const;
 	QString getIniSqlCfgPrefix() const;
-	SqlTableInfo* getSqlTableInfoPointer() const;
+
 	void setDataMap(const QVector<ExcelDataUploadInfo>& dataMap);
 	const QVector<ExcelDataUploadInfo> getDataMap() const;
+
 	void setUploadConfig(const ExcelDataUploadConfig& stUploadConfig);
 	const ExcelDataUploadConfig getUploadConfig() const;
-	bool getIsUploading()const {
-		return m_bUploading;
-	};
+
+	bool getUploading() const;
+	void setUploading(bool bUploading);
+
+	SqlTableInfo* getSqlTableInfoPointer() const;
+	const volatile bool& getStopUploadReference() const;
+	UploadingInfo* getUploadingInfoPointer() const;
 
 private:
-	QXlsx::CellRange* OpenExcelSheet(const QXlsx::Document& xlsx, int index = 0);
+	QXlsx::CellRange OpenExcelSheet(const QXlsx::Document& xlsx, int index = 0);
 	int LoadExcelRowCount(const QString& fileName);
 
 private:
-	SqlTableInfo m_stTableInfo;
 	QString m_strIniFileName;
 	IniOperation* m_pCfg;
 	QString m_strExcelFileName;
+
+	SqlTableInfo m_stTableInfo;
 	QVector<ExcelDataUploadInfo> m_vecDataMap;
 	ExcelDataUploadConfig m_stUploadConfig;
+	UploadingInfo* m_pstUploadingInfo;
+
+	QThread* m_pUploadWorkerThread;
 	volatile bool m_bUploading;
+	volatile bool m_bStopUpload;
+
+Q_SIGNALS:
+	void toUploadWork(ExcelDataUploadApp* const& pApp);
+	void toDisplayItem(const QString& text, int count, int countMax);
+	void toDisplayFinish();
+};
+
+
+class ExcelDataUploadWorker : public QObject
+{
+	Q_OBJECT
+public slots:
+	void DoWork(ExcelDataUploadApp* const& pApp);
 };
