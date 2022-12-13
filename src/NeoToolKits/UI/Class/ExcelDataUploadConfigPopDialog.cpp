@@ -1,6 +1,8 @@
 #include "ExcelDataUploadConfigPopDialog.h"
 #include <QIntValidator>
 #include <QMessageBox>
+#include <QGuiApplication>
+#include <QClipboard>
 
 ExcelDataUploadConfigPopDialog::ExcelDataUploadConfigPopDialog(QWidget* parent, ExcelDataUploadApp* pApp)
 	: QDialog(parent),
@@ -33,6 +35,16 @@ void ExcelDataUploadConfigPopDialog::initView(void)
 	ui->progressBar->setMaximum(iExcelUploadRowCountMax);
 	ui->progressBar->setValue(0);
 	ui->progressBar->setFormat("%p% (%v/%m)");// %p 百分比 //%v 当前值 //%m 总值
+
+	m_pItemCopyAct = new QAction(QString::fromStdWString(L"复制"), this);
+	m_pItemCopyAct->setShortcuts(QKeySequence::Copy);
+	connect(m_pItemCopyAct, &QAction::triggered, this, &ExcelDataUploadConfigPopDialog::DisplayItemCopySlot);
+
+	m_pContextMenu = new QMenu(this);
+	m_pContextMenu->addAction(m_pItemCopyAct);
+
+	ui->listWidget->setSelectionMode(QAbstractItemView::ContiguousSelection);
+	ui->listWidget->installEventFilter(this);
 }
 
 void ExcelDataUploadConfigPopDialog::closeEvent(QCloseEvent* event)
@@ -42,6 +54,11 @@ void ExcelDataUploadConfigPopDialog::closeEvent(QCloseEvent* event)
 		QMessageBox::warning(this, "warning", QString::fromStdWString(L"请先停止再关闭窗口"));
 		event->ignore();
 	}
+}
+
+void ExcelDataUploadConfigPopDialog::reject()
+{
+	close();
 }
 
 void ExcelDataUploadConfigPopDialog::PushbuttonClickedSlot(bool checked)
@@ -77,7 +94,10 @@ void ExcelDataUploadConfigPopDialog::PushbuttonClickedSlot(bool checked)
 
 void ExcelDataUploadConfigPopDialog::DisplayItemSlot(const QString& text, int count, int countMax)
 {
-	ui->listWidget->addItem(text);
+	QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
+	item->setText(text);
+	item->setToolTip(text);
+	ui->listWidget->addItem(item);
 	ui->listWidget->scrollToBottom();
 	ui->progressBar->setMaximum(countMax);
 	ui->progressBar->setValue(count);
@@ -103,4 +123,40 @@ void ExcelDataUploadConfigPopDialog::UploadingView(bool uploading)
 	ui->checkBox_ErrorStop->setEnabled(!uploading);
 	ui->btn_StartOrStop->setEnabled(true);
 	ui->btn_StartOrStop->setText(uploading ? QString::fromStdWString(L"停止") : QString::fromStdWString(L"开始"));
+}
+
+bool ExcelDataUploadConfigPopDialog::eventFilter(QObject* obj, QEvent* event)
+{
+	if (obj == ui->listWidget)
+	{
+		if (event->type() == QEvent::ContextMenu)
+		{
+			QContextMenuEvent* contextMenuEvent = static_cast<QContextMenuEvent*>(event);
+			if (contextMenuEvent->reason() == QContextMenuEvent::Mouse)
+			{
+				QModelIndexList selection = ui->listWidget->selectionModel()->selectedRows();
+				if (selection.count() > 0)
+				{
+					m_pContextMenu->popup(contextMenuEvent->globalPos());
+					return true;
+				}
+			}
+		}
+	}
+	return QWidget::eventFilter(obj, event);
+}
+
+void ExcelDataUploadConfigPopDialog::DisplayItemCopySlot(bool checked)
+{
+	QModelIndexList selection = ui->listWidget->selectionModel()->selectedRows();
+	QString text;
+	foreach (auto var, selection)
+	{
+		text += var.data().toString() + "\r\n";
+	}
+	if (!text.isEmpty())
+	{
+		text = text.left(text.length() - 2);
+		QGuiApplication::clipboard()->setText(text);
+	}
 }

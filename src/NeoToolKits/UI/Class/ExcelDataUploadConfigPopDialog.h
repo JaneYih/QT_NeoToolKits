@@ -1,6 +1,9 @@
 #pragma once
 
 #include <QDialog>
+#include <QCloseEvent>
+#include <QAction>
+#include <QMenu>
 #include "ui_ExcelDataUploadConfigPopDialog.h"
 #include "ExcelDataUploadApp.h"
 
@@ -13,7 +16,9 @@ public:
 	~ExcelDataUploadConfigPopDialog();
 
 protected:
-	virtual void closeEvent(QCloseEvent* event);
+	virtual void closeEvent(QCloseEvent* event) override;
+	virtual bool eventFilter(QObject* obj, QEvent* event) override;
+	virtual void reject() override;
 
 private:
 	void initView(void);
@@ -23,9 +28,12 @@ private:
 private:
 	Ui::ExcelDataUploadConfigPopDlg* ui;
 	ExcelDataUploadApp* const m_pApp;
+	QAction* m_pItemCopyAct;
+	QMenu* m_pContextMenu;
 
 public slots:
 	void PushbuttonClickedSlot(bool checked = false);
 	void DisplayItemSlot(const QString& text, int count, int countMax);
 	void DisplayFinishSlot();
+	void DisplayItemCopySlot(bool checked = false);
 };
