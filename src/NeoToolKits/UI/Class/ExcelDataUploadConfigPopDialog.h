@@ -5,35 +5,40 @@
 #include <QAction>
 #include <QMenu>
 #include "ui_ExcelDataUploadConfigPopDialog.h"
-#include "ExcelDataUploadApp.h"
+#include "ExcelDataUpload_def.h"
 
-class ExcelDataUploadConfigPopDialog  : public QDialog
+namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 {
-	Q_OBJECT
+	class ExcelDataUploadApp;
+	class ExcelDataUploadConfigPopDialog : public QDialog
+	{
+		Q_OBJECT
 
-public:
-	ExcelDataUploadConfigPopDialog(QWidget *parent, ExcelDataUploadApp* pApp);
-	~ExcelDataUploadConfigPopDialog();
+	public:
+		ExcelDataUploadConfigPopDialog(QWidget* parent, ExcelDataUploadApp* pApp);
+		~ExcelDataUploadConfigPopDialog();
 
-protected:
-	virtual void closeEvent(QCloseEvent* event) override;
-	virtual bool eventFilter(QObject* obj, QEvent* event) override;
-	virtual void reject() override;
+	protected:
+		virtual void closeEvent(QCloseEvent* event) override;
+		virtual bool eventFilter(QObject* obj, QEvent* event) override;
+		virtual void reject() override;
 
-private:
-	void initView(void);
-	void ClearDisplay(int rowCount);
-	void UploadingView(bool uploading);
+	private:
+		void initView(void);
+		void ClearDisplay(int rowCount);
+		void UploadingView(bool uploading);
 
-private:
-	Ui::ExcelDataUploadConfigPopDlg* ui;
-	ExcelDataUploadApp* const m_pApp;
-	QAction* m_pItemCopyAct;
-	QMenu* m_pContextMenu;
+	private:
+		Ui::ExcelDataUploadConfigPopDlg* ui;
+		ExcelDataUploadApp* const m_pApp;
+		QAction* m_pItemCopyAct;
+		QMenu* m_pContextMenu;
 
-public slots:
-	void PushbuttonClickedSlot(bool checked = false);
-	void DisplayItemSlot(const QString& text, int count, int countMax);
-	void DisplayFinishSlot();
-	void DisplayItemCopySlot(bool checked = false);
+	public slots:
+		void PushbuttonClickedSlot(bool checked = false);
+		void DisplayItemSlot(const QString& text, int count, int countMax);
+		void DisplayFinishSlot();
+		void DisplayItemCopySlot(bool checked = false);
+	};
 };
+

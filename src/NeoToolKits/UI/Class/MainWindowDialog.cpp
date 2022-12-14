@@ -1,11 +1,10 @@
 #include "MainWindowDialog.h"
 
-
 MainWindowDialog::MainWindowDialog(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindowDialogClass),
     m_pDbScriptEditPage(new DbScriptEditorPageForm),
-    m_pExcelDataUploadPage(new ExcelDataUploadPageForm)
+    m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm)
 {
     initView();
 	connect(ui->actionDbScriptEditor, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);

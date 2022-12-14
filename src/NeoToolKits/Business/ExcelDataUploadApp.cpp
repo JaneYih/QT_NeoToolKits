@@ -1,6 +1,8 @@
 #include "ExcelDataUploadApp.h"
 #include <QMessageBox>
 #include "ExcelDataUploadDbOperate.h"
+#include "IniOperation.h"
+#include <QThread>
 
 #include "xlsxdocument.h"
 #include "xlsxchartsheet.h"
@@ -9,6 +11,8 @@
 #include "xlsxrichstring.h"
 #include "xlsxworkbook.h"
 using namespace QXlsx;
+
+using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 
 //ini prefixs
 const QString s_ini_prefix_excel = "Excel";

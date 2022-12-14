@@ -1,27 +1,32 @@
 #pragma once
 
 #include <QStyledItemDelegate>
+#include "ExcelDataUpload_def.h"
 
-class ExcelDataUploadDataDelegate  : public QStyledItemDelegate
+namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 {
-	Q_OBJECT
+	class ExcelDataUploadDataDelegate : public QStyledItemDelegate
+	{
+		Q_OBJECT
 
-public:
-	ExcelDataUploadDataDelegate(QObject* parent = nullptr);
-	~ExcelDataUploadDataDelegate();
+	public:
+		ExcelDataUploadDataDelegate(QObject* parent = nullptr);
+		~ExcelDataUploadDataDelegate();
 
-	// editing
-	QWidget* createEditor(QWidget* parent,
-		const QStyleOptionViewItem& option,
-		const QModelIndex& index) const override;
+		// editing
+		QWidget* createEditor(QWidget* parent,
+			const QStyleOptionViewItem& option,
+			const QModelIndex& index) const override;
 
-	void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-	void setModelData(QWidget* editor,
-		QAbstractItemModel* model,
-		const QModelIndex& index) const override;
+		void setEditorData(QWidget* editor, const QModelIndex& index) const override;
+		void setModelData(QWidget* editor,
+			QAbstractItemModel* model,
+			const QModelIndex& index) const override;
 
-	void setComboCtrlOptions(const QStringList& options);
+		void setComboCtrlOptions(const QStringList& options);
 
-private:
-	QStringList m_comboCtrlOptions;
+	private:
+		QStringList m_comboCtrlOptions;
+	};
 };
+

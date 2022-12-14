@@ -2,35 +2,41 @@
 
 #include <QWidget>
 #include "ui_ExcelDataUploadPageForm.h"
-#include "MysqlInfoPopDialog.h"
-#include "ExcelDataUploadApp.h"
-#include "ExcelDataUploadDataModel.h"
-#include "ExcelDataUploadDataDelegate.h"
+#include "ExcelDataUpload_def.h"
 
-class ExcelDataUploadPageForm  : public QWidget
+class MysqlInfoPopDialog;
+
+namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 {
-	Q_OBJECT
+	class ExcelDataUploadApp;
+	class ExcelDataUploadDataModel;
+	class ExcelDataUploadDataDelegate;
 
-public:
-	ExcelDataUploadPageForm(QWidget *parent = nullptr);
-	~ExcelDataUploadPageForm();
+	class ExcelDataUploadPageForm : public QWidget
+	{
+		Q_OBJECT
 
-protected:
-	virtual void showEvent(QShowEvent* event);
+	public:
+		ExcelDataUploadPageForm(QWidget* parent = nullptr);
+		~ExcelDataUploadPageForm();
 
-public slots:
-	void PushbuttonClickedSlot(bool checked = false);
+	protected:
+		virtual void showEvent(QShowEvent* event);
 
-private:
-	void initView(void);
-	void EditTableViewByExcel(const QString& excelFileName);
-	void EditTableViewByDbConnect();
+	public slots:
+		void PushbuttonClickedSlot(bool checked = false);
 
-private:
-	Ui::ExcelDataUploadPageForm* ui;
-	ExcelDataUploadApp* m_pApp;
-	MysqlInfoPopDialog* m_pMysqlInfoDlg;
-	ExcelDataUploadDataModel* m_pDataModel;
-	ExcelDataUploadDataDelegate* m_pDataDelegate;
-	bool m_bFirstShowData;
+	private:
+		void initView(void);
+		void EditTableViewByExcel(const QString& excelFileName);
+		void EditTableViewByDbConnect();
+
+	private:
+		Ui::ExcelDataUploadPageForm* ui;
+		ExcelDataUploadApp* m_pApp;
+		MysqlInfoPopDialog* m_pMysqlInfoDlg;
+		ExcelDataUploadDataModel* m_pDataModel;
+		ExcelDataUploadDataDelegate* m_pDataDelegate;
+		bool m_bFirstShowData;
+	};
 };

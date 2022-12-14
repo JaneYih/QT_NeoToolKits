@@ -24,5 +24,5 @@ private:
     Ui::MainWindowDialogClass* ui;
     QMap<QAction*, QWidget*> m_mapToolsPageDictionary;
     DbScriptEditorPageForm* m_pDbScriptEditPage;
-    ExcelDataUploadPageForm* m_pExcelDataUploadPage;
+    NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm* m_pExcelDataUploadPage;
 };

@@ -1,5 +1,6 @@
 #include "ExcelDataUploadDbOperate.h"
 #include "ExcelDataUploadApp.h"
+using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 
 ExcelDataUploadDbOperate::ExcelDataUploadDbOperate(const SqlTableInfo& info)
 	: ITableManage(info.baseInfo),

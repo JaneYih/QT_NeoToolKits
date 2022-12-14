@@ -3,6 +3,9 @@
 #include <QMessageBox>
 #include <QGuiApplication>
 #include <QClipboard>
+#include "ExcelDataUploadApp.h"
+
+using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 
 ExcelDataUploadConfigPopDialog::ExcelDataUploadConfigPopDialog(QWidget* parent, ExcelDataUploadApp* pApp)
 	: QDialog(parent),

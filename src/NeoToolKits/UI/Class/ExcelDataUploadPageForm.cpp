@@ -4,6 +4,12 @@
 #include <QDebug>
 #include "ExcelDataUploadDbOperate.h"
 #include <QMessageBox>
+#include "MysqlInfoPopDialog.h"
+#include "ExcelDataUploadApp.h"
+#include "ExcelDataUploadDataModel.h"
+#include "ExcelDataUploadDataDelegate.h"
+
+using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 
 ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 	: QWidget(parent),

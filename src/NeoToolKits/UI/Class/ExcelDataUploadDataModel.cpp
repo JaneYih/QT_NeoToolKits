@@ -1,6 +1,8 @@
 #include "ExcelDataUploadDataModel.h"
 #include <QMessageBox>
 
+using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
+
 ExcelDataUploadDataModel::ExcelDataUploadDataModel(QObject* parent)
 	: QAbstractTableModel(parent)
 {

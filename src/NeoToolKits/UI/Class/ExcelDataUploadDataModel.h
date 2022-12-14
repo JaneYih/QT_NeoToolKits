@@ -4,31 +4,33 @@
 #include <QVector>
 #include "ExcelDataUpload_def.h"
 
-using namespace ExcelDataUpload;
-
-class ExcelDataUploadDataModel  : public QAbstractTableModel
+namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 {
-	Q_OBJECT
+	class ExcelDataUploadDataModel : public QAbstractTableModel
+	{
+		Q_OBJECT
 
-public:
-	ExcelDataUploadDataModel(QObject *parent = nullptr);
-	~ExcelDataUploadDataModel();
+	public:
+		ExcelDataUploadDataModel(QObject* parent = nullptr);
+		~ExcelDataUploadDataModel();
 
-public:
-	void initData(const QStringList& excelColumns);
-	void setData(const QVector<ExcelDataUploadInfo>& data);
-	QVector<ExcelDataUploadInfo> getData() const;
+	public:
+		void initData(const QStringList& excelColumns);
+		void setData(const QVector<ExcelDataUploadInfo>& data);
+		QVector<ExcelDataUploadInfo> getData() const;
 
-protected:
-	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-	virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-	virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+	protected:
+		virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+		virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+		virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+		virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+		virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+		virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+		virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-private:
-	mutable QVector<ExcelDataUploadInfo> m_stData;
-	void ClearData();
+	private:
+		mutable QVector<ExcelDataUploadInfo> m_stData;
+		void ClearData();
+	};
+
 };

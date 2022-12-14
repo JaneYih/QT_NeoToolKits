@@ -1,7 +1,9 @@
 #pragma once
 #include <QString>
 
-namespace ExcelDataUpload
+#define NAMESPACENAME_EXCEL_DATA_UPLOAD  Namespace_ExcelDataUpload 
+
+namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 {
 	typedef struct _ExcelDataUploadInfo_
 	{
@@ -54,4 +56,3 @@ namespace ExcelDataUpload
 		}
 	}UploadingInfo, * pUploadingInfo;
 };
-
