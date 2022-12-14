@@ -43,8 +43,13 @@ void ExcelDataUploadConfigPopDialog::initView(void)
 	m_pItemCopyAct->setShortcuts(QKeySequence::Copy);
 	connect(m_pItemCopyAct, &QAction::triggered, this, &ExcelDataUploadConfigPopDialog::DisplayItemCopySlot);
 
+	m_pItemSelectAllAct = new QAction(QString::fromStdWString(L"全选"), this);
+	m_pItemSelectAllAct->setShortcuts(QKeySequence::SelectAll);
+	connect(m_pItemSelectAllAct, &QAction::triggered, this, &ExcelDataUploadConfigPopDialog::DisplayItemSelectAllSlot);
+
 	m_pContextMenu = new QMenu(this);
 	m_pContextMenu->addAction(m_pItemCopyAct);
+	m_pContextMenu->addAction(m_pItemSelectAllAct);
 
 	ui->listWidget->setSelectionMode(QAbstractItemView::ContiguousSelection);
 	ui->listWidget->installEventFilter(this);
@@ -151,6 +156,11 @@ bool ExcelDataUploadConfigPopDialog::eventFilter(QObject* obj, QEvent* event)
 
 void ExcelDataUploadConfigPopDialog::DisplayItemCopySlot(bool checked)
 {
+	//方法一
+	//QList<QListWidgetItem*> selectedItems = ui->listWidget->selectedItems();
+	//selectedItems.at(0)->text();
+
+	//方法二
 	QModelIndexList selection = ui->listWidget->selectionModel()->selectedRows();
 	QString text;
 	foreach (auto var, selection)
@@ -161,5 +171,18 @@ void ExcelDataUploadConfigPopDialog::DisplayItemCopySlot(bool checked)
 	{
 		text = text.left(text.length() - 2);
 		QGuiApplication::clipboard()->setText(text);
+	}
+}
+
+void ExcelDataUploadConfigPopDialog::DisplayItemSelectAllSlot(bool checked)
+{
+	int rowCount = ui->listWidget->count();
+	for (int row = 0; row < rowCount; ++row)
+	{
+		QListWidgetItem* item = ui->listWidget->item(row);
+		if (item)
+		{
+			item->setSelected(true);
+		}
 	}
 }

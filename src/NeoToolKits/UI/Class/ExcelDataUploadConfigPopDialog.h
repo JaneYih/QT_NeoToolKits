@@ -32,6 +32,7 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		Ui::ExcelDataUploadConfigPopDlg* ui;
 		ExcelDataUploadApp* const m_pApp;
 		QAction* m_pItemCopyAct;
+		QAction* m_pItemSelectAllAct;
 		QMenu* m_pContextMenu;
 
 	public slots:
@@ -39,6 +40,7 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		void DisplayItemSlot(const QString& text, int count, int countMax);
 		void DisplayFinishSlot();
 		void DisplayItemCopySlot(bool checked = false);
+		void DisplayItemSelectAllSlot(bool checked = false);
 	};
 };
 
