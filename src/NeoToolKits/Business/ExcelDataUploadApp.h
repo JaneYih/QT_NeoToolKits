@@ -43,7 +43,6 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		void setUploading(bool bUploading);
 
 		SqlTableInfo* getSqlTableInfoPointer() const;
-		const volatile bool& getStopUploadReference() const;
 		UploadingInfo* getUploadingInfoPointer() const;
 
 	private:
@@ -55,14 +54,12 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		IniOperation* m_pCfg;
 		QString m_strExcelFileName;
 
-		SqlTableInfo m_stTableInfo;
-		QVector<ExcelDataUploadInfo> m_vecDataMap;
-		ExcelDataUploadConfig m_stUploadConfig;
-		UploadingInfo* m_pstUploadingInfo;
-
-		QThread* m_pUploadWorkerThread;
-		volatile bool m_bUploading;
-		volatile bool m_bStopUpload;
+		SqlTableInfo m_stTableInfo; //数据库配置信息
+		QVector<ExcelDataUploadInfo> m_vecDataMap; //Excel信息与数据库字段关系表
+		ExcelDataUploadConfig m_stUploadConfig; //上传配置信息
+		
+		QThread* m_pUploadWorkerThread; //上传工作线程
+		UploadingInfo* m_pstUploadingInfo; //上传的运行时信息
 
 	Q_SIGNALS:
 		void toUploadWork(ExcelDataUploadApp* const& pApp);

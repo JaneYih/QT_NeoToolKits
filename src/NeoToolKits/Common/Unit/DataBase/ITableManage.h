@@ -19,12 +19,9 @@ public:
 	}
 
 public:
-	IDatabase* DatabaseInstence;
-
-public:
-	bool TestConnect(string& errMsg);
-	bool IsExistTable(const char* TableName);
-	bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
+	virtual bool TestConnect(string& errMsg);
+	virtual bool IsExistTable(const char* TableName);
+	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
 	virtual bool CreateTable();
 	virtual bool InsertData(vector<string> para);
 	virtual bool DeleteData(vector<string> para);
@@ -32,5 +29,6 @@ public:
 	virtual bool SelectData(vector<string> para, DataTable& outputData);
 
 protected:
+	IDatabase* DatabaseInstence;
 	bool AnalysisPara(list<string> para, const int paraNum, string Sqlpara[]);
 };

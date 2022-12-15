@@ -9,8 +9,8 @@ using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 
 ExcelDataUploadConfigPopDialog::ExcelDataUploadConfigPopDialog(QWidget* parent, ExcelDataUploadApp* pApp)
 	: QDialog(parent),
-	m_pApp(pApp),
-	ui(new Ui::ExcelDataUploadConfigPopDlg)
+	ui(new Ui::ExcelDataUploadConfigPopDlg),
+	m_pApp(pApp)
 {
 	Q_ASSERT(m_pApp);
 	initView();
@@ -29,10 +29,11 @@ void ExcelDataUploadConfigPopDialog::initView(void)
 	ui->setupUi(this);
 	int iExcelUploadRowCountMax = m_pApp->LoadExcelRowCount();
 	ui->lineEdit_CountMax->setText(QString("%1").arg(iExcelUploadRowCountMax));
-	ui->lineEdit_StartLine->setValidator(new QIntValidator(1, iExcelUploadRowCountMax, this));
+	ui->lineEdit_StartLine->setValidator(new QIntValidator(2, iExcelUploadRowCountMax, this));
 	ui->lineEdit_StartLine->setText("2");
-	ui->lineEdit_Count->setValidator(new QIntValidator(0, iExcelUploadRowCountMax, this));
+	ui->lineEdit_Count->setValidator(new QIntValidator(1, iExcelUploadRowCountMax, this));
 	ui->lineEdit_Count->setText(QString("%1").arg(iExcelUploadRowCountMax));
+	ui->lineEdit_ProductionOrderID->setValidator(new QRegExpValidator(QRegExp("^[0-9]{5,10}$"), this));
 	ui->checkBox_ErrorStop->setChecked(true);
 	ui->progressBar->setMinimum(0);
 	ui->progressBar->setMaximum(iExcelUploadRowCountMax);
@@ -82,14 +83,16 @@ void ExcelDataUploadConfigPopDialog::PushbuttonClickedSlot(bool checked)
 		else
 		{
 			ExcelDataUploadConfig stUploadConfig;
+			stUploadConfig.pApp = m_pApp;
 			stUploadConfig.iRowCountMax = ui->lineEdit_CountMax->text().toInt();
 			stUploadConfig.iRowStartRowIndex = ui->lineEdit_StartLine->text().toInt();
 			stUploadConfig.iRowCount = ui->lineEdit_Count->text().toInt();
 			stUploadConfig.strProductionOrderID = ui->lineEdit_ProductionOrderID->text();
 			stUploadConfig.bErrorStop = ui->checkBox_ErrorStop->checkState() == Qt::Checked;
-			if (stUploadConfig.strProductionOrderID.isEmpty())
+			QString strWarningMsg;
+			if (!stUploadConfig.isValid(strWarningMsg))
 			{
-				QMessageBox::warning(this, "warning", QString::fromStdWString(L"工单号不能为空"));
+				QMessageBox::warning(this, "warning", strWarningMsg);
 				return;
 			}
 			m_pApp->setUploadConfig(stUploadConfig);

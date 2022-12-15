@@ -46,7 +46,7 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_StartLine">
          <property name="placeholderText">
-          <string>1~最大值</string>
+          <string>2~最大值</string>
          </property>
         </widget>
        </item>
@@ -64,7 +64,7 @@
        <item>
         <widget class="QLineEdit" name="lineEdit_Count">
          <property name="placeholderText">
-          <string>0~最大值</string>
+          <string>1~最大值</string>
          </property>
         </widget>
        </item>
@@ -80,7 +80,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_ProductionOrderID"/>
+        <widget class="QLineEdit" name="lineEdit_ProductionOrderID">
+         <property name="placeholderText">
+          <string>5~10位纯数字</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

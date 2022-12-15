@@ -29,8 +29,42 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		bool bErrorStop = false;
 		int iRowCountMax = 0;
 		int iRowCount = 0;
-		int iRowStartRowIndex = 1;
+		int iRowStartRowIndex = 2;
 		QString strProductionOrderID = "";
+		bool isValid(QString& msg)
+		{
+			if (strProductionOrderID.isEmpty())
+			{
+				msg = QString::fromStdWString(L"工单号不能为空");
+				return false;
+			}
+			if (strProductionOrderID.length() < 5)
+			{
+				msg = QString::fromStdWString(L"工单号长度不能小于5");
+				return false;
+			}
+			if (iRowCountMax < 1)
+			{
+				msg = QString::fromStdWString(L"最大数量不能小于1");
+				return false;
+			}
+			if (iRowCount < 1)
+			{
+				msg = QString::fromStdWString(L"数量不能小于1");
+				return false;
+			}
+			if (iRowStartRowIndex < 2)
+			{
+				msg = QString::fromStdWString(L"起始行不能小于2");
+				return false;
+			}
+			if (pApp == nullptr)
+			{
+				msg = QString::fromStdWString(L"app实例不能为nullptr");
+				return false;
+			}
+			return true;
+		}
 	}ExcelDataUploadConfig, * pExcelDataUploadConfig;
 
 	typedef struct _UploadData_
@@ -45,7 +79,8 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 
 	typedef struct _UploadingInfo_
 	{
-		volatile bool bStop;
+		volatile bool bStop; //控制信号-终止上传标志
+		volatile bool bUploading;  //状态信号-正在上传标志
 		_UploadingInfo_()
 		{
 			clear();
@@ -53,6 +88,7 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		void clear()
 		{
 			bStop = false;
+			bUploading = false;
 		}
 	}UploadingInfo, * pUploadingInfo;
 };

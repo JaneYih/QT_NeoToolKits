@@ -5,13 +5,10 @@ using namespace NAMESPACENAME_EXCEL_DATA_UPLOAD;
 ExcelDataUploadDbOperate::ExcelDataUploadDbOperate(const SqlTableInfo& info)
 	: ITableManage(info.baseInfo),
 	m_stSqlInfo(info)
-{
-	
-}
+{}
 
 ExcelDataUploadDbOperate::~ExcelDataUploadDbOperate()
-{
-}
+{}
 
 bool ExcelDataUploadDbOperate::InsertExcelData(const QList<QVector<UploadData>>& dataList, 
 	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
@@ -161,7 +158,7 @@ bool ExcelDataUploadDbOperate::test(QString& strErrMsg)
 		return false;
 	}
 
-	if (!ITableManage::IsExistTable(m_stSqlInfo.tableName.toLocal8Bit()))
+	if (!IsExistTable(m_stSqlInfo.tableName.toLocal8Bit()))
 	{
 		strErrMsg = QString::fromStdWString(L"数据表<%1>不存在").arg(m_stSqlInfo.tableName);
 		return false;

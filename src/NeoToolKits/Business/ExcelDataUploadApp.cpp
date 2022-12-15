@@ -26,9 +26,9 @@ ExcelDataUploadApp::ExcelDataUploadApp(QObject* parent)
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/ExcelDataUploadTool.ini"),
 	m_pCfg(new IniOperation(m_strIniFileName)),
 	m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString()),
-	m_pstUploadingInfo(new UploadingInfo()),
-	m_bUploading(false)
+	m_pstUploadingInfo(new UploadingInfo())
 {
+	Q_ASSERT(m_pstUploadingInfo);
 	m_pUploadWorkerThread = new QThread();
 	ExcelDataUploadWorker* uploadWorkerWorker = new ExcelDataUploadWorker();
 	uploadWorkerWorker->moveToThread(m_pUploadWorkerThread);
@@ -90,18 +90,13 @@ const ExcelDataUploadConfig ExcelDataUploadApp::getUploadConfig() const
 
 bool ExcelDataUploadApp::getUploading() const 
 {
-	return m_bUploading;
+	return m_pstUploadingInfo->bUploading;
 };
 
 void ExcelDataUploadApp::setUploading(bool bUploading)
 {
-	m_bUploading = bUploading;
+	m_pstUploadingInfo->bUploading = bUploading;
 };
-
-const volatile bool& ExcelDataUploadApp::getStopUploadReference() const
-{
-	return m_bStopUpload;
-}
 
 UploadingInfo* ExcelDataUploadApp::getUploadingInfoPointer() const
 {
@@ -165,7 +160,6 @@ int ExcelDataUploadApp::LoadExcelRowCount(const QString& fileName)
 bool ExcelDataUploadApp::StartUpload()
 {
 	m_pstUploadingInfo->clear();
-	m_stUploadConfig.pApp = (void*)(this);
 	emit toUploadWork(this);
 	return true;
 }
@@ -223,6 +217,7 @@ void ExcelDataUploadWorker::DoWork(ExcelDataUploadApp* const& pApp)
 	QList<QVector<UploadData>> dataList;
 	pApp->PackingUploadDataList(dataList);
 	emit pApp->toDisplayItem(QString::fromStdWString(L"ExcelÄÚÈÝÍê±Ï¡£"), 0, dataList.count());
+
 	if (dataList.count() == pApp->getUploadConfig().iRowCount)
 	{
 		ExcelDataUploadDbOperate db(*(pApp->getSqlTableInfoPointer()));
