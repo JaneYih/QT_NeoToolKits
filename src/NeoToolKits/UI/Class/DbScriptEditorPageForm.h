@@ -2,16 +2,35 @@
 
 #include <QWidget>
 #include "ui_DbScriptEditorPageForm.h"
+#include "DbScriptEditor_def.h"
 
-class DbScriptEditorPageForm  : public QWidget
+namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
-	Q_OBJECT
+	class DbScriptEditorApp;
+	class DbScriptEditorPageForm : public QWidget
+	{
+		Q_OBJECT
 
-public:
-	DbScriptEditorPageForm(QWidget *parent = nullptr);
-	~DbScriptEditorPageForm();
+	public:
+		DbScriptEditorPageForm(QWidget* parent = nullptr);
+		~DbScriptEditorPageForm();
 
-private:
-	Ui::DbScriptEditorPageForm* ui;
-	void initView(void);
-};
+	protected:
+		virtual void showEvent(QShowEvent* event) override;
+
+	public slots:
+		void PushbuttonClickedSlot(bool checked = false);
+		void ComboBoxCurrentIndexChangedSlot(int index);
+
+	private:
+		void initView(void);
+		void InitComboBoxItems(const TestItemExcelInfo& info);
+		void LoadExcelInfo(const QString& fileName);
+
+	private:
+		Ui::DbScriptEditorPageForm* ui;
+		DbScriptEditorApp* m_pApp;
+		bool m_bFirstShowData;
+	};
+}
+

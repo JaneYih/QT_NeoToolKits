@@ -254,6 +254,12 @@
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp">
       <Filter>Tools\ExcelDataUpload\Business</Filter>
     </ClCompile>
+    <ClCompile Include="Business\DbScriptEditorApp.cpp">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Unit\xlsx\ExcelOperation.cpp">
+      <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -285,6 +291,12 @@
     </QtMoc>
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h">
       <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
+    </QtMoc>
+    <QtMoc Include="Business\DbScriptEditorApp.h">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
+    </QtMoc>
+    <QtMoc Include="Common\Unit\xlsx\ExcelOperation.h">
+      <Filter>Common\Unit\xlsx</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h">
       <Filter>Tools\ExcelDataUpload\Business</Filter>
+    </ClInclude>
+    <ClInclude Include="Business\DbScriptEditor_def.h">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

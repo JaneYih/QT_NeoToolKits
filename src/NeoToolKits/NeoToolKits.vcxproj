@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Business\DbScriptEditorApp.cpp" />
     <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
@@ -119,6 +120,7 @@
     <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp" />
+    <ClCompile Include="Common\Unit\xlsx\ExcelOperation.cpp" />
     <ClCompile Include="Common\Unit\xlsx\source\xlsxabstractooxmlfile.cpp" />
     <ClCompile Include="Common\Unit\xlsx\source\xlsxabstractsheet.cpp" />
     <ClCompile Include="Common\Unit\xlsx\source\xlsxcell.cpp" />
@@ -182,6 +184,8 @@
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h" />
     <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h" />
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
+    <QtMoc Include="Business\DbScriptEditorApp.h" />
+    <ClInclude Include="Business\DbScriptEditor_def.h" />
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
     <ClInclude Include="Business\ExcelDataUpload_def.h" />
     <ClInclude Include="Common\IniOperation.h" />
@@ -193,6 +197,7 @@
     <ClInclude Include="Common\Unit\DataBase\ITableManage.h" />
     <ClInclude Include="Common\Unit\DataBase\MysqlDatabase.h" />
     <ClInclude Include="Common\Unit\DataBase\usersDataTable.h" />
+    <QtMoc Include="Common\Unit\xlsx\ExcelOperation.h" />
     <ClInclude Include="Common\Unit\xlsx\header\xlsxabstractooxmlfile.h" />
     <ClInclude Include="Common\Unit\xlsx\header\xlsxabstractooxmlfile_p.h" />
     <ClInclude Include="Common\Unit\xlsx\header\xlsxabstractsheet.h" />

@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include "ExcelDataUploadDbOperate.h"
 #include "IniOperation.h"
+#include "ExcelOperation.h"
 #include <QThread>
 
 #include "xlsxdocument.h"
@@ -103,58 +104,14 @@ UploadingInfo* ExcelDataUploadApp::getUploadingInfoPointer() const
 	return m_pstUploadingInfo;
 }
 
-CellRange ExcelDataUploadApp::OpenExcelSheet(const QXlsx::Document& xlsx, int index)
-{
-	if (xlsx.load())
-	{
-		QXlsx::Workbook* workBook = xlsx.workbook();
-		if (workBook)
-		{
-			QXlsx::Worksheet* workSheet = static_cast<QXlsx::Worksheet*>(workBook->sheet(index));
-			if (workSheet)
-			{
-				return workSheet->dimension();
-			}
-		}
-	}
-	else
-	{
-		//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
-	}
-	return CellRange();
-}
-
 QStringList ExcelDataUploadApp::LoadExcelColumns(const QString& fileName)
 {
-	QStringList strOutList;
-	QXlsx::Document xlsx(fileName);
-	CellRange cellRange = OpenExcelSheet(xlsx);
-	if (cellRange.isValid())
-	{
-		int rowCount = cellRange.rowCount();
-		int columnCount = cellRange.columnCount();
-		for (int col = 1; col <= columnCount; col++)
-		{
-			Cell* cell = xlsx.cellAt(1, col);
-			if (cell != NULL)
-			{
-				QVariant var = cell->readValue();
-				strOutList.push_back(var.toString());
-			}
-		}
-	}
-	return strOutList;
+	return ExcelOperation::LoadExcelColumns(fileName);
 }
 
 int ExcelDataUploadApp::LoadExcelRowCount(const QString& fileName)
 {
-	QXlsx::Document xlsx(fileName);
-	CellRange cellRange = OpenExcelSheet(xlsx);
-	if (cellRange.isValid())
-	{
-		return cellRange.rowCount();
-	}
-	return 0;
+	return ExcelOperation::LoadExcelRowCount(fileName);
 }
 
 bool ExcelDataUploadApp::StartUpload()
@@ -174,7 +131,7 @@ void ExcelDataUploadApp::PackingUploadDataList(QList<QVector<UploadData>>& dataL
 {
 	dataList.clear();
 	QXlsx::Document xlsx(getExcelFileName());
-	CellRange cellRange = OpenExcelSheet(xlsx);
+	CellRange cellRange = ExcelOperation::OpenExcelSheet(xlsx);
 	if (cellRange.isValid())
 	{
 		int rowCount = cellRange.rowCount();

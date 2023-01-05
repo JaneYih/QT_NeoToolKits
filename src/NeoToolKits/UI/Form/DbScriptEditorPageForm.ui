@@ -52,7 +52,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_testCodeCol"/>
+      <widget class="QComboBox" name="comboBox_testCodeCol">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_testNameCol">
@@ -62,10 +72,20 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox_testNameCol"/>
+      <widget class="QComboBox" name="comboBox_testNameCol">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -76,6 +96,20 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_LoadItemDictionary">
+       <property name="text">
+        <string>加载关系表</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_ItemDictionary">
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -135,7 +169,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="btn_save">
        <property name="text">
         <string>保存</string>
        </property>

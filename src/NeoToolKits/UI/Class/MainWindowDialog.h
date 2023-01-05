@@ -23,6 +23,6 @@ public slots:
 private:
     Ui::MainWindowDialogClass* ui;
     QMap<QAction*, QWidget*> m_mapToolsPageDictionary;
-    DbScriptEditorPageForm* m_pDbScriptEditPage;
+    NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorPageForm* m_pDbScriptEditPage;
     NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm* m_pExcelDataUploadPage;
 };

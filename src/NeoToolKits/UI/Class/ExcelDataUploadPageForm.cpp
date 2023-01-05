@@ -17,7 +17,8 @@ ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 	m_pApp(new ExcelDataUploadApp(this)),
 	m_pDataModel(new ExcelDataUploadDataModel),
 	m_pDataDelegate(new ExcelDataUploadDataDelegate),
-	m_bFirstShowData(true)
+	m_bFirstShowData(true),
+	m_pMysqlInfoDlg(nullptr)
 {
 	Q_ASSERT(m_pApp);
 	Q_ASSERT(m_pDataModel);

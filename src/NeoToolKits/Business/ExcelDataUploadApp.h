@@ -3,7 +3,6 @@
 #include <QObject>
 #include "Database_def.h"
 #include "ExcelDataUpload_def.h"
-#include "xlsxdocument.h"
 
 class QThread;
 class IniOperation;
@@ -46,7 +45,6 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 		UploadingInfo* getUploadingInfoPointer() const;
 
 	private:
-		QXlsx::CellRange OpenExcelSheet(const QXlsx::Document& xlsx, int index = 0);
 		int LoadExcelRowCount(const QString& fileName);
 
 	private:
