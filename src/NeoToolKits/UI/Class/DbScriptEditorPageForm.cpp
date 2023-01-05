@@ -106,8 +106,18 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_DBPath)
 	{
-		QString fileName = QFileDialog::getOpenFileName(this,
+		QString dbPath = QFileDialog::getOpenFileName(this,
 			tr("Open SQLite File"), "", tr("SQLite Files (*.db)"));
+		if (!dbPath.isEmpty())
+		{
+			ui->lineEdit_DBPath->setText(dbPath);
+			if (m_pApp->TestSqliteDb(dbPath, "model_testlist"))
+			{
+				ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
+				return;
+			}
+			ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(255, 0, 0);");
+		}
 	}
 	else if (curBtn == ui->btn_add)
 	{
