@@ -7,6 +7,7 @@
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
 	class DbScriptEditorApp;
+	class DbScriptDataModel;
 	class DbScriptEditorPageForm : public QWidget
 	{
 		Q_OBJECT
@@ -21,6 +22,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
 		void ComboBoxCurrentIndexChangedSlot(int index);
+		void HorizontalHeaderSectionClickedSlot(int logicalIndex);
 
 	private:
 		void initView(void);
@@ -30,6 +32,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	private:
 		Ui::DbScriptEditorPageForm* ui;
 		DbScriptEditorApp* m_pApp;
+		DbScriptDataModel* m_pDataModel;
 		bool m_bFirstShowData;
 	};
 }

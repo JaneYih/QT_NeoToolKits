@@ -3,6 +3,7 @@
 #include "DataTableTest.h"
 #include "ExcelOperation.h"
 #include "IniOperation.h"
+#include "DbScriptOperate.h"
 #include <QMessageBox>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -57,21 +58,13 @@ void DbScriptEditorApp::setSQLiteDbPath(const QString& src)
 	m_strSQLiteDbPath = src;
 }
 
-bool DbScriptEditorApp::TestSqliteDb(const QString& dbPath, const QString& tableName)
+bool DbScriptEditorApp::TestSqliteDb(const QString& dbPath)
 {
 	SqlTableInfo tempInfo;
 	tempInfo.baseInfo.type = SqlTypes::eSQLITE;
 	tempInfo.baseInfo.dbName = dbPath;
-	CDataTableTest db(tempInfo.baseInfo);
-	//QString tableName("model_testlist");
-	QByteArray byteTableName = tableName.toLocal8Bit();
-	if (db.IsExistTable(byteTableName))
-	{
-		std::list<std::string> Fields;
-		db.GetTableFullFields(byteTableName, Fields);
-		return Fields.size() > 0;
-	}
-	return false;
+	DbScriptOperate dbOperate(tempInfo);
+	return dbOperate.TestConnect();
 }
 
 void DbScriptEditorApp::LoadExcelColumns(const QString& fileName)

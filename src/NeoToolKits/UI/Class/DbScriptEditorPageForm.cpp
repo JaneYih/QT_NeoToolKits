@@ -1,6 +1,7 @@
 #include "DbScriptEditorPageForm.h"
 #include <QDebug>
 #include "DbScriptEditorApp.h"
+#include "DbScriptDataModel.h"
 #include <QFileDialog>
 #include <QComboBox>
 
@@ -10,9 +11,11 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 	: QWidget(parent),
 	ui(new Ui::DbScriptEditorPageForm),
 	m_pApp(new DbScriptEditorApp(this)),
+	m_pDataModel(new DbScriptDataModel(this)),
 	m_bFirstShowData(true)
 {
 	Q_ASSERT(m_pApp);
+	Q_ASSERT(m_pDataModel);
 	initView();
 	connect(ui->btn_ExcelPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_DBPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
@@ -27,6 +30,7 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 
 DbScriptEditorPageForm::~DbScriptEditorPageForm()
 {
+	delete m_pDataModel;
 	delete m_pApp;
 	delete ui;
 }
@@ -43,8 +47,24 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 	{
 		LoadExcelInfo(m_pApp->getTestItemExcelInfo().strExcelPath);
 
+		ui->tableView_DBDataTable->setModel(m_pDataModel);
+		QHeaderView* horizontalHeader = ui->tableView_DBDataTable->horizontalHeader();
+		horizontalHeader->setSectionResizeMode(QHeaderView::Interactive);
+		//horizontalHeader->setDefaultAlignment(Qt::AlignHCenter);
+		//horizontalHeader->setStretchLastSection(true);
+		horizontalHeader->setSortIndicatorShown(true);
+		horizontalHeader->setSectionsClickable(true);
+		connect(horizontalHeader, &QHeaderView::sectionClicked, this, &DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot);
+		ui->tableView_DBDataTable->setAlternatingRowColors(true);
+		ui->tableView_DBDataTable->show();
+
 		m_bFirstShowData = false;
 	}
+}
+
+void DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot(int logicalIndex)
+{
+	ui->tableView_DBDataTable->sortByColumn(logicalIndex, Qt::DescendingOrder);
 }
 
 void DbScriptEditorPageForm::InitComboBoxItems(const TestItemExcelInfo& info)
@@ -111,7 +131,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 		if (!dbPath.isEmpty())
 		{
 			ui->lineEdit_DBPath->setText(dbPath);
-			if (m_pApp->TestSqliteDb(dbPath, "model_testlist"))
+			if (m_pApp->TestSqliteDb(dbPath))
 			{
 				ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
 				return;

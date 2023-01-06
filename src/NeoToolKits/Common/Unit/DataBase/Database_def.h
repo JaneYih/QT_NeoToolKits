@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QString>
+#include <QVector>
+#include <QList>
 
 typedef enum
 {
@@ -38,3 +40,14 @@ typedef struct _SqlTableInfo_
 			.arg(baseInfo.toString()).arg(tableName);
 	}
 }SqlTableInfo, * pSqlTableInfo;
+
+typedef struct _DbFieldGroup_
+{
+	QVector<QString> fields;
+}DbFieldGroup, * pDbFieldGroup;
+
+typedef struct _DbData_
+{
+	DbFieldGroup fieldGroup;
+	QList<DbFieldGroup> rows;
+}DbData, * pDbData;

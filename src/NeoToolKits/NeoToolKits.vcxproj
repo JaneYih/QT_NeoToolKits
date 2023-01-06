@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Business\DbScriptEditorApp.cpp" />
+    <ClCompile Include="Business\DbScriptOperate.cpp" />
     <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Common\Unit\xlsx\source\xlsxworksheet.cpp" />
     <ClCompile Include="Common\Unit\xlsx\source\xlsxzipreader.cpp" />
     <ClCompile Include="Common\Unit\xlsx\source\xlsxzipwriter.cpp" />
+    <ClCompile Include="UI\Class\DbScriptDataModel.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp" />
@@ -181,11 +183,13 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="UI\Class\DbScriptDataModel.h" />
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h" />
     <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h" />
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
     <QtMoc Include="Business\DbScriptEditorApp.h" />
     <ClInclude Include="Business\DbScriptEditor_def.h" />
+    <ClInclude Include="Business\DbScriptOperate.h" />
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
     <ClInclude Include="Business\ExcelDataUpload_def.h" />
     <ClInclude Include="Common\IniOperation.h" />

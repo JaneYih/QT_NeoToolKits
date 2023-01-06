@@ -88,11 +88,20 @@
     <Filter Include="Common\Unit\xlsx\source">
       <UniqueIdentifier>{df29e061-4cdc-4ec0-8c12-dbab057edc9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools\ExcelDataUpload\UI\Class\model">
-      <UniqueIdentifier>{d643c8d9-654b-4f48-a7d8-424f54681e09}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Tools\ExcelDataUpload\UI\Class\Delegat">
       <UniqueIdentifier>{bb56c688-a2f8-4624-9991-1a4e6c745e92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI\Class\Delegat">
+      <UniqueIdentifier>{7fde46af-3289-4206-8286-bbae89c77201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI\Class\View">
+      <UniqueIdentifier>{39b9c55d-6892-4a4b-93c5-f3e186f69197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DbScriptEditor\UI\Class\Model">
+      <UniqueIdentifier>{367c53b9-d356-426e-aae2-85f7c9bb3d47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\ExcelDataUpload\UI\Class\Model">
+      <UniqueIdentifier>{d643c8d9-654b-4f48-a7d8-424f54681e09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -246,7 +255,7 @@
       <Filter>Tools\ExcelDataUpload\Business</Filter>
     </ClCompile>
     <ClCompile Include="UI\Class\ExcelDataUploadDataModel.cpp">
-      <Filter>Tools\ExcelDataUpload\UI\Class\model</Filter>
+      <Filter>Tools\ExcelDataUpload\UI\Class\Model</Filter>
     </ClCompile>
     <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp">
       <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
@@ -259,6 +268,12 @@
     </ClCompile>
     <ClCompile Include="Common\Unit\xlsx\ExcelOperation.cpp">
       <Filter>Common\Unit\xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Class\DbScriptDataModel.cpp">
+      <Filter>Tools\DbScriptEditor\UI\Class\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Business\DbScriptOperate.cpp">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,7 +302,7 @@
       <Filter>Tools\ExcelDataUpload\Business</Filter>
     </QtMoc>
     <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h">
-      <Filter>Tools\ExcelDataUpload\UI\Class\model</Filter>
+      <Filter>Tools\ExcelDataUpload\UI\Class\Model</Filter>
     </QtMoc>
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h">
       <Filter>Tools\ExcelDataUpload\UI\Class\Delegat</Filter>
@@ -297,6 +312,9 @@
     </QtMoc>
     <QtMoc Include="Common\Unit\xlsx\ExcelOperation.h">
       <Filter>Common\Unit\xlsx</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Class\DbScriptDataModel.h">
+      <Filter>Tools\DbScriptEditor\UI\Class\Model</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -489,6 +507,9 @@
       <Filter>Tools\ExcelDataUpload\Business</Filter>
     </ClInclude>
     <ClInclude Include="Business\DbScriptEditor_def.h">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
+    </ClInclude>
+    <ClInclude Include="Business\DbScriptOperate.h">
       <Filter>Tools\DbScriptEditor\Business</Filter>
     </ClInclude>
   </ItemGroup>
