@@ -10,18 +10,18 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QString strExcelPath; //Excel路径
 		QStringList listExcelColumns; //excel的标题列表
 
-		int nTestItemCodeExcelColumnIndex; //Excel中测试项代号列序号
-		QString strTestItemCodeExcelColumnName; //Excel中测试项代号列标题
+		int nColIndex_ItemCode; //Excel中测试项代号列序号
+		QString strColName_ItemCode; //Excel中测试项代号列标题
 
-		int nTestItemNameExcelColumnIndex; //Excel中测试项名称列序号
-		QString strTestItemNameExcelColumnName; //Excel中测试项名称列标题
+		int nColIndex_ItemName; //Excel中测试项名称列序号
+		QString strColName_ItemName; //Excel中测试项名称列标题
 	
 		bool isValid()
 		{
 			if (strExcelPath.isEmpty()
-				|| nTestItemCodeExcelColumnIndex < 1
-				|| nTestItemNameExcelColumnIndex < 1
-				|| nTestItemCodeExcelColumnIndex == nTestItemNameExcelColumnIndex)
+				|| nColIndex_ItemCode < 1
+				|| nColIndex_ItemName < 1
+				|| nColIndex_ItemCode == nColIndex_ItemName)
 			{
 				return false;
 			}

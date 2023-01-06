@@ -51,16 +51,16 @@ void DbScriptEditorPageForm::InitComboBoxItems(const TestItemExcelInfo& info)
 {
 	ui->comboBox_testCodeCol->clear();
 	ui->comboBox_testCodeCol->addItems(info.listExcelColumns);
-	int curIndex = ui->comboBox_testCodeCol->count() >= info.nTestItemCodeExcelColumnIndex
-		? info.nTestItemCodeExcelColumnIndex - 1
+	int curIndex = ui->comboBox_testCodeCol->count() >= info.nColIndex_ItemCode
+		? info.nColIndex_ItemCode - 1
 		: -1;
 	ui->comboBox_testCodeCol->setCurrentIndex(curIndex);
 	emit ui->comboBox_testCodeCol->currentIndexChanged(curIndex);
 
 	ui->comboBox_testNameCol->clear();
 	ui->comboBox_testNameCol->addItems(info.listExcelColumns);
-	curIndex = ui->comboBox_testNameCol->count() >= info.nTestItemNameExcelColumnIndex
-					? info.nTestItemNameExcelColumnIndex - 1
+	curIndex = ui->comboBox_testNameCol->count() >= info.nColIndex_ItemName
+					? info.nColIndex_ItemName - 1
 					: -1;
 	ui->comboBox_testNameCol->setCurrentIndex(curIndex);
 	emit ui->comboBox_testNameCol->currentIndexChanged(curIndex);
@@ -143,15 +143,15 @@ void DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot(int index)
 	if (curComboBox == ui->comboBox_testCodeCol)
 	{
 		TestItemExcelInfo info = m_pApp->getTestItemExcelInfo();
-		info.nTestItemCodeExcelColumnIndex = index + 1;
-		info.strTestItemCodeExcelColumnName = curComboBox->currentText();
+		info.nColIndex_ItemCode = index + 1;
+		info.strColName_ItemCode = curComboBox->currentText();
 		m_pApp->setTestItemExcelInfo(info);
 	}
 	else if (curComboBox == ui->comboBox_testNameCol)
 	{
 		TestItemExcelInfo info = m_pApp->getTestItemExcelInfo();
-		info.nTestItemNameExcelColumnIndex = index + 1;
-		info.strTestItemNameExcelColumnName = curComboBox->currentText();
+		info.nColIndex_ItemName = index + 1;
+		info.strColName_ItemName = curComboBox->currentText();
 		m_pApp->setTestItemExcelInfo(info);
 	}
 }

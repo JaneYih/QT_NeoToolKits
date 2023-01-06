@@ -11,8 +11,8 @@ const QString s_ini_prefix_excel = "Excel";
 
 //ini keys
 const QString s_ini_key_excelFile = "ExcelFlie";
-const QString s_ini_key_TestItemCodeColumnIndex = "TestItemCodeColumnIndex";
-const QString s_ini_key_TestItemNameColumnIndex = "TestItemNameColumnIndex";
+const QString s_ini_key_ColumnIndex_TestItemCode = "ColumnIndex_TestItemCode";
+const QString s_ini_key_ColumnIndex_TestItemName = "ColumnIndex_TestItemName";
 
 DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	: QObject(parent),
@@ -20,8 +20,8 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	m_pCfg(new IniOperation(m_strIniFileName))
 {
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
-	m_stTestItemExcelInfo.nTestItemCodeExcelColumnIndex = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_TestItemCodeColumnIndex, -1).toInt();
-	m_stTestItemExcelInfo.nTestItemNameExcelColumnIndex = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_TestItemNameColumnIndex, -1).toInt();
+	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
+	m_stTestItemExcelInfo.nColIndex_ItemName = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemName, -1).toInt();
 }
 
 DbScriptEditorApp::~DbScriptEditorApp()
@@ -43,8 +43,8 @@ void DbScriptEditorApp::setTestItemExcelInfo(const TestItemExcelInfo& src)
 {
 	m_stTestItemExcelInfo = src;
 	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, src.strExcelPath);
-	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_TestItemCodeColumnIndex, src.nTestItemCodeExcelColumnIndex);
-	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_TestItemNameColumnIndex, src.nTestItemNameExcelColumnIndex);
+	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, src.nColIndex_ItemCode);
+	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemName, src.nColIndex_ItemName);
 }
 
 QString DbScriptEditorApp::getSQLiteDbPath() const
@@ -100,9 +100,9 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 		int StartRowIndex = 2;
 		for (int row = StartRowIndex; row < rowCount; ++row)
 		{
-			Cell* cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nTestItemCodeExcelColumnIndex);
+			Cell* cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemCode);
 			QString strCurCode(cell->readValue().toString());
-			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nTestItemNameExcelColumnIndex);
+			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemName);
 			QString strCurName(cell->readValue().toString());
 			if (m_mapTestItemDictionary.find(strCurCode) == m_mapTestItemDictionary.end())
 			{
