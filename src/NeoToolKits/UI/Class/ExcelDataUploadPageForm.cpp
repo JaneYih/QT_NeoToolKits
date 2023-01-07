@@ -91,12 +91,12 @@ void ExcelDataUploadPageForm::EditTableViewByDbConnect()
 	ui->lineEdit_DbInfo->setText(m_pApp->getSqlTableInfoPointer()->toString());
 
 	ExcelDataUploadDbOperate db(*(m_pApp->getSqlTableInfoPointer()));
-	std::list<std::string> fields;
+	FieldList fields;
 	if (db.GetTableFullFields(m_pApp->getSqlTableInfoPointer()->tableName.toUtf8(), fields))
 	{
 		QStringList options;
 		options.push_back("");
-		foreach (auto var, fields)
+		for each (auto var in fields.FieldListValue)
 		{
 			options.push_back(QString::fromStdString(var));
 		}

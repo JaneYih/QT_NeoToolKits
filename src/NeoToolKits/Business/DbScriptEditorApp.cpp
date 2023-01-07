@@ -18,7 +18,8 @@ const QString s_ini_key_ColumnIndex_TestItemName = "ColumnIndex_TestItemName";
 DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	: QObject(parent),
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/DbScriptEditorTool.ini"),
-	m_pCfg(new IniOperation(m_strIniFileName))
+	m_pCfg(new IniOperation(m_strIniFileName)),
+	m_DbScriptOperate(nullptr)
 {
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
 	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
@@ -27,6 +28,7 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 
 DbScriptEditorApp::~DbScriptEditorApp()
 {
+	delete m_DbScriptOperate;
 	delete m_pCfg;
 }
 
@@ -58,13 +60,35 @@ void DbScriptEditorApp::setSQLiteDbPath(const QString& src)
 	m_strSQLiteDbPath = src;
 }
 
-bool DbScriptEditorApp::TestSqliteDb(const QString& dbPath)
+bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 {
+	if (m_DbScriptOperate)
+	{
+		delete m_DbScriptOperate;
+		m_DbScriptOperate = nullptr;
+	}
+
 	SqlTableInfo tempInfo;
 	tempInfo.baseInfo.type = SqlTypes::eSQLITE;
 	tempInfo.baseInfo.dbName = dbPath;
-	DbScriptOperate dbOperate(tempInfo);
-	return dbOperate.TestConnect();
+	m_DbScriptOperate = new DbScriptOperate(tempInfo);
+	if (m_DbScriptOperate)
+	{	
+		if (m_DbScriptOperate->TestConnect())
+		{
+			setSQLiteDbPath(dbPath);
+
+			DbData outData;
+			QString strErrorMsg;
+			if (!m_DbScriptOperate->GetTableFullData(outData, strErrorMsg))
+			{
+				QMessageBox::critical(nullptr, "critical", strErrorMsg);
+				return false;
+			}
+			return true;
+		}
+	}
+	return false;
 }
 
 void DbScriptEditorApp::LoadExcelColumns(const QString& fileName)

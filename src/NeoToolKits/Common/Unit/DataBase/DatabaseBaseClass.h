@@ -5,19 +5,27 @@
 #include <string.h>
 #include <vector>
 #include <list>
-#include "Database_def.h"
 using namespace std;
 
-typedef struct 
+typedef struct _FieldList_
 {
-	vector<string> FieldListValue;
-}FieldList;
+	vector<std::string> FieldListValue;
+	void clear()
+	{
+		FieldListValue.clear();
+	}
+}FieldList, * pFieldList;
 
-typedef struct 
+typedef struct _DataTable_
 {
-	FieldList FieldName;      
-	vector<FieldList> RowList; 
-}DataTable;
+	FieldList FieldName;
+	vector<FieldList> RowList;
+	void clear()
+	{
+		FieldName.clear();
+		RowList.clear();
+	}
+}DataTable, * pDataTable;
 
 class IDatabase
 {
@@ -43,6 +51,6 @@ public:
 	virtual int ShowIndex(const char* TableName) = 0;
 
 	virtual bool IsExistTable(const char* TableName) = 0;
-	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields) = 0;
+	virtual bool GetTableFullFields(const char* TableName, FieldList& Fields) = 0;
 	virtual string GetLastError() = 0;
 };

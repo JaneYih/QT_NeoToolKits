@@ -17,27 +17,46 @@ DbScriptOperate::~DbScriptOperate()
 bool DbScriptOperate::TestConnect()
 {
 	DbFieldGroup Fields;
-	return GetTableFullFields(Fields);
+	QString strErrorMsg;
+	return GetTableFullFields(Fields, strErrorMsg);
 }
 
-bool DbScriptOperate::GetTableFullFields(DbFieldGroup& outFields)
+bool DbScriptOperate::GetTableFullFields(DbFieldGroup& outFields, QString& strErrorMsg)
 {
-	outFields.fields.clear();
+	outFields.clear();
 	if (!DatabaseInstence->IsInit())
 	{
+		strErrorMsg = QString::fromStdWString(L"数据库未连接");
 		return false;
 	}
 
 	QByteArray byteTableName = m_stSqlInfo.tableName.toLocal8Bit();
 	if (DatabaseInstence->IsExistTable(byteTableName))
 	{
-		std::list<std::string> Fields;
+		FieldList Fields;
 		DatabaseInstence->GetTableFullFields(byteTableName, Fields);
-		for each (auto var in Fields)
-		{
-			outFields.fields.push_back(QString::fromStdString(var));
-		}
-		return Fields.size() > 0;
+		outFields = Fields;
+		return outFields.fields.size() > 0;
 	}
+	strErrorMsg = QString::fromStdWString(L"数据库表(%1)不存在").arg(m_stSqlInfo.tableName);
+	return false;
+}
+
+bool DbScriptOperate::GetTableFullData(DbData& outData, QString& strErrorMsg)
+{
+	outData.clear();
+	if (!DatabaseInstence->IsInit())
+	{
+		strErrorMsg = QString::fromStdWString(L"数据库未连接");
+		return false;
+	}
+
+	DataTable ResultData;
+	if (0 == DatabaseInstence->GetResultData(QString("SELECT * FROM %1;").arg(m_stSqlInfo.tableName).toLocal8Bit(), ResultData))
+	{
+		outData = ResultData;
+		return true;
+	}
+	strErrorMsg = QString::fromStdString(DatabaseInstence->GetLastError());
 	return false;
 }

@@ -40,7 +40,7 @@ bool ITableManage::TestConnect(string& errMsg)
 	return false;
 }
 
-bool ITableManage::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+bool ITableManage::GetTableFullFields(const char* TableName, FieldList& Fields)
 {
 	if (DatabaseInstence)
 	{

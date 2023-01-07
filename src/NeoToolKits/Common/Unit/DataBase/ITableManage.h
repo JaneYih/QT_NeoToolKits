@@ -21,7 +21,7 @@ public:
 public:
 	virtual bool TestConnect(string& errMsg);
 	virtual bool IsExistTable(const char* TableName);
-	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
+	virtual bool GetTableFullFields(const char* TableName, FieldList& Fields);
 	virtual bool CreateTable();
 	virtual bool InsertData(vector<string> para);
 	virtual bool DeleteData(vector<string> para);

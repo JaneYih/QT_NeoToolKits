@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DatabaseBaseClass.h"
+#include "Database_def.h"
 #include "MysqlDatabase.h"
 #include "SQLiteDatabase.h"
 

@@ -131,7 +131,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 		if (!dbPath.isEmpty())
 		{
 			ui->lineEdit_DBPath->setText(dbPath);
-			if (m_pApp->TestSqliteDb(dbPath))
+			if (m_pApp->OpenSQLiteDb(dbPath))
 			{
 				ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
 				return;

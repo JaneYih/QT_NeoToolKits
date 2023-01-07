@@ -241,7 +241,7 @@ bool CMysqlDatabase::IsExistTable(const char* TableName)
 }
 
 //查询表的字段名称
-bool CMysqlDatabase::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+bool CMysqlDatabase::GetTableFullFields(const char* TableName, FieldList& Fields)
 {
 	char command[1024] = { 0 };
 	sprintf_s(command, "SHOW FULL COLUMNS FROM %s", TableName);
@@ -251,13 +251,15 @@ bool CMysqlDatabase::GetTableFullFields(const char* TableName, std::list<string>
 	if (!GetResultData(command, OutData))
 	{
 		int index = 0;
-		foreach (auto var, OutData.FieldName.FieldListValue)
+		vector<std::string>::iterator iter = OutData.FieldName.FieldListValue.begin();
+		for (; iter != OutData.FieldName.FieldListValue.end(); ++iter)
 		{
-			if (var == "Field")
+			if (*iter == "Field")
 			{
-				foreach(auto value, OutData.RowList)
+				vector<FieldList>::iterator valueItem = OutData.RowList.begin();
+				for (; valueItem != OutData.RowList.end(); ++valueItem)
 				{
-					Fields.push_back(value.FieldListValue[index]);
+					Fields.FieldListValue.push_back(valueItem->FieldListValue[index]);
 				}
 				return true;
 			}

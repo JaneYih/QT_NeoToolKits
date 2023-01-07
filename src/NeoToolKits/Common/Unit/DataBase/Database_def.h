@@ -3,6 +3,8 @@
 #include <QString>
 #include <QVector>
 #include <QList>
+#include <QDebug>
+#include "DatabaseBaseClass.h"
 
 typedef enum
 {
@@ -44,10 +46,112 @@ typedef struct _SqlTableInfo_
 typedef struct _DbFieldGroup_
 {
 	QVector<QString> fields;
+
+	_DbFieldGroup_()
+	{
+		clear();
+	}
+	~_DbFieldGroup_()
+	{
+		clear();
+	}
+	_DbFieldGroup_(const _DbFieldGroup_& src)
+	{
+		this->copy(src);
+	}
+	_DbFieldGroup_& operator=(const _DbFieldGroup_& src)
+	{
+		if (this == &src)
+		{
+			return *this;
+		}
+		this->copy(src);
+		return *this;
+	}
+	void copy(const _DbFieldGroup_& src)
+	{
+		this->clear();
+		for each (QString var in src.fields)
+		{
+			this->fields.push_back(var);
+		}
+	}
+	_DbFieldGroup_(const FieldList& src)
+	{
+		*this = src;
+	}
+	_DbFieldGroup_& operator=(const FieldList& src)
+	{
+		this->clear();
+		foreach (std::string var, src.FieldListValue)
+		{
+			this->fields.push_back(QString::fromStdString(var));
+		}
+		return *this;
+	}
+	void clear()
+	{
+		this->fields.clear();
+	}
 }DbFieldGroup, * pDbFieldGroup;
 
 typedef struct _DbData_
 {
 	DbFieldGroup fieldGroup;
-	QList<DbFieldGroup> rows;
+	QList<pDbFieldGroup> rows;
+
+	_DbData_()
+	{
+		clear();
+	}
+	~_DbData_()
+	{
+		clear();
+	}
+	_DbData_(const _DbData_& src)
+	{
+		this->copy(src);
+	}
+	_DbData_& operator=(const _DbData_& src)
+	{
+		if (this == &src)
+		{
+			return *this;
+		}
+		this->copy(src);
+		return *this;
+	}
+	void copy(const _DbData_& src)
+	{
+		this->clear();
+		this->fieldGroup = src.fieldGroup;
+		foreach(pDbFieldGroup var, src.rows)
+		{
+			this->rows.push_back(new DbFieldGroup(*var));
+		}
+	}
+	_DbData_(const DataTable& src)
+	{
+		*this = src;
+	}
+	_DbData_& operator=(const DataTable& src)
+	{
+		this->clear();
+		this->fieldGroup = src.FieldName;
+		foreach (FieldList var, src.RowList)
+		{
+			this->rows.push_back(new DbFieldGroup(var));
+		}
+		return *this;
+	}
+	void clear()
+	{
+		this->fieldGroup.fields.clear();
+		for each (auto var in rows)
+		{
+			delete var;
+			var = nullptr;
+		}
+		this->rows.clear();
+	}
 }DbData, * pDbData;

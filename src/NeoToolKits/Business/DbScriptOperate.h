@@ -14,7 +14,8 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	public:
 		bool TestConnect();
-		bool GetTableFullFields(DbFieldGroup& Fields);
+		bool GetTableFullFields(DbFieldGroup& Fields, QString& strErrorMsg);
+		bool GetTableFullData(DbData& outData, QString& strErrorMsg);
 
 	private:
 		SqlTableInfo m_stSqlInfo;

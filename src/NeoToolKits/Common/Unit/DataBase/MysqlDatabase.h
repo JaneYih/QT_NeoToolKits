@@ -45,6 +45,6 @@ public:
 	virtual int ShowIndex(const char* TableName);
 
 	virtual bool IsExistTable(const char* TableName);
-	virtual bool GetTableFullFields(const char* TableName, std::list<string>& Fields);
+	virtual bool GetTableFullFields(const char* TableName, FieldList& Fields);
 };
 

@@ -67,7 +67,7 @@ bool CSQLiteDatabase::IsExistTable(const char* TableName)
 	return false;
 }
 
-bool CSQLiteDatabase::GetTableFullFields(const char* TableName, std::list<string>& Fields)
+bool CSQLiteDatabase::GetTableFullFields(const char* TableName, FieldList& Fields)
 {
 	Fields.clear();
 	QSqlQuery query(QSqlDatabase::database());
@@ -78,7 +78,7 @@ bool CSQLiteDatabase::GetTableFullFields(const char* TableName, std::list<string
 	{
 		while (query.next())
 		{
-			Fields.push_back(query.value(1).toString().toStdString());
+			Fields.FieldListValue.push_back(query.value(1).toString().toStdString());
 			//qDebug() << QString(QString::fromLocal8Bit("字段数:%1     字段名:%2     字段类型:%3")).arg(query.value(0).toString()).arg(query.value(1).toString()).arg(query.value(2).toString());
 		}
 		return true;
