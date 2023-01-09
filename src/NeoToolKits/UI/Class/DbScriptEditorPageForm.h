@@ -7,7 +7,6 @@
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
 	class DbScriptEditorApp;
-	class DbScriptDataModel;
 	class DbScriptEditorPageForm : public QWidget
 	{
 		Q_OBJECT
@@ -32,7 +31,6 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	private:
 		Ui::DbScriptEditorPageForm* ui;
 		DbScriptEditorApp* m_pApp;
-		DbScriptDataModel* m_pDataModel;
 		bool m_bFirstShowData;
 	};
 }

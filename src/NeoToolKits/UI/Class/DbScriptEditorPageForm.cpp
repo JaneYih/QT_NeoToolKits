@@ -11,11 +11,9 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 	: QWidget(parent),
 	ui(new Ui::DbScriptEditorPageForm),
 	m_pApp(new DbScriptEditorApp(this)),
-	m_pDataModel(new DbScriptDataModel(this)),
 	m_bFirstShowData(true)
 {
 	Q_ASSERT(m_pApp);
-	Q_ASSERT(m_pDataModel);
 	initView();
 	connect(ui->btn_ExcelPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_DBPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
@@ -30,7 +28,6 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 
 DbScriptEditorPageForm::~DbScriptEditorPageForm()
 {
-	delete m_pDataModel;
 	delete m_pApp;
 	delete ui;
 }
@@ -47,15 +44,17 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 	{
 		LoadExcelInfo(m_pApp->getTestItemExcelInfo().strExcelPath);
 
-		ui->tableView_DBDataTable->setModel(m_pDataModel);
+		ui->tableView_DBDataTable->setModel(m_pApp->getDbScriptDataModelPointer());
 		QHeaderView* horizontalHeader = ui->tableView_DBDataTable->horizontalHeader();
-		horizontalHeader->setSectionResizeMode(QHeaderView::Interactive);
-		//horizontalHeader->setDefaultAlignment(Qt::AlignHCenter);
-		//horizontalHeader->setStretchLastSection(true);
+		horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+		horizontalHeader->setDefaultAlignment(Qt::AlignLeft);
+		horizontalHeader->setStretchLastSection(true);
 		horizontalHeader->setSortIndicatorShown(true);
 		horizontalHeader->setSectionsClickable(true);
 		connect(horizontalHeader, &QHeaderView::sectionClicked, this, &DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot);
 		ui->tableView_DBDataTable->setAlternatingRowColors(true);
+		ui->tableView_DBDataTable->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+		ui->tableView_DBDataTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		ui->tableView_DBDataTable->show();
 
 		m_bFirstShowData = false;
@@ -149,7 +148,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_refresh)
 	{
-
+		return;
 	}
 	else if (curBtn == ui->btn_save)
 	{

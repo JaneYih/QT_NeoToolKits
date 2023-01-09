@@ -4,6 +4,7 @@
 #include "ExcelOperation.h"
 #include "IniOperation.h"
 #include "DbScriptOperate.h"
+#include "DbScriptDataModel.h"
 #include <QMessageBox>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -19,7 +20,8 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	: QObject(parent),
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/DbScriptEditorTool.ini"),
 	m_pCfg(new IniOperation(m_strIniFileName)),
-	m_DbScriptOperate(nullptr)
+	m_DbScriptOperate(nullptr),
+	m_pDataModel(new DbScriptDataModel(this))
 {
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
 	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
@@ -28,8 +30,14 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 
 DbScriptEditorApp::~DbScriptEditorApp()
 {
+	delete m_pDataModel;
 	delete m_DbScriptOperate;
 	delete m_pCfg;
+}
+
+DbScriptDataModel* const DbScriptEditorApp::getDbScriptDataModelPointer() const
+{
+	return m_pDataModel;
 }
 
 QMap<QString, QString> DbScriptEditorApp::getTestItemDictionary() const
@@ -85,6 +93,7 @@ bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 				QMessageBox::critical(nullptr, "critical", strErrorMsg);
 				return false;
 			}
+			getDbScriptDataModelPointer()->setDbScriptData(outData);
 			return true;
 		}
 	}

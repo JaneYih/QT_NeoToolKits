@@ -5,6 +5,7 @@
 #include "DbScriptEditor_def.h"
 
 class IniOperation;
+class DbScriptDataModel;
 
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
@@ -26,6 +27,8 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QString getSQLiteDbPath() const;
 		bool OpenSQLiteDb(const QString& dbPath);
 
+		DbScriptDataModel* const getDbScriptDataModelPointer() const;
+
 	private:
 		void setSQLiteDbPath(const QString& src);
 
@@ -38,6 +41,8 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 		QString m_strSQLiteDbPath;
 		DbScriptOperate* m_DbScriptOperate;
+
+		DbScriptDataModel* m_pDataModel;
 	};
 }
 
