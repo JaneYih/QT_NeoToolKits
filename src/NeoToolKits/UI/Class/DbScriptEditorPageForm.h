@@ -27,6 +27,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void initView(void);
 		void InitComboBoxItems(const TestItemExcelInfo& info);
 		void LoadExcelInfo(const QString& fileName);
+		void LoadSQLiteDb(const QString& dbPath);
 
 	private:
 		Ui::DbScriptEditorPageForm* ui;

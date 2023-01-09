@@ -43,9 +43,40 @@ typedef struct _SqlTableInfo_
 	}
 }SqlTableInfo, * pSqlTableInfo;
 
+typedef struct _DbDataCell_
+{
+private:
+	bool bEdited;
+	QString strValue;
+public:
+	_DbDataCell_(){
+		init();
+	}
+	void init()
+	{
+		bEdited = false;
+		strValue = "";
+	}
+	QString value() const {
+		return strValue;
+	}
+	void setValue(const QString& value){
+		strValue = value;
+	}
+	bool isEdited() const{
+		return bEdited;
+	}
+	void setEdited(){
+		bEdited = true;
+	}
+	void setUnedited(){
+		bEdited = false;
+	}
+}DbDataCell, * pDbDataCell;
+
 typedef struct _DbFieldGroup_
 {
-	QVector<QString> fields;
+	QVector<DbDataCell> fields;
 
 	_DbFieldGroup_()
 	{
@@ -71,7 +102,7 @@ typedef struct _DbFieldGroup_
 	void copy(const _DbFieldGroup_& src)
 	{
 		this->clear();
-		for each (QString var in src.fields)
+		for each (auto var in src.fields)
 		{
 			this->fields.push_back(var);
 		}
@@ -85,7 +116,9 @@ typedef struct _DbFieldGroup_
 		this->clear();
 		foreach (std::string var, src.FieldListValue)
 		{
-			this->fields.push_back(QString::fromStdString(var));
+			DbDataCell cell;
+			cell.setValue(QString::fromStdString(var));
+			this->fields.push_back(cell);
 		}
 		return *this;
 	}

@@ -16,6 +16,9 @@ public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
 
+private:
+	void ClearDbScriptData();
+
 protected:
 	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;

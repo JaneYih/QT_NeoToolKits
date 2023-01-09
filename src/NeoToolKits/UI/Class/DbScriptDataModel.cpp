@@ -1,4 +1,5 @@
 #include "DbScriptDataModel.h"
+#include <QColor>
 
 DbScriptDataModel::DbScriptDataModel(QObject *parent)
 	: QAbstractTableModel(parent)
@@ -22,11 +23,30 @@ void DbScriptDataModel::setDbScriptData(const DbData& data)
 	int columnCount = data.fieldGroup.fields.size() - 1;
 	if (rowCount >= 0 && columnCount >= 0)
 	{
+		ClearDbScriptData();
 		beginInsertRows(QModelIndex(), 0, rowCount);
 		beginInsertColumns(QModelIndex(), 0, columnCount);
 		m_DbScriptData = data;
 		endInsertColumns();
 		endInsertRows();
+	}
+}
+
+void DbScriptDataModel::ClearDbScriptData()
+{
+	int rowCount = m_DbScriptData.rows.count() - 1;
+	int columnCount = m_DbScriptData.fieldGroup.fields.size() - 1;
+	if (rowCount >= 0)
+	{
+		beginRemoveRows(QModelIndex(), 0, rowCount);
+		m_DbScriptData.rows.clear();
+		endRemoveRows();
+	}
+	if (columnCount >= 0)
+	{
+		beginRemoveColumns(QModelIndex(), 0, columnCount);
+		m_DbScriptData.fieldGroup.clear();
+		endRemoveColumns();
 	}
 }
 
@@ -62,7 +82,7 @@ QVariant DbScriptDataModel::headerData(int section, Qt::Orientation orientation,
 		{
 			if (section < m_DbScriptData.fieldGroup.fields.size())
 			{
-				return QVariant(QString::fromStdWString(L"%1").arg(m_DbScriptData.fieldGroup.fields[section]));
+				return QVariant(QString::fromStdWString(L"%1").arg(m_DbScriptData.fieldGroup.fields[section].value()));
 			}
 		}
 		else
@@ -77,20 +97,34 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 {
 	if (index.isValid())
 	{
-		if (role == Qt::DisplayRole
-			|| role == Qt::ToolTipRole
-			|| role == Qt::EditRole)
+		DbDataCell* cellValue = nullptr;
+		int row = index.row();
+		if (row < m_DbScriptData.rows.size())
 		{
-			int row = index.row();
-			if (row < m_DbScriptData.rows.size())
+			pDbFieldGroup pRowData = m_DbScriptData.rows[row];
+			int column = index.column();
+			if (pRowData != nullptr
+				&& column < pRowData->fields.size())
 			{
-				pDbFieldGroup pRowData = m_DbScriptData.rows[row];
-				int column = index.column();
-				if (pRowData != nullptr
-					&& column < pRowData->fields.size())
+				cellValue = &(pRowData->fields[column]);
+			}
+		}
+
+		if (cellValue)
+		{
+			if (role == Qt::DisplayRole
+				|| role == Qt::ToolTipRole
+				|| role == Qt::EditRole)
+			{
+				return cellValue->value();
+			}
+			else if (role == Qt::ForegroundRole)
+			{
+				if (cellValue->isEdited())
 				{
-					return pRowData->fields[column];
+					return QColor(Qt::red);
 				}
+				return QColor(Qt::black);
 			}
 		}
 	}
@@ -111,8 +145,13 @@ bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value,
 				if (pRowData != nullptr
 					&& column < pRowData->fields.size())
 				{
-					pRowData->fields[column] = value.toString();
-					return true;
+					DbDataCell* cell = &(pRowData->fields[column]);
+					if (cell->value() != value)
+					{
+						cell->setValue(value.toString());
+						cell->setEdited();
+						return true;
+					}	
 				}
 			}
 		}

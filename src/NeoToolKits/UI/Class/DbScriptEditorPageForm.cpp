@@ -129,13 +129,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 			tr("Open SQLite File"), "", tr("SQLite Files (*.db)"));
 		if (!dbPath.isEmpty())
 		{
-			ui->lineEdit_DBPath->setText(dbPath);
-			if (m_pApp->OpenSQLiteDb(dbPath))
-			{
-				ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
-				return;
-			}
-			ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(255, 0, 0);");
+			LoadSQLiteDb(dbPath);
 		}
 	}
 	else if (curBtn == ui->btn_add)
@@ -148,12 +142,23 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_refresh)
 	{
-		return;
+		LoadSQLiteDb(m_pApp->getSQLiteDbPath());
 	}
 	else if (curBtn == ui->btn_save)
 	{
 
 	}
+}
+
+void DbScriptEditorPageForm::LoadSQLiteDb(const QString& dbPath)
+{
+	ui->lineEdit_DBPath->setText(dbPath);
+	if (m_pApp->OpenSQLiteDb(dbPath))
+	{
+		ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
+		return;
+	}
+	ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(255, 0, 0);");
 }
 
 void DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot(int index)
