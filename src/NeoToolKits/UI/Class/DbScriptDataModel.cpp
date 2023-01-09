@@ -118,13 +118,13 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 			{
 				return cellValue->value();
 			}
-			else if (role == Qt::ForegroundRole)
+			else if (role == Qt::BackgroundRole)
 			{
 				if (cellValue->isEdited())
 				{
-					return QColor(Qt::red);
+					return QColor(Qt::yellow);
 				}
-				return QColor(Qt::black);
+				return QColor(Qt::white);
 			}
 		}
 	}
