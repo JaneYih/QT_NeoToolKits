@@ -53,6 +53,11 @@ string CSQLiteDatabase::GetLastError()
 	return db.lastError().text().toStdString();
 }
 
+string CSQLiteDatabase::GetQueryLastError()
+{
+	return m_queryLastError.text().toStdString();
+}
+
 bool CSQLiteDatabase::IsExistTable(const char* TableName)
 {
 	QStringList tableList;
@@ -98,6 +103,7 @@ int CSQLiteDatabase::ExcuteCommand(const char*  command)
 	{
 		return 0;   //success
 	}
+	m_queryLastError = query.lastError();
 	return -1;
 }
 
@@ -150,25 +156,22 @@ int CSQLiteDatabase::GetResultData(const char*  command, DataTable& ResultData)
 
 int CSQLiteDatabase::BeginTransaction()
 {
-	QSqlDatabase::database().transaction();
-	return 0;
+	return QSqlDatabase::database().transaction() ? 0 : -1;
 }
 
 int CSQLiteDatabase::RollBackTransaction(const char* PointName)
 {
-	QSqlDatabase::database().rollback();
-	return 0;
+	return QSqlDatabase::database().rollback() ? 0 : -1;
 }
 
 int CSQLiteDatabase::SetRollBackPoint(const char* PointName)
 {
-	return 0;
+	return -1;
 }
 
 int CSQLiteDatabase::CommitTransaction()
 {
-	QSqlDatabase::database().commit();
-	return 0;
+	return QSqlDatabase::database().commit() ? 0 : -1;
 }
 
 int CSQLiteDatabase::CreateIndex(const char* TableName, const char* FieldName, const char* IndexName)
@@ -189,5 +192,5 @@ int CSQLiteDatabase::DeleteIndex(const char* TableName, const char* FieldName, c
 
 int CSQLiteDatabase::ShowIndex(const char* TableName)
 {
-	return 0;
+	return -1;
 }

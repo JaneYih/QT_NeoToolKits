@@ -31,7 +31,7 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 DbScriptEditorApp::~DbScriptEditorApp()
 {
 	delete m_pDataModel;
-	delete m_DbScriptOperate;
+	CloaseSQLiteDb();
 	delete m_pCfg;
 }
 
@@ -68,13 +68,18 @@ void DbScriptEditorApp::setSQLiteDbPath(const QString& src)
 	m_strSQLiteDbPath = src;
 }
 
-bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
+void DbScriptEditorApp::CloaseSQLiteDb()
 {
 	if (m_DbScriptOperate)
 	{
 		delete m_DbScriptOperate;
 		m_DbScriptOperate = nullptr;
 	}
+}
+
+bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
+{
+	CloaseSQLiteDb();
 
 	SqlTableInfo tempInfo;
 	tempInfo.baseInfo.type = SqlTypes::eSQLITE;

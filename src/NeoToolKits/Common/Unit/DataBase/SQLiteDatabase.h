@@ -2,6 +2,7 @@
 #define SQLISTDB_H
 
 #include <QObject>
+#include <QSqlError>
 #include "DatabaseBaseClass.h"
 
 class CSQLiteDatabase : public QObject, public IDatabase
@@ -14,12 +15,14 @@ public:
 private:
 	int m_InitErr;
 	QString m_strDataBaseName;
+	QSqlError m_queryLastError;
 
 public:
 	virtual bool IsInit();
 	virtual int Init();
 	virtual int UnInit();
 	virtual std::string GetLastError();
+	virtual std::string GetQueryLastError();
 	virtual int ExcuteCommand(const char*  command);
 	virtual int GetResultData(const char*  command, DataTable& ResultData);
 	virtual int BeginTransaction();
@@ -31,6 +34,9 @@ public:
 	virtual int ShowIndex(const char* TableName);
 	virtual bool IsExistTable(const char* TableName);
 	virtual bool GetTableFullFields(const char* TableName, FieldList& Fields);
+
+	
+
 signals:
 
 public slots:

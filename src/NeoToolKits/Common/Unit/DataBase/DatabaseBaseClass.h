@@ -52,5 +52,8 @@ public:
 
 	virtual bool IsExistTable(const char* TableName) = 0;
 	virtual bool GetTableFullFields(const char* TableName, FieldList& Fields) = 0;
-	virtual string GetLastError() = 0;
+	virtual std::string GetLastError() = 0;
+	virtual std::string GetQueryLastError(){
+		return "";
+	}
 };
