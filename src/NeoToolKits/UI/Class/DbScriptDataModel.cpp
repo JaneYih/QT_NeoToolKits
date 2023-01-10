@@ -239,12 +239,12 @@ bool DbScriptDataModel::removeRows(const QModelIndexList& selection)
 
 void DbScriptDataModel::insertRow(const QModelIndex& selection)
 {
-	if (!selection.isValid())
+	int row = m_DbScriptData.rows.count() - 1;
+	if (selection.isValid())
 	{
-		return;
+		row = selection.row();
 	}
 
-	int row = selection.row();
 	if (m_DbScriptData.fieldGroup.fields.count() <= 0
 		|| row >= m_DbScriptData.rows.count())
 	{

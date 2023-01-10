@@ -27,6 +27,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QString getSQLiteDbPath() const;
 		bool OpenSQLiteDb(const QString& dbPath);
 		void CloaseSQLiteDb();
+		bool SaveSQLiteData(QString& strErrorMsg);
 
 		DbScriptDataModel* const getDbScriptDataModelPointer() const;
 

@@ -4,6 +4,7 @@
 #include "DbScriptDataModel.h"
 #include <QFileDialog>
 #include <QComboBox>
+#include <QMessageBox>
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -66,6 +67,7 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 void DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot(int logicalIndex)
 {
 	ui->tableView_DBDataTable->sortByColumn(logicalIndex, Qt::DescendingOrder);
+	ui->tableView_DBDataTable->clearSelection();
 }
 
 void DbScriptEditorPageForm::InitComboBoxItems(const TestItemExcelInfo& info)
@@ -141,8 +143,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_delete)
 	{
-		QModelIndexList selection = ui->tableView_DBDataTable->selectionModel()->selectedIndexes();
-		m_pApp->getDbScriptDataModelPointer()->removeRows(selection);
+		m_pApp->getDbScriptDataModelPointer()->removeRows(ui->tableView_DBDataTable->selectionModel()->selectedIndexes());
 		ui->tableView_DBDataTable->clearSelection();
 	}
 	else if (curBtn == ui->btn_refresh)
@@ -151,7 +152,13 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_save)
 	{
-
+		QString strErrorMsg;
+		if (!m_pApp->SaveSQLiteData(strErrorMsg))
+		{
+			QMessageBox::critical(this, "critical", strErrorMsg);
+			return;
+		}
+		Refresh();
 	}
 }
 

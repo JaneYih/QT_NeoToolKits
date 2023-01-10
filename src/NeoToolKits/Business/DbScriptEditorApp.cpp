@@ -105,6 +105,62 @@ bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 	return false;
 }
 
+bool DbScriptEditorApp::SaveSQLiteData(QString& strErrorMsg)
+{
+	DbData SQLiteData = m_pDataModel->getDbScriptData();
+	DbData WaitingDeleteData;
+	DbData WaitingInsertData;
+	DbData WaitingUpdateData;
+
+	foreach (auto row, SQLiteData.rows)
+	{
+		foreach (auto cell, row->fields)
+		{
+			if (cell.isWaitingInsert())
+			{
+				WaitingInsertData.rows.push_back(new DbFieldGroup(*row));
+				break;
+			}
+			else if (cell.isWaitingDelete())
+			{
+				WaitingDeleteData.rows.push_back(new DbFieldGroup(*row));
+				break;
+			}
+			else if (cell.isWaitingUpdate())
+			{
+				WaitingUpdateData.rows.push_back(new DbFieldGroup(*row));
+				break;
+			}
+		}
+	}
+
+	if (!WaitingInsertData.rows.isEmpty())
+	{
+		WaitingInsertData.fieldGroup = SQLiteData.fieldGroup;
+		if (!m_DbScriptOperate->InsertData(WaitingInsertData, strErrorMsg))
+		{
+			return false;
+		}
+	}
+	if (!WaitingUpdateData.rows.isEmpty())
+	{
+		WaitingUpdateData.fieldGroup = SQLiteData.fieldGroup;
+		if (!m_DbScriptOperate->UpdateData(WaitingUpdateData, strErrorMsg))
+		{
+			return false;
+		}
+	}
+	if (!WaitingDeleteData.rows.isEmpty())
+	{
+		WaitingDeleteData.fieldGroup = SQLiteData.fieldGroup;
+		if (!m_DbScriptOperate->DeleteData(WaitingDeleteData, strErrorMsg))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void DbScriptEditorApp::LoadExcelColumns(const QString& fileName)
 {
 	m_stTestItemExcelInfo.strExcelPath = fileName;
