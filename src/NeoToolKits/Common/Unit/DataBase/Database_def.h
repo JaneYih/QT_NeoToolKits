@@ -43,10 +43,18 @@ typedef struct _SqlTableInfo_
 	}
 }SqlTableInfo, * pSqlTableInfo;
 
+typedef enum _DbDataCellOperate_
+{
+	DbDataCell_NOP,
+	DbDataCell_Insert,
+	DbDataCell_Delete,
+	DbDataCell_Update,
+}DbDataCellOperate;
+
 typedef struct _DbDataCell_
 {
 private:
-	bool bEdited;
+	DbDataCellOperate eOperate;
 	QString strValue;
 public:
 	_DbDataCell_(){
@@ -54,7 +62,7 @@ public:
 	}
 	void init()
 	{
-		bEdited = false;
+		eOperate = DbDataCellOperate::DbDataCell_NOP;
 		strValue = "";
 	}
 	QString value() const {
@@ -63,14 +71,29 @@ public:
 	void setValue(const QString& value){
 		strValue = value;
 	}
-	bool isEdited() const{
-		return bEdited;
+	bool isWaitingOperate() {
+		return eOperate != DbDataCellOperate::DbDataCell_NOP;
 	}
-	void setEdited(){
-		bEdited = true;
+	void setUnOperate() {
+		eOperate = DbDataCellOperate::DbDataCell_NOP;
 	}
-	void setUnedited(){
-		bEdited = false;
+	bool isWaitingUpdate() const{
+		return DbDataCellOperate::DbDataCell_Update == eOperate;
+	}
+	void setWaitingUpdate(){
+		eOperate = DbDataCellOperate::DbDataCell_Update;
+	}
+	bool isWaitingDelete() const {
+		return DbDataCellOperate::DbDataCell_Delete == eOperate;
+	}
+	void setWaitingDelete() {
+		eOperate = DbDataCellOperate::DbDataCell_Delete;
+	}
+	bool isWaitingInsert() const {
+		return DbDataCellOperate::DbDataCell_Insert == eOperate;
+	}
+	void setWaitingInsert() {
+		eOperate = DbDataCellOperate::DbDataCell_Insert;
 	}
 }DbDataCell, * pDbDataCell;
 

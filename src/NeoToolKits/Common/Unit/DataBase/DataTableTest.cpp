@@ -14,7 +14,7 @@ bool CDataTableTest::DeleteData(vector<string> para) //É¾
 {
 	return false;
 }
-bool CDataTableTest::UpdataData(vector<string> para) //¸Ä
+bool CDataTableTest::UpdateData(vector<string> para) //¸Ä
 {
 	return false;
 }

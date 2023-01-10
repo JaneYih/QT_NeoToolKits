@@ -55,6 +55,8 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 		ui->tableView_DBDataTable->setAlternatingRowColors(true);
 		ui->tableView_DBDataTable->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 		ui->tableView_DBDataTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		ui->tableView_DBDataTable->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
+		ui->tableView_DBDataTable->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectItems);
 		ui->tableView_DBDataTable->show();
 
 		m_bFirstShowData = false;
@@ -134,20 +136,28 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_add)
 	{
-
+		m_pApp->getDbScriptDataModelPointer()->insertRow(ui->tableView_DBDataTable->selectionModel()->currentIndex());
+		ui->tableView_DBDataTable->clearSelection();
 	}
 	else if (curBtn == ui->btn_delete)
 	{
-
+		QModelIndexList selection = ui->tableView_DBDataTable->selectionModel()->selectedIndexes();
+		m_pApp->getDbScriptDataModelPointer()->removeRows(selection);
+		ui->tableView_DBDataTable->clearSelection();
 	}
 	else if (curBtn == ui->btn_refresh)
 	{
-		LoadSQLiteDb(m_pApp->getSQLiteDbPath());
+		Refresh();
 	}
 	else if (curBtn == ui->btn_save)
 	{
 
 	}
+}
+
+void DbScriptEditorPageForm::Refresh()
+{
+	LoadSQLiteDb(m_pApp->getSQLiteDbPath());
 }
 
 void DbScriptEditorPageForm::LoadSQLiteDb(const QString& dbPath)

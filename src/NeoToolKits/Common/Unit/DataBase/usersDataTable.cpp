@@ -143,7 +143,7 @@ bool CUsersDataTable::DeleteData(vector<string> para) //É¾
 
 	return !res;
 }
-bool CUsersDataTable::UpdataData(vector<string> para) //¸Ä
+bool CUsersDataTable::UpdateData(vector<string> para) //¸Ä
 {
 	if (!DatabaseInstence->IsInit())
 	{

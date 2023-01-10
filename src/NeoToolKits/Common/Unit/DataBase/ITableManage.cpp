@@ -69,7 +69,7 @@ bool ITableManage::DeleteData(vector<string> para)
 	return false;
 }
 
-bool ITableManage::UpdataData(vector<string> para)
+bool ITableManage::UpdateData(vector<string> para)
 {
 	return false;
 }

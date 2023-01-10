@@ -19,6 +19,6 @@ public:
 	virtual bool CreateTable(); 
 	virtual bool InsertData(vector<string> para); 
 	virtual bool DeleteData(vector<string> para); 
-	virtual bool UpdataData(vector<string> para); 
+	virtual bool UpdateData(vector<string> para); 
 	virtual bool SelectData(vector<string> para, DataTable& outputData);  
 };

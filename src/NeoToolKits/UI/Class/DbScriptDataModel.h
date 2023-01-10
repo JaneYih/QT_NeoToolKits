@@ -15,6 +15,8 @@ public:
 public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
+	void insertRow(const QModelIndex& selection);
+	bool removeRows(const QModelIndexList& selection);
 
 private:
 	void ClearDbScriptData();
@@ -28,6 +30,8 @@ protected:
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 	virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+	//virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
 private:
 	mutable DbData m_DbScriptData;

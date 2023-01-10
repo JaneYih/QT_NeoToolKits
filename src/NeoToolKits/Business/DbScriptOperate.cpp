@@ -81,9 +81,9 @@ bool DbScriptOperate::DeleteData(const DbData& data, QString& strErrorMsg)
 	return ExcuteDataOperateCommand(&DbScriptOperate::CreateDeleteDataCommand, data, strErrorMsg);
 }
 
-bool DbScriptOperate::UpdataData(const DbData& data, QString& strErrorMsg)
+bool DbScriptOperate::UpdateData(const DbData& data, QString& strErrorMsg)
 {
-	return ExcuteDataOperateCommand(&DbScriptOperate::CreateUpdataDataCommand, data, strErrorMsg);
+	return ExcuteDataOperateCommand(&DbScriptOperate::CreateUpdateDataCommand, data, strErrorMsg);
 }
 
 QString DbScriptOperate::CreateInsertDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values)
@@ -125,7 +125,7 @@ QString DbScriptOperate::CreateDeleteDataCommand(const DbFieldGroup& fields, con
 	return QString("delete from %1 where %2;").arg(m_stSqlInfo.tableName).arg(strPredicate);
 }
 
-QString DbScriptOperate::CreateUpdataDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values)
+QString DbScriptOperate::CreateUpdateDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values)
 {
 	int fieldsCount = fields.fields.count();
 	int valuesCount = values.fields.count();
@@ -140,7 +140,7 @@ QString DbScriptOperate::CreateUpdataDataCommand(const DbFieldGroup& fields, con
 	{
 		DbDataCell cell = values.fields[i];
 		DbDataCell field = fields.fields[i];
-		if (cell.isEdited())
+		if (cell.isWaitingUpdate())
 		{
 			strValues += QString("%1 = \'%2\',")
 				.arg(field.value())

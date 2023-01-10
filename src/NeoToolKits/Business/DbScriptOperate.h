@@ -20,13 +20,13 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		bool GetTableFullData(DbData& outData, QString& strErrorMsg);
 		bool InsertData(const DbData& data, QString& strErrorMsg);
 		bool DeleteData(const DbData& data, QString& strErrorMsg);
-		bool UpdataData(const DbData& data, QString& strErrorMsg);
+		bool UpdateData(const DbData& data, QString& strErrorMsg);
 
 	private:
 		bool CheckConnect(QString& strErrorMsg);
 		QString CreateInsertDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
 		QString CreateDeleteDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
-		QString CreateUpdataDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
+		QString CreateUpdateDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
 		bool ExcuteDataOperateCommand(const CreateCommandFunc createCommand, const DbData& data, QString& strErrorMsg);
 
 	private:

@@ -1,7 +1,7 @@
 #include "DbScriptDataModel.h"
 #include <QColor>
 
-DbScriptDataModel::DbScriptDataModel(QObject *parent)
+DbScriptDataModel::DbScriptDataModel(QObject* parent)
 	: QAbstractTableModel(parent)
 {
 
@@ -66,12 +66,12 @@ QModelIndex DbScriptDataModel::index(int row, int column, const QModelIndex& par
 
 int DbScriptDataModel::rowCount(const QModelIndex& parent) const
 {
-	return m_DbScriptData.rows.size();
+	return m_DbScriptData.rows.count();
 }
 
 int DbScriptDataModel::columnCount(const QModelIndex& parent) const
 {
-	return m_DbScriptData.fieldGroup.fields.size();
+	return m_DbScriptData.fieldGroup.fields.count();
 }
 
 QVariant DbScriptDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -120,11 +120,23 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 			}
 			else if (role == Qt::BackgroundRole)
 			{
-				if (cellValue->isEdited())
+				if (cellValue->isWaitingDelete())
 				{
-					return QColor(Qt::yellow);
+					return QColor(240, 178, 157);//ºì
+				}
+				else if (cellValue->isWaitingInsert())
+				{
+					return QColor(180, 240, 156);//ÂÌ
+				}
+				else if (cellValue->isWaitingUpdate())
+				{
+					return QColor(243, 245, 152);//»Æ
 				}
 				return QColor(Qt::white);
+			}
+			else if (role == Qt::ForegroundRole)
+			{
+				return QColor(Qt::black);
 			}
 		}
 	}
@@ -149,9 +161,12 @@ bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value,
 					if (cell->value() != value)
 					{
 						cell->setValue(value.toString());
-						cell->setEdited();
+						if (!cell->isWaitingOperate())
+						{
+							cell->setWaitingUpdate();
+						}
 						return true;
-					}	
+					}
 				}
 			}
 		}
@@ -167,4 +182,84 @@ Qt::ItemFlags DbScriptDataModel::flags(const QModelIndex& index) const
 void DbScriptDataModel::sort(int column, Qt::SortOrder order)
 {
 	return;
+}
+
+bool DbScriptDataModel::removeRows(int row, int count, const QModelIndex& parent)
+{
+	int last = row + count - 1;
+	beginRemoveRows(parent, row, last);
+	for (int i = row; i <= last; ++i)
+	{
+		if (i < m_DbScriptData.rows.count())
+		{
+			m_DbScriptData.rows.removeAt(i);
+		}
+	}
+	endRemoveRows();
+	return true;
+}
+
+bool DbScriptDataModel::removeRows(const QModelIndexList& selection)
+{
+	int rowCount = m_DbScriptData.rows.count();
+	for (int j = selection.size()-1; j >= 0; --j)
+	{
+		if (selection.at(j).isValid())
+		{
+			int curRow = selection.at(j).row();
+			if (curRow < rowCount)
+			{
+				int fieldsCount = m_DbScriptData.rows[curRow]->fields.count();
+				bool bRemoveRows = false;
+				for (int i = 0; i < fieldsCount; ++i)
+				{
+					DbDataCell* cell = &(m_DbScriptData.rows[curRow]->fields[i]);
+					if (cell->isWaitingInsert())
+					{
+						removeRows(curRow, 1);
+						rowCount = m_DbScriptData.rows.count();
+						bRemoveRows = true;
+						break;
+					}
+					else
+					{
+						cell->setWaitingDelete();
+					}
+				}
+				if (!bRemoveRows)
+				{
+					emit dataChanged(createIndex(curRow, 0, &(m_DbScriptData.rows[curRow]->fields[0])),
+						createIndex(curRow, fieldsCount - 1, &(m_DbScriptData.rows[curRow]->fields[fieldsCount - 1])));
+				}
+			}
+		}
+	}
+	return true;
+}
+
+void DbScriptDataModel::insertRow(const QModelIndex& selection)
+{
+	if (!selection.isValid())
+	{
+		return;
+	}
+
+	int row = selection.row();
+	if (m_DbScriptData.fieldGroup.fields.count() <= 0
+		|| row >= m_DbScriptData.rows.count())
+	{
+		return;
+	}
+
+	beginInsertRows(QModelIndex(), row, row);
+	pDbFieldGroup values = new DbFieldGroup();
+	foreach (auto var, m_DbScriptData.fieldGroup.fields)
+	{
+		DbDataCell cell;
+		cell.setValue("");
+		cell.setWaitingInsert();
+		values->fields.push_back(cell);
+	}
+	m_DbScriptData.rows.insert(row+1, values);
+	endInsertRows();
 }
