@@ -17,7 +17,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	public:
 		bool TestConnect();
 		bool GetTableFullFields(DbFieldGroup& Fields, QString& strErrorMsg);
-		bool GetTableFullData(DbData& outData, QString& strErrorMsg);
+		bool GetTableFullData(DbData& outData, QString& strErrorMsg, const QString& orderByField = "");
 		bool InsertData(const DbData& data, QString& strErrorMsg);
 		bool DeleteData(const DbData& data, QString& strErrorMsg);
 		bool UpdateData(const DbData& data, QString& strErrorMsg);

@@ -52,7 +52,7 @@ bool DbScriptOperate::GetTableFullFields(DbFieldGroup& outFields, QString& strEr
 	return false;
 }
 
-bool DbScriptOperate::GetTableFullData(DbData& outData, QString& strErrorMsg)
+bool DbScriptOperate::GetTableFullData(DbData& outData, QString& strErrorMsg, const QString& orderByField)
 {
 	if (!CheckConnect(strErrorMsg))
 	{
@@ -62,7 +62,12 @@ bool DbScriptOperate::GetTableFullData(DbData& outData, QString& strErrorMsg)
 	outData.clear();
 
 	DataTable ResultData;
-	if (0 == DatabaseInstence->GetResultData(QString("SELECT * FROM %1;").arg(m_stSqlInfo.tableName).toLocal8Bit(), ResultData))
+	QString strOrderBy("");
+	if (!orderByField.isEmpty())
+	{
+		strOrderBy = QString("order by %1 asc").arg(orderByField); //"order by xxx desc"
+	}
+	if (0 == DatabaseInstence->GetResultData(QString("SELECT * FROM %1 %2;").arg(m_stSqlInfo.tableName).arg(strOrderBy).toLocal8Bit(), ResultData))
 	{
 		outData = ResultData;
 		return true;

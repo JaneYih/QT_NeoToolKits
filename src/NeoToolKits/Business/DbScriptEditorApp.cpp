@@ -105,8 +105,37 @@ bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 	return false;
 }
 
+bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex)
+{
+	DbScriptDataModel* model = getDbScriptDataModelPointer();
+	if (model)
+	{
+		DbData modelDbScriptData = model->getDbScriptData();
+		QString orderByField("");
+		if (orderByFieldIndex < modelDbScriptData.fieldGroup.fields.count())
+		{
+			orderByField = modelDbScriptData.fieldGroup.fields[orderByFieldIndex].value();
+			DbData outData;
+			QString strErrorMsg;
+			if (!m_DbScriptOperate->GetTableFullData(outData, strErrorMsg, orderByField))
+			{
+				QMessageBox::critical(nullptr, "critical", strErrorMsg);
+				return false;
+			}
+			model->setDbScriptData(outData);
+		}
+		return true;
+	}
+	return false;
+}
+
 bool DbScriptEditorApp::SaveSQLiteData(QString& strErrorMsg)
 {
+	if (m_DbScriptOperate != nullptr)
+	{
+		return false;
+	}
+
 	DbData SQLiteData = m_pDataModel->getDbScriptData();
 	DbData WaitingDeleteData;
 	DbData WaitingInsertData;
