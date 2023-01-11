@@ -1,41 +1,40 @@
 #pragma once
 
 #include <QAbstractTableModel>
+#include <QList>
 #include "DbScriptEditor_def.h"
-#include "Database_def.h"
 
-class DbScriptDataModel : public QAbstractTableModel
+using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
+
+class DBScriptTestItemsModel  : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
-	DbScriptDataModel(QObject* parent = nullptr);
-	~DbScriptDataModel();
+	DBScriptTestItemsModel(QObject *parent = nullptr);
+	~DBScriptTestItemsModel();
 
 public:
-	DbData getDbScriptData() const;
-	void setDbScriptData(const DbData& data);
-	void ClearDbScriptData();
-	bool setItemData(const QModelIndex& index, const QString& strValue);
-	QString getItemData(const QModelIndex& index) const;
+	QList<TestItem> getTestItems() const;
+	void setTestItems(const QList<TestItem>& items);
+	void ClearTestItems();
+	bool setTestItem(const QModelIndex& index, const TestItem& strValue);
+	TestItem getTestItem(const QModelIndex& index) const;
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
-	QString GetHorizontalHeaderName(int section) const;
 
 protected:
-	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+	//virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
-	virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 	//virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
 private:
-	mutable DbData m_DbScriptData;
+	QList<TestItem> m_testItems;
+
 };
-
-

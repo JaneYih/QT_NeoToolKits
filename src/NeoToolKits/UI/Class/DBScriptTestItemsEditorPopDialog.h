@@ -4,6 +4,8 @@
 #include "ui_DBScriptTestItemsEditorPopDialog.h"
 #include "DbScriptEditor_def.h"
 
+class DBScriptTestItemsModel;
+
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
 	class DBScriptTestItemsEditorPopDialog : public QDialog
@@ -15,7 +17,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		~DBScriptTestItemsEditorPopDialog();
 
 		QString getTestItemsText() const {
-			return m_TestItemsText;
+			return m_testItemsText;
 		}
 
 	public slots:
@@ -30,7 +32,8 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
-		QString m_TestItemsText;
+		QString m_testItemsText;
+		DBScriptTestItemsModel* m_testItemsModel;
 	};
 }
 
