@@ -28,7 +28,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		bool OpenSQLiteDb(const QString& dbPath);
 		void CloaseSQLiteDb();
 		bool SaveSQLiteData(QString& strErrorMsg);
-		bool RefreshSQLiteData(int orderByFieldIndex);
+		bool RefreshSQLiteData(int orderByFieldIndex, Qt::SortOrder order = Qt::DescendingOrder);
 
 		DbScriptDataModel* const getDbScriptDataModelPointer() const;
 

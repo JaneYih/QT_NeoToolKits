@@ -105,8 +105,13 @@ bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 	return false;
 }
 
-bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex)
+bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex, Qt::SortOrder order)
 {
+	if (m_DbScriptOperate == nullptr)
+	{
+		return false;
+	}
+
 	DbScriptDataModel* model = getDbScriptDataModelPointer();
 	if (model)
 	{
@@ -117,7 +122,7 @@ bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex)
 			orderByField = modelDbScriptData.fieldGroup.fields[orderByFieldIndex].value();
 			DbData outData;
 			QString strErrorMsg;
-			if (!m_DbScriptOperate->GetTableFullData(outData, strErrorMsg, orderByField))
+			if (!m_DbScriptOperate->GetTableFullData(outData, strErrorMsg, orderByField, order))
 			{
 				QMessageBox::critical(nullptr, "critical", strErrorMsg);
 				return false;
@@ -131,7 +136,7 @@ bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex)
 
 bool DbScriptEditorApp::SaveSQLiteData(QString& strErrorMsg)
 {
-	if (m_DbScriptOperate != nullptr)
+	if (m_DbScriptOperate == nullptr)
 	{
 		return false;
 	}

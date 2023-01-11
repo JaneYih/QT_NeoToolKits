@@ -66,8 +66,17 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 
 void DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot(int logicalIndex)
 {
-	m_pApp->RefreshSQLiteData(logicalIndex);
-	ui->tableView_DBDataTable->sortByColumn(logicalIndex, Qt::DescendingOrder);
+	static Qt::SortOrder order = Qt::AscendingOrder;
+	if (Qt::DescendingOrder == order)
+	{
+		order = Qt::AscendingOrder;
+	}
+	else if (Qt::AscendingOrder == order)
+	{
+		order = Qt::DescendingOrder;
+	}
+	m_pApp->RefreshSQLiteData(logicalIndex, order);
+	ui->tableView_DBDataTable->sortByColumn(logicalIndex, order);
 	ui->tableView_DBDataTable->clearSelection();
 }
 
