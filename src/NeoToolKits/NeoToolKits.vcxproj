@@ -158,6 +158,7 @@
     <ClCompile Include="UI\Class\DbScriptDataModel.cpp" />
     <ClCompile Include="UI\Class\DBScriptDataTableView.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
+    <ClCompile Include="UI\Class\DBScriptTestItemsEditorPopDialog.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadDataDelegate.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadDataModel.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="main.cpp" />
     <None Include="NeoToolKits.ico" />
     <QtUic Include="UI\Form\DbScriptEditorPageForm.ui" />
+    <QtUic Include="UI\Form\DBScriptTestItemsEditorPopDialog.ui" />
     <QtUic Include="UI\Form\ExcelDataUploadConfigPopDialog.ui" />
     <QtUic Include="UI\Form\ExcelDataUploadPageForm.ui" />
     <QtUic Include="UI\Form\MainWindowDialog.ui" />
@@ -184,6 +186,7 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="UI\Class\DBScriptTestItemsEditorPopDialog.h" />
     <QtMoc Include="UI\Class\DBScriptDataTableView.h" />
     <QtMoc Include="UI\Class\DbScriptDataModel.h" />
     <QtMoc Include="UI\Class\ExcelDataUploadDataDelegate.h" />

@@ -15,9 +15,11 @@ public:
 public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
-	bool SetTestListData(const QModelIndex& index, const QString& strTestList);
+	bool setItemData(const QModelIndex& index, const QString& strValue);
+	QString getItemData(const QModelIndex& index) const;
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
+	QString GetHorizontalHeaderName(int section) const;
 
 private:
 	void ClearDbScriptData();

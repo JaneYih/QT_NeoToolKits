@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QComboBox>
 #include <QMessageBox>
+#include "DBScriptTestItemsEditorPopDialog.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -69,10 +70,20 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 {
 	if (index.isValid())
 	{
-		qDebug() << "\r\n" << index;
-		QString strTestList = "351321231313";
-		QMessageBox::information(this, "", "");
-		m_pApp->getDbScriptDataModelPointer()->SetTestListData(index, strTestList);
+		DbScriptDataModel* model = m_pApp->getDbScriptDataModelPointer();
+		if (model)
+		{
+			QString horizontalHeaderName = model->GetHorizontalHeaderName(index.column());
+			if ("TESTLIST" == horizontalHeaderName)
+			{
+				DBScriptTestItemsEditorPopDialog dlg(model->getItemData(index), this);
+				if (dlg.exec() == QDialog::Accepted)
+				{
+					model->setItemData(index, dlg.getTestItemsText());
+				}
+				ui->tableView_DBDataTable->clearSelection();
+			}
+		}
 	}
 }
 

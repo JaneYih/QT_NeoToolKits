@@ -74,6 +74,11 @@ int DbScriptDataModel::columnCount(const QModelIndex& parent) const
 	return m_DbScriptData.fieldGroup.fields.count();
 }
 
+QString DbScriptDataModel::GetHorizontalHeaderName(int section) const
+{
+	return headerData(section, Qt::Horizontal, Qt::DisplayRole).toString();
+}
+
 QVariant DbScriptDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
@@ -91,6 +96,11 @@ QVariant DbScriptDataModel::headerData(int section, Qt::Orientation orientation,
 		}
 	}
 	return QVariant();
+}
+
+QString DbScriptDataModel::getItemData(const QModelIndex& index) const
+{
+	return data(index, Qt::EditRole).toString();
 }
 
 QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
@@ -143,9 +153,9 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
-bool DbScriptDataModel::SetTestListData(const QModelIndex& index, const QString& strTestList)
+bool DbScriptDataModel::setItemData(const QModelIndex& index, const QString& strValue)
 {
-	return setData(index, strTestList, Qt::EditRole);
+	return setData(index, strValue, Qt::EditRole);
 }
 
 bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -170,6 +180,7 @@ bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value,
 						{
 							cell->setWaitingUpdate();
 						}
+						emit dataChanged(index, index);
 						return true;
 					}
 				}
@@ -181,6 +192,10 @@ bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value,
 
 Qt::ItemFlags DbScriptDataModel::flags(const QModelIndex& index) const
 {
+	if (GetHorizontalHeaderName(index.column()) == "TESTLIST")
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	}
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
