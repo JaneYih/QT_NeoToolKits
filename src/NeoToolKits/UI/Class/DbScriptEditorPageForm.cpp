@@ -53,6 +53,7 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 		horizontalHeader->setSortIndicatorShown(true);
 		horizontalHeader->setSectionsClickable(true);
 		connect(horizontalHeader, &QHeaderView::sectionClicked, this, &DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot);
+		connect(ui->tableView_DBDataTable, &QAbstractItemView::doubleClicked, this, &DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot);
 		ui->tableView_DBDataTable->setAlternatingRowColors(true);
 		ui->tableView_DBDataTable->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 		ui->tableView_DBDataTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -61,6 +62,17 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 		ui->tableView_DBDataTable->show();
 
 		m_bFirstShowData = false;
+	}
+}
+
+void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex& index)
+{
+	if (index.isValid())
+	{
+		qDebug() << "\r\n" << index;
+		QString strTestList = "351321231313";
+		QMessageBox::information(this, "", "");
+		m_pApp->getDbScriptDataModelPointer()->SetTestListData(index, strTestList);
 	}
 }
 

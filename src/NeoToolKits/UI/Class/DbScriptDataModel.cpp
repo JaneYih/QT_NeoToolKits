@@ -143,6 +143,11 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 	return QVariant();
 }
 
+bool DbScriptDataModel::SetTestListData(const QModelIndex& index, const QString& strTestList)
+{
+	return setData(index, strTestList, Qt::EditRole);
+}
+
 bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
 	if (index.isValid())

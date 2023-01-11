@@ -15,6 +15,7 @@ public:
 public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
+	bool SetTestListData(const QModelIndex& index, const QString& strTestList);
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
 

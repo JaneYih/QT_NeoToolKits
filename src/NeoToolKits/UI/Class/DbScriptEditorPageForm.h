@@ -22,6 +22,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void PushbuttonClickedSlot(bool checked = false);
 		void ComboBoxCurrentIndexChangedSlot(int index);
 		void HorizontalHeaderSectionClickedSlot(int logicalIndex);
+		void DBDataTableItemDoubleClickedSlot(const QModelIndex& index);
 
 	private:
 		void initView(void);
