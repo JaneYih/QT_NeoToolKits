@@ -4,6 +4,8 @@
 #include "ui_DbScriptEditorPageForm.h"
 #include "DbScriptEditor_def.h"
 
+class DbScriptDataModel;
+
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
 	class DbScriptEditorApp;
@@ -34,7 +36,8 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	private:
 		Ui::DbScriptEditorPageForm* ui;
 		DbScriptEditorApp* m_pApp;
-		bool m_bFirstShowData;
+		DbScriptDataModel* m_pDataModel;
+		volatile bool m_bFirstShowData;
 	};
 }
 

@@ -15,6 +15,7 @@ public:
 public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
+	void ClearDbScriptData();
 	bool setItemData(const QModelIndex& index, const QString& strValue);
 	QString getItemData(const QModelIndex& index) const;
 	void insertRow(const QModelIndex& selection);
@@ -22,7 +23,7 @@ public:
 	QString GetHorizontalHeaderName(int section) const;
 
 private:
-	void ClearDbScriptData();
+
 
 protected:
 	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;

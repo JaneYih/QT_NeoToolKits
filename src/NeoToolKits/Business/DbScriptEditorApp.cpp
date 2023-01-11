@@ -20,8 +20,7 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	: QObject(parent),
 	m_strIniFileName(QCoreApplication::applicationDirPath() + "/DbScriptEditorTool.ini"),
 	m_pCfg(new IniOperation(m_strIniFileName)),
-	m_DbScriptOperate(nullptr),
-	m_pDataModel(new DbScriptDataModel(this))
+	m_DbScriptOperate(nullptr)
 {
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
 	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
@@ -30,14 +29,8 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 
 DbScriptEditorApp::~DbScriptEditorApp()
 {
-	delete m_pDataModel;
 	CloaseSQLiteDb();
 	delete m_pCfg;
-}
-
-DbScriptDataModel* const DbScriptEditorApp::getDbScriptDataModelPointer() const
-{
-	return m_pDataModel;
 }
 
 QMap<QString, QString> DbScriptEditorApp::getTestItemDictionary() const
@@ -68,18 +61,27 @@ void DbScriptEditorApp::setSQLiteDbPath(const QString& src)
 	m_strSQLiteDbPath = src;
 }
 
-void DbScriptEditorApp::CloaseSQLiteDb()
+void DbScriptEditorApp::CloaseSQLiteDb(DbScriptDataModel* model)
 {
 	if (m_DbScriptOperate)
 	{
 		delete m_DbScriptOperate;
 		m_DbScriptOperate = nullptr;
 	}
+	if (model)
+	{
+		model->ClearDbScriptData();
+	}
 }
 
-bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
+bool DbScriptEditorApp::OpenSQLiteDb(DbScriptDataModel* model, const QString& dbPath)
 {
-	CloaseSQLiteDb();
+	if (model == nullptr)
+	{
+		return false;
+	}
+
+	CloaseSQLiteDb(model);
 
 	SqlTableInfo tempInfo;
 	tempInfo.baseInfo.type = SqlTypes::eSQLITE;
@@ -98,21 +100,21 @@ bool DbScriptEditorApp::OpenSQLiteDb(const QString& dbPath)
 				QMessageBox::critical(nullptr, "critical", strErrorMsg);
 				return false;
 			}
-			getDbScriptDataModelPointer()->setDbScriptData(outData);
+			model->setDbScriptData(outData);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex, Qt::SortOrder order)
+bool DbScriptEditorApp::RefreshSQLiteData(DbScriptDataModel* model, int orderByFieldIndex, Qt::SortOrder order)
 {
-	if (m_DbScriptOperate == nullptr)
+	if (m_DbScriptOperate == nullptr
+		|| model == nullptr)
 	{
 		return false;
 	}
 
-	DbScriptDataModel* model = getDbScriptDataModelPointer();
 	if (model)
 	{
 		DbData modelDbScriptData = model->getDbScriptData();
@@ -134,14 +136,15 @@ bool DbScriptEditorApp::RefreshSQLiteData(int orderByFieldIndex, Qt::SortOrder o
 	return false;
 }
 
-bool DbScriptEditorApp::SaveSQLiteData(QString& strErrorMsg)
+bool DbScriptEditorApp::SaveSQLiteData(DbScriptDataModel* model, QString& strErrorMsg)
 {
-	if (m_DbScriptOperate == nullptr)
+	if (m_DbScriptOperate == nullptr
+		|| model == nullptr)
 	{
 		return false;
 	}
 
-	DbData SQLiteData = m_pDataModel->getDbScriptData();
+	DbData SQLiteData = model->getDbScriptData();
 	DbData WaitingDeleteData;
 	DbData WaitingInsertData;
 	DbData WaitingUpdateData;

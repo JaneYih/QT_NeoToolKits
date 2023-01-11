@@ -22,7 +22,7 @@ DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
 void DBScriptTestItemsEditorPopDialog::initView()
 {
 	ui->setupUi(this);
-	ui->lineEdit_TestItems->setText(m_TestItemsText);
+	ui->textEdit_TestItems->setText(m_TestItemsText);
 }
 
 void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
@@ -30,7 +30,7 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	QPushButton* curBtn = static_cast<QPushButton*>(sender());
 	if (curBtn == ui->btn_ok)
 	{
-		m_TestItemsText = ui->lineEdit_TestItems->text();
+		m_TestItemsText = ui->textEdit_TestItems->toPlainText();
 		setResult(QDialog::Accepted);
 		close();
 	}

@@ -13,12 +13,15 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 	: QWidget(parent),
 	ui(new Ui::DbScriptEditorPageForm),
 	m_pApp(new DbScriptEditorApp(this)),
-	m_bFirstShowData(true)
+	m_bFirstShowData(true),
+	m_pDataModel(new DbScriptDataModel(this))
 {
 	Q_ASSERT(m_pApp);
+	Q_ASSERT(m_pDataModel);
 	initView();
 	connect(ui->btn_ExcelPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_DBPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
+	connect(ui->btn_DisconnectDB, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_LoadItemDictionary, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_add, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_delete, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
@@ -30,6 +33,7 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 
 DbScriptEditorPageForm::~DbScriptEditorPageForm()
 {
+	delete m_pDataModel;
 	delete m_pApp;
 	delete ui;
 }
@@ -46,7 +50,7 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 	{
 		LoadExcelInfo(m_pApp->getTestItemExcelInfo().strExcelPath);
 
-		ui->tableView_DBDataTable->setModel(m_pApp->getDbScriptDataModelPointer());
+		ui->tableView_DBDataTable->setModel(m_pDataModel);
 		QHeaderView* horizontalHeader = ui->tableView_DBDataTable->horizontalHeader();
 		horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 		horizontalHeader->setDefaultAlignment(Qt::AlignLeft);
@@ -70,19 +74,15 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 {
 	if (index.isValid())
 	{
-		DbScriptDataModel* model = m_pApp->getDbScriptDataModelPointer();
-		if (model)
+		QString horizontalHeaderName = m_pDataModel->GetHorizontalHeaderName(index.column());
+		if ("TESTLIST" == horizontalHeaderName)
 		{
-			QString horizontalHeaderName = model->GetHorizontalHeaderName(index.column());
-			if ("TESTLIST" == horizontalHeaderName)
+			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), this);
+			if (dlg.exec() == QDialog::Accepted)
 			{
-				DBScriptTestItemsEditorPopDialog dlg(model->getItemData(index), this);
-				if (dlg.exec() == QDialog::Accepted)
-				{
-					model->setItemData(index, dlg.getTestItemsText());
-				}
-				ui->tableView_DBDataTable->clearSelection();
+				m_pDataModel->setItemData(index, dlg.getTestItemsText());
 			}
+			ui->tableView_DBDataTable->clearSelection();
 		}
 	}
 }
@@ -98,7 +98,7 @@ void DbScriptEditorPageForm::HorizontalHeaderSectionClickedSlot(int logicalIndex
 	{
 		order = Qt::DescendingOrder;
 	}
-	m_pApp->RefreshSQLiteData(logicalIndex, order);
+	m_pApp->RefreshSQLiteData(m_pDataModel, logicalIndex, order);
 	ui->tableView_DBDataTable->sortByColumn(logicalIndex, order);
 	ui->tableView_DBDataTable->clearSelection();
 }
@@ -169,14 +169,20 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 			LoadSQLiteDb(dbPath);
 		}
 	}
+	else if (curBtn == ui->btn_DisconnectDB)
+	{
+		m_pApp->CloaseSQLiteDb(m_pDataModel);
+		ui->lineEdit_DBPath->setText("");
+		ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(255, 255, 255);");
+	}
 	else if (curBtn == ui->btn_add)
 	{
-		m_pApp->getDbScriptDataModelPointer()->insertRow(ui->tableView_DBDataTable->selectionModel()->currentIndex());
+		m_pDataModel->insertRow(ui->tableView_DBDataTable->selectionModel()->currentIndex());
 		ui->tableView_DBDataTable->clearSelection();
 	}
 	else if (curBtn == ui->btn_delete)
 	{
-		m_pApp->getDbScriptDataModelPointer()->removeRows(ui->tableView_DBDataTable->selectionModel()->selectedIndexes());
+		m_pDataModel->removeRows(ui->tableView_DBDataTable->selectionModel()->selectedIndexes());
 		ui->tableView_DBDataTable->clearSelection();
 	}
 	else if (curBtn == ui->btn_refresh)
@@ -186,7 +192,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	else if (curBtn == ui->btn_save)
 	{
 		QString strErrorMsg;
-		if (!m_pApp->SaveSQLiteData(strErrorMsg))
+		if (!m_pApp->SaveSQLiteData(m_pDataModel, strErrorMsg))
 		{
 			QMessageBox::critical(this, "critical", strErrorMsg);
 			return;
@@ -203,7 +209,7 @@ void DbScriptEditorPageForm::Refresh()
 void DbScriptEditorPageForm::LoadSQLiteDb(const QString& dbPath)
 {
 	ui->lineEdit_DBPath->setText(dbPath);
-	if (m_pApp->OpenSQLiteDb(dbPath))
+	if (m_pApp->OpenSQLiteDb(m_pDataModel, dbPath))
 	{
 		ui->lineEdit_DBPath->setStyleSheet("background-color: rgb(0, 255, 0);");
 		return;

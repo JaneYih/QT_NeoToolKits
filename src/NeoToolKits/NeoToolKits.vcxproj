@@ -55,10 +55,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;.\$(Configuration)\uic;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
-    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;$(IncludePath)</IncludePath>
+    <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;.\$(Configuration)\uic;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>

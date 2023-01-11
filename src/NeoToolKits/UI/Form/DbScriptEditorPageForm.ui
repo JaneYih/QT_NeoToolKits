@@ -143,6 +143,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btn_DisconnectDB">
+       <property name="text">
+        <string>断开连接</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

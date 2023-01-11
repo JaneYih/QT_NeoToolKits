@@ -25,12 +25,10 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void setTestItemExcelInfo(const TestItemExcelInfo& src);
 	
 		QString getSQLiteDbPath() const;
-		bool OpenSQLiteDb(const QString& dbPath);
-		void CloaseSQLiteDb();
-		bool SaveSQLiteData(QString& strErrorMsg);
-		bool RefreshSQLiteData(int orderByFieldIndex, Qt::SortOrder order = Qt::DescendingOrder);
-
-		DbScriptDataModel* const getDbScriptDataModelPointer() const;
+		bool OpenSQLiteDb(DbScriptDataModel* model, const QString& dbPath);
+		void CloaseSQLiteDb(DbScriptDataModel* model = nullptr);
+		bool SaveSQLiteData(DbScriptDataModel* model, QString& strErrorMsg);
+		bool RefreshSQLiteData(DbScriptDataModel* model, int orderByFieldIndex, Qt::SortOrder order = Qt::DescendingOrder);
 
 	private:
 		void setSQLiteDbPath(const QString& src);
@@ -44,8 +42,6 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 		QString m_strSQLiteDbPath;
 		DbScriptOperate* m_DbScriptOperate;
-
-		DbScriptDataModel* m_pDataModel;
 	};
 }
 
