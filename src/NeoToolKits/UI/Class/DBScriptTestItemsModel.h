@@ -2,6 +2,7 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <QVector>
 #include "DbScriptEditor_def.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
@@ -36,5 +37,5 @@ protected:
 
 private:
 	QList<TestItem> m_testItems;
-
+	QVector<QString> m_headerDatas;
 };

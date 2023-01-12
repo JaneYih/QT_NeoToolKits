@@ -4,6 +4,9 @@
 DBScriptTestItemsModel::DBScriptTestItemsModel(QObject *parent)
 	: QAbstractTableModel(parent)
 {
+	m_headerDatas.clear();
+	m_headerDatas.push_back(QString::fromStdWString(L"ÐòºÅ"));
+	m_headerDatas.push_back(QString::fromStdWString(L"²âÊÔÏî"));
 }
 
 DBScriptTestItemsModel::~DBScriptTestItemsModel()
@@ -17,7 +20,7 @@ int DBScriptTestItemsModel::rowCount(const QModelIndex& parent) const
 
 int DBScriptTestItemsModel::columnCount(const QModelIndex& parent) const
 {
-	return 2;
+	return m_headerDatas.count();
 }
 
 QVariant DBScriptTestItemsModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -26,13 +29,9 @@ QVariant DBScriptTestItemsModel::headerData(int section, Qt::Orientation orienta
 	{
 		if (Qt::Horizontal == orientation)
 		{
-			if (0 == section)
+			if (m_headerDatas.count() > section)
 			{
-				return QString::fromStdWString(L"ÐòºÅ");
-			}
-			else if (1 == section)
-			{
-				return QString::fromStdWString(L"²âÊÔÏî");
+				return m_headerDatas[section];
 			}
 		}
 		else
@@ -210,38 +209,30 @@ void DBScriptTestItemsModel::insertRow(const QModelIndex& selection)
 
 bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 {
-	int rowCount = m_testItems.count();
 	for (int j = selection.size() - 1; j >= 0; --j)
 	{
 		QModelIndex curModelIndex = selection.at(j);
 		if (curModelIndex.isValid())
 		{
 			int curRow = curModelIndex.row();
-			if (curRow < rowCount)
+			if (curRow < m_testItems.count())
 			{
 				TestItem* testitem = const_cast<TestItem*>(&m_testItems[curRow]);
-				if (testitem)
-				{
-					bool bRemoveRows = false;
-					if (testitem->isWaitingInsert())
-					{
-						removeRows(curRow, 1);
-						rowCount = m_testItems.count();
-						bRemoveRows = true;
-						break;
-					}
-					else
-					{
-						testitem->setWaitingDelete();
-					}
-
-					if (!bRemoveRows)
-					{
-						emit dataChanged(createIndex(curRow, 0, testitem),
-							createIndex(curRow, 1, testitem));
-					}
-				}
+				testitem->setWaitingDelete();
 			}
+		}
+	}
+
+	for (int i = 0; i < m_testItems.count();)
+	{
+		if (m_testItems[i].isWaitingDelete())
+		{
+			removeRows(i, 1);
+			i = 0;
+		}
+		else
+		{
+			i++;
 		}
 	}
 	return true;
