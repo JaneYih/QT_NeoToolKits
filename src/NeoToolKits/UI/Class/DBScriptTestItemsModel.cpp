@@ -106,13 +106,35 @@ bool DBScriptTestItemsModel::setData(const QModelIndex& index, const QVariant& v
 				TestItem* testitem = const_cast<TestItem*>(&m_testItems[row]);
 				if (testitem)
 				{
-					testitem->setValue(value.toString(), value.toString());
-					if (!testitem->isWaitingOperate())
+					bool bChanged = false;
+					if (value.canConvert<QString>())
 					{
-						testitem->setWaitingUpdate();
+						QString inputValue(value.toString());
+						if (testitem->toString() != inputValue)
+						{
+							testitem->fromString(inputValue);
+							bChanged = true;
+						}
 					}
-					emit dataChanged(index, index);
-					return true;
+					else if (value.canConvert<TestItem>())
+					{
+						TestItem inputValue(value.value<TestItem>());
+						if (*testitem != inputValue)
+						{
+							testitem->setValue(inputValue.code(), inputValue.name());
+							bChanged = true;
+						}
+					}
+
+					if (bChanged)
+					{
+						if (!testitem->isWaitingOperate())
+						{
+							testitem->setWaitingUpdate();
+						}
+						emit dataChanged(index, index);
+						return true;
+					}
 				}
 			}
 		}
@@ -173,13 +195,14 @@ void DBScriptTestItemsModel::ClearTestItems()
 }
 bool DBScriptTestItemsModel::setTestItem(const QModelIndex& index, const TestItem& strValue)
 {
-	return setData(index, strValue.toString(), Qt::EditRole);
+	return setData(index, QVariant::fromValue(strValue), Qt::EditRole);
 }
 
 TestItem DBScriptTestItemsModel::getTestItem(const QModelIndex& index) const
 {
-	QString value = data(index, Qt::EditRole).toString();
-	return TestItem(value, value);
+	TestItem item;
+	item.fromString(data(index, Qt::EditRole).toString());
+	return item;
 }
 
 void DBScriptTestItemsModel::insertRow(const QModelIndex& selection)
@@ -197,7 +220,7 @@ void DBScriptTestItemsModel::insertRow(const QModelIndex& selection)
 	}
 
 	beginInsertRows(QModelIndex(), row, row);
-	TestItem newTestItem("", "");
+	TestItem newTestItem("NULL", "NULL");
 	newTestItem.setWaitingInsert();
 	m_testItems.insert(row + 1, newTestItem);
 	endInsertRows();

@@ -284,6 +284,9 @@
     <ClCompile Include="UI\Class\DBScriptTestItemsModel.cpp">
       <Filter>Tools\DbScriptEditor\UI\Class\Model</Filter>
     </ClCompile>
+    <ClCompile Include="Business\DbScriptEditor_def.cpp">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -333,6 +336,9 @@
     </QtMoc>
     <QtMoc Include="UI\Class\DBScriptTestItemsModel.h">
       <Filter>Tools\DbScriptEditor\UI\Class\Model</Filter>
+    </QtMoc>
+    <QtMoc Include="Business\DbScriptEditor_def.h">
+      <Filter>Tools\DbScriptEditor\Business</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -526,9 +532,6 @@
     </ClInclude>
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h">
       <Filter>Tools\ExcelDataUpload\Business</Filter>
-    </ClInclude>
-    <ClInclude Include="Business\DbScriptEditor_def.h">
-      <Filter>Tools\DbScriptEditor\Business</Filter>
     </ClInclude>
     <ClInclude Include="Business\DbScriptOperate.h">
       <Filter>Tools\DbScriptEditor\Business</Filter>

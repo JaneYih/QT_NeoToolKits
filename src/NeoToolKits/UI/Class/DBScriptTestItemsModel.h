@@ -19,8 +19,10 @@ public:
 	QList<TestItem> getTestItems() const;
 	void resetTestItems(const QList<TestItem>& items);
 	void ClearTestItems();
+
 	bool setTestItem(const QModelIndex& index, const TestItem& strValue);
 	TestItem getTestItem(const QModelIndex& index) const;
+
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
 

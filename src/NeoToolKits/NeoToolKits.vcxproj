@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Business\DbScriptEditorApp.cpp" />
+    <ClCompile Include="Business\DbScriptEditor_def.cpp" />
     <ClCompile Include="Business\DbScriptOperate.cpp" />
     <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
@@ -195,7 +196,7 @@
     <QtMoc Include="UI\Class\ExcelDataUploadDataModel.h" />
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
     <QtMoc Include="Business\DbScriptEditorApp.h" />
-    <ClInclude Include="Business\DbScriptEditor_def.h" />
+    <QtMoc Include="Business\DbScriptEditor_def.h" />
     <ClInclude Include="Business\DbScriptOperate.h" />
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
     <ClInclude Include="Business\ExcelDataUpload_def.h" />

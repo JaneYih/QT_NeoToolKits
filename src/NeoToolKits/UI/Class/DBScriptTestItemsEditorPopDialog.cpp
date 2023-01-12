@@ -69,12 +69,18 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_apply)
 	{
-		QList<TestItem> items;
+		/*QList<TestItem> items;
 		items.push_back(TestItem("111", "111"));
 		items.push_back(TestItem("222", "222"));
 		items.push_back(TestItem("333", "333"));
 		items.push_back(TestItem("444", "444"));
-		m_testItemsModel->resetTestItems(items);
+		m_testItemsModel->resetTestItems(items);*/
+
+		/*TestItem strValue;
+		strValue.setCode("test");
+		strValue.setName("name");
+		m_testItemsModel->setTestItem(ui->tableView_TestItems->selectionModel()->currentIndex(), strValue);
+		ui->tableView_TestItems->clearSelection();*/
 	}
 }
 
