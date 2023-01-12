@@ -83,7 +83,7 @@ public:
 		this->strName = src.name();
 	}
 	QString toString() const {
-		return QString::fromStdWString(L"[%1][%2]").arg(strCode).arg(strName);
+		return QString::fromStdWString(L"[%1]<------->[%2]").arg(strName).arg(strCode);
 	}
 	void fromString(const QString& str) {
 		int firstIndex = str.indexOf('[') + 1;
@@ -92,7 +92,7 @@ public:
 		{
 			return;
 		}
-		this->strCode = str.mid(firstIndex, lastIndex - firstIndex);
+		this->strName = str.mid(firstIndex, lastIndex - firstIndex);
 
 		QString strTemp = str.mid(lastIndex+1);
 		firstIndex = strTemp.indexOf('[') + 1;
@@ -101,7 +101,7 @@ public:
 		{
 			return;
 		}
-		this->strName = strTemp.mid(firstIndex, lastIndex - firstIndex);
+		this->strCode = strTemp.mid(firstIndex, lastIndex - firstIndex);
 	}
 	void setValue(const QString& code, const QString& name) {
 		this->strCode = code;

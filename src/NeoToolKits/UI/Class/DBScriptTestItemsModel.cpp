@@ -250,11 +250,31 @@ bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 			if (curRow < m_testItems.count())
 			{
 				TestItem* testitem = const_cast<TestItem*>(&m_testItems[curRow]);
-				testitem->setWaitingDelete();
+				if (!testitem->isWaitingInsert())
+				{
+					testitem->setWaitingDelete();
+				}
 			}
 		}
 	}
 
+	for (int i = 0; i < m_testItems.count();)
+	{
+		if (m_testItems[i].isWaitingInsert())
+		{
+			removeRows(i, 1);
+			i = 0;
+		}
+		else
+		{
+			i++;
+		}
+	}
+	return true;
+}
+
+void DBScriptTestItemsModel::removeWaitingDeleteRows()
+{
 	for (int i = 0; i < m_testItems.count();)
 	{
 		if (m_testItems[i].isWaitingDelete())
@@ -267,5 +287,4 @@ bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 			i++;
 		}
 	}
-	return true;
 }

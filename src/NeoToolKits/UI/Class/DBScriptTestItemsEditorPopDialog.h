@@ -32,10 +32,14 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		void initView(void);
+		void refresh();
+		void apply();
+		void ResetTestItemTableByText(const QString& testItemsText);
 
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
 		QString m_testItemsText;
+		QMap<QString, QString>* m_hTestItemDictionary;
 		DBScriptTestItemsModel* m_testItemsModel;
 		DBScriptTestItemsDelegate* m_testItemsDelegate;
 	};

@@ -25,6 +25,7 @@ public:
 
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
+	void removeWaitingDeleteRows();
 
 protected:
 	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
