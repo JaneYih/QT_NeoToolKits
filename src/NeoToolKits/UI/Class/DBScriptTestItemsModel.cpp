@@ -13,6 +13,15 @@ DBScriptTestItemsModel::~DBScriptTestItemsModel()
 {
 }
 
+QModelIndex DBScriptTestItemsModel::index(int row, int column, const QModelIndex& parent) const
+{
+	if (row >= 0 && column >= 0 && row < m_testItems.count())
+	{
+		return createIndex(row, column, (void*)(&m_testItems[row]));
+	}
+	return QModelIndex();
+}
+
 int DBScriptTestItemsModel::rowCount(const QModelIndex& parent) const
 {
 	return m_testItems.count();
@@ -66,7 +75,11 @@ QVariant DBScriptTestItemsModel::data(const QModelIndex& index, int role) const
 				}
 				else if (column == 1)
 				{
-					return QVariant(testitem->toString());
+					if (testitem->isValid())
+					{
+						return QVariant(testitem->toString());
+					}
+					return QVariant();
 				}
 			}
 			else if (role == Qt::BackgroundRole)
@@ -220,7 +233,7 @@ void DBScriptTestItemsModel::insertRow(const QModelIndex& selection)
 	}
 
 	beginInsertRows(QModelIndex(), row, row);
-	TestItem newTestItem("NULL", "NULL");
+	TestItem newTestItem("", "");
 	newTestItem.setWaitingInsert();
 	m_testItems.insert(row + 1, newTestItem);
 	endInsertRows();

@@ -27,7 +27,7 @@ public:
 	bool removeRows(const QModelIndexList& selection);
 
 protected:
-	//virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	virtual int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;

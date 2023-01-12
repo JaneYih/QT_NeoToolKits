@@ -159,6 +159,7 @@
     <ClCompile Include="UI\Class\DbScriptDataModel.cpp" />
     <ClCompile Include="UI\Class\DBScriptDataTableView.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
+    <ClCompile Include="UI\Class\DBScriptTestItemsDelegate.cpp" />
     <ClCompile Include="UI\Class\DBScriptTestItemsEditorPopDialog.cpp" />
     <ClCompile Include="UI\Class\DBScriptTestItemsModel.cpp" />
     <ClCompile Include="UI\Class\ExcelDataUploadConfigPopDialog.cpp" />
@@ -188,6 +189,7 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="UI\Class\DBScriptTestItemsDelegate.h" />
     <QtMoc Include="UI\Class\DBScriptTestItemsModel.h" />
     <QtMoc Include="UI\Class\DBScriptTestItemsEditorPopDialog.h" />
     <QtMoc Include="UI\Class\DBScriptDataTableView.h" />

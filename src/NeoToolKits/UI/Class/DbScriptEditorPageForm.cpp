@@ -77,7 +77,13 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 		QString horizontalHeaderName = m_pDataModel->GetHorizontalHeaderName(index.column());
 		if ("TESTLIST" == horizontalHeaderName)
 		{
-			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), this);
+			QMap<QString, QString> map = m_pApp->getTestItemDictionary();
+			if (map.count() <= 0)
+			{
+				QMessageBox::warning(this, "warning", QString::fromStdWString(L"请先点击加载关系表"));
+				return;
+			}
+			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), &map, this);
 			if (dlg.exec() == QDialog::Accepted)
 			{
 				m_pDataModel->setItemData(index, dlg.getTestItemsText());
@@ -120,6 +126,8 @@ void DbScriptEditorPageForm::InitComboBoxItems(const TestItemExcelInfo& info)
 					: -1;
 	ui->comboBox_testNameCol->setCurrentIndex(curIndex);
 	emit ui->comboBox_testNameCol->currentIndexChanged(curIndex);
+
+	LoadItemDictionary();
 }
 
 void DbScriptEditorPageForm::LoadExcelInfo(const QString& fileName)
@@ -150,15 +158,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_LoadItemDictionary)
 	{
-		m_pApp->LoadExcelTestItemDictionary();
-		QMap<QString, QString> map = m_pApp->getTestItemDictionary();
-		ui->comboBox_ItemDictionary->clear();
-		QMapIterator<QString, QString> i(map);
-		while (i.hasNext()) 
-		{
-			i.next();
-			ui->comboBox_ItemDictionary->addItem(QString("%1:%2").arg(i.key()).arg(i.value()));
-		}
+		LoadItemDictionary();
 	}
 	else if (curBtn == ui->btn_DBPath)
 	{
@@ -198,6 +198,19 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 			return;
 		}
 		Refresh();
+	}
+}
+
+void DbScriptEditorPageForm::LoadItemDictionary()
+{
+	m_pApp->LoadExcelTestItemDictionary();
+	QMap<QString, QString> map = m_pApp->getTestItemDictionary();
+	ui->comboBox_ItemDictionary->clear();
+	QMapIterator<QString, QString> i(map);
+	while (i.hasNext())
+	{
+		i.next();
+		ui->comboBox_ItemDictionary->addItem(QString("%1:%2").arg(i.key()).arg(i.value()));
 	}
 }
 

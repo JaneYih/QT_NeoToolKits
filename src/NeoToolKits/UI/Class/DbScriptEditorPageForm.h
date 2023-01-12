@@ -32,6 +32,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void LoadExcelInfo(const QString& fileName);
 		void LoadSQLiteDb(const QString& dbPath);
 		void Refresh();
+		void LoadItemDictionary();
 
 	private:
 		Ui::DbScriptEditorPageForm* ui;

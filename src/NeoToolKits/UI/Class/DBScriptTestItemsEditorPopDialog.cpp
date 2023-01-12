@@ -2,17 +2,20 @@
 #include <QPushButton>
 #include <QCloseEvent>
 #include "DBScriptTestItemsModel.h"
+#include "DBScriptTestItemsDelegate.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
-DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString& testItemsText, QWidget* parent)
+DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString& testItemsText,
+	QMap<QString, QString>* hTestItemDictionary, QWidget* parent)
 	: QDialog(parent),
 	ui(new Ui::DBScriptTestItemsEditorPopDlg),
 	m_testItemsText(testItemsText),
-	m_testItemsModel(new DBScriptTestItemsModel(this))
+	m_testItemsModel(new DBScriptTestItemsModel(this)),
+	m_testItemsDelegate(new DBScriptTestItemsDelegate(hTestItemDictionary, this))
 {
 	Q_ASSERT(m_testItemsModel);
-
+	Q_ASSERT(m_testItemsDelegate);
 	initView();
 	connect(ui->btn_ok, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_cancel, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
@@ -23,6 +26,8 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 
 DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
 {
+	delete m_testItemsDelegate;
+	delete m_testItemsModel;
 	delete ui;
 }
 
@@ -32,6 +37,7 @@ void DBScriptTestItemsEditorPopDialog::initView()
 	ui->textEdit_TestItems->setText(m_testItemsText);
 
 	ui->tableView_TestItems->setModel(m_testItemsModel);
+	ui->tableView_TestItems->setItemDelegateForColumn(1, m_testItemsDelegate);
 	QHeaderView* horizontalHeader = ui->tableView_TestItems->horizontalHeader();
 	horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 	horizontalHeader->setStretchLastSection(true);

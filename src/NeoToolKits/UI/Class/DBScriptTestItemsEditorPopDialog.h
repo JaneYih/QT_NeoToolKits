@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QMap>
 #include "ui_DBScriptTestItemsEditorPopDialog.h"
 #include "DbScriptEditor_def.h"
 
@@ -8,12 +9,14 @@ class DBScriptTestItemsModel;
 
 namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 {
+	class DBScriptTestItemsDelegate;
 	class DBScriptTestItemsEditorPopDialog : public QDialog
 	{
 		Q_OBJECT
 
 	public:
-		DBScriptTestItemsEditorPopDialog(const QString& testItemsText, QWidget* parent = nullptr);
+		explicit DBScriptTestItemsEditorPopDialog(const QString& testItemsText, 
+			QMap<QString, QString>* hTestItemDictionary, QWidget* parent = nullptr);
 		~DBScriptTestItemsEditorPopDialog();
 
 		QString getTestItemsText() const {
@@ -34,6 +37,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
 		QString m_testItemsText;
 		DBScriptTestItemsModel* m_testItemsModel;
+		DBScriptTestItemsDelegate* m_testItemsDelegate;
 	};
 }
 
