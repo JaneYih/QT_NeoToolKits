@@ -17,7 +17,7 @@ public:
 
 public:
 	QList<TestItem> getTestItems() const;
-	void setTestItems(const QList<TestItem>& items);
+	void resetTestItems(const QList<TestItem>& items);
 	void ClearTestItems();
 	bool setTestItem(const QModelIndex& index, const TestItem& strValue);
 	TestItem getTestItem(const QModelIndex& index) const;

@@ -12,6 +12,7 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 	m_testItemsModel(new DBScriptTestItemsModel(this))
 {
 	Q_ASSERT(m_testItemsModel);
+
 	initView();
 	connect(ui->btn_ok, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_cancel, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
@@ -68,7 +69,12 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_apply)
 	{
-		
+		QList<TestItem> items;
+		items.push_back(TestItem("111", "111"));
+		items.push_back(TestItem("222", "222"));
+		items.push_back(TestItem("333", "333"));
+		items.push_back(TestItem("444", "444"));
+		m_testItemsModel->resetTestItems(items);
 	}
 }
 

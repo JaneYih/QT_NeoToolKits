@@ -149,18 +149,14 @@ QList<TestItem> DBScriptTestItemsModel::getTestItems() const
 	return m_testItems;
 }
 
-void DBScriptTestItemsModel::setTestItems(const QList<TestItem>& items)
+void DBScriptTestItemsModel::resetTestItems(const QList<TestItem>& items)
 {
 	int rowCount = items.count() - 1;
 	if (rowCount >= 0)
 	{
+		ClearTestItems();
 		beginInsertRows(QModelIndex(), 0, rowCount);
 		m_testItems = items;
-		/*m_testItems.clear();
-		for each (auto var in items)
-		{
-			m_testItems.push_back(var);
-		}*/
 		endInsertRows();
 	}
 }
