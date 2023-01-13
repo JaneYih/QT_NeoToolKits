@@ -36,6 +36,9 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void refresh();
 		void apply();
 		void ResetTestItemTableByText(const QString& testItemsText);
+		void setTestItemsText(const QString& text);
+		void setAppliedFlag(bool isApplied);
+		bool getAppliedFlag() const;
 
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
@@ -43,6 +46,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QMap<QString, QString>* m_hTestItemDictionary;
 		DBScriptTestItemsModel* m_testItemsModel;
 		DBScriptTestItemsDelegate* m_testItemsDelegate;
+		volatile bool m_bApplied;
 	};
 }
 

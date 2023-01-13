@@ -1,6 +1,7 @@
 #include "DBScriptTestItemsEditorPopDialog.h"
 #include <QPushButton>
 #include <QCloseEvent>
+#include <QMessageBox>
 #include "DBScriptTestItemsModel.h"
 #include "DBScriptTestItemsDelegate.h"
 
@@ -13,12 +14,15 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 	m_testItemsText(testItemsText),
 	m_hTestItemDictionary(hTestItemDictionary),
 	m_testItemsModel(new DBScriptTestItemsModel(this)),
-	m_testItemsDelegate(new DBScriptTestItemsDelegate(hTestItemDictionary, this))
+	m_testItemsDelegate(new DBScriptTestItemsDelegate(hTestItemDictionary, this)),
+	m_bApplied(false)
 {
 	Q_ASSERT(m_hTestItemDictionary);
 	Q_ASSERT(m_testItemsModel);
 	Q_ASSERT(m_testItemsDelegate);
-	ui->setupUi(this);
+	ui->setupUi(this);	
+	initView();
+
 	connect(ui->btn_ok, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_cancel, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_add, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
@@ -26,7 +30,6 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 	connect(ui->btn_refresh, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_apply, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->textEdit_TestItems, &QTextEdit::textChanged, this, &DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot);
-	initView();
 }
 
 DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
@@ -38,6 +41,8 @@ DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
 
 void DBScriptTestItemsEditorPopDialog::initView()
 {
+	setWindowFlags(Qt::Window);
+
 	ui->tableView_TestItems->setModel(m_testItemsModel);
 	ui->tableView_TestItems->setItemDelegateForColumn(1, m_testItemsDelegate);
 	QHeaderView* horizontalHeader = ui->tableView_TestItems->horizontalHeader();
@@ -56,6 +61,7 @@ void DBScriptTestItemsEditorPopDialog::initView()
 	ui->tableView_TestItems->show();
 
 	ui->textEdit_TestItems->setText(m_testItemsText);
+	refresh();
 }
 
 void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& testItemsText)
@@ -78,7 +84,34 @@ void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& t
 
 void DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot()
 {
+	setAppliedFlag(true);
 	refresh();
+}
+
+void DBScriptTestItemsEditorPopDialog::setTestItemsText(const QString& text)
+{
+	m_testItemsText = text;
+	setAppliedFlag(false);
+}
+
+void DBScriptTestItemsEditorPopDialog::setAppliedFlag(bool isApplied)
+{
+	m_bApplied = isApplied;
+
+	//ui->textEdit_TestItems->setTextColor(QColor(Qt::red));
+	//ui->textEdit_TestItems->setTextBackgroundColor(QColor(isApplied ? Qt::yellow : Qt::white));
+
+	QPalette plet = ui->textEdit_TestItems->palette();
+	plet.setColor(QPalette::Text, QColor(isApplied ? Qt::red : Qt::black));
+	ui->textEdit_TestItems->setPalette(plet);
+
+	QString strRGB = isApplied ? "243, 245, 152" : "255, 255, 255";
+	ui->textEdit_TestItems->setStyleSheet(QString("background-color: rgb(%1);").arg(strRGB));
+}
+
+bool DBScriptTestItemsEditorPopDialog::getAppliedFlag() const
+{
+	return m_bApplied;
 }
 
 void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
@@ -87,12 +120,13 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	if (curBtn == ui->btn_ok)
 	{
 		apply();
-		m_testItemsText = ui->textEdit_TestItems->toPlainText();
+		setTestItemsText(ui->textEdit_TestItems->toPlainText());
 		setResult(QDialog::Accepted);
 		close();
 	}
 	else if (curBtn == ui->btn_cancel)
 	{
+		setAppliedFlag(false);
 		setResult(QDialog::Rejected);
 		close();
 	}
@@ -136,10 +170,19 @@ void DBScriptTestItemsEditorPopDialog::apply()
 		}
 	}
 	ui->textEdit_TestItems->setText(testItemsText);
+	setAppliedFlag(true);
 }
 
 void DBScriptTestItemsEditorPopDialog::closeEvent(QCloseEvent* event)
 {
+	if (getAppliedFlag())
+	{
+		if (QMessageBox::Cancel == QMessageBox::warning(this, "warning", QString::fromStdWString(L"数据还没保存，确定要退出吗?"), QMessageBox::Yes, QMessageBox::Cancel))
+		{
+			event->ignore();
+			return;
+		}
+	}
 	event->accept();
 }
 
