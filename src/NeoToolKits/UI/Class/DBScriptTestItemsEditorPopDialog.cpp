@@ -42,6 +42,7 @@ DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
 void DBScriptTestItemsEditorPopDialog::initView()
 {
 	setWindowFlags(Qt::Window);
+	setWindowFlags(windowFlags() & ~Qt::WindowMinimizeButtonHint);
 
 	ui->tableView_TestItems->setModel(m_testItemsModel);
 	ui->tableView_TestItems->setItemDelegateForColumn(1, m_testItemsDelegate);
