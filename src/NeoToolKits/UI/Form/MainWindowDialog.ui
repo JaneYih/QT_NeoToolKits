@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
-    <height>635</height>
+    <width>1120</width>
+    <height>783</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,8 +37,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>917</width>
-     <height>23</height>
+     <width>1120</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
@@ -94,7 +94,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="MainWindowDialog.qrc">
+    <iconset>
      <normaloff>:/MainWindowDialog/rc/2.png</normaloff>:/MainWindowDialog/rc/2.png</iconset>
    </property>
    <property name="text">
@@ -109,7 +109,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="MainWindowDialog.qrc">
+    <iconset>
      <normaloff>:/MainWindowDialog/rc/1.ico</normaloff>:/MainWindowDialog/rc/1.ico</iconset>
    </property>
    <property name="text">
