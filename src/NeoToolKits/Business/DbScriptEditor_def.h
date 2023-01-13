@@ -34,6 +34,17 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	}TestItemExcelInfo, * pTestItemExcelInfo;
 };
 
+class StringGroupItem
+{
+public:
+	int index;
+	QString text;
+	static bool compareIndexLessThan(const StringGroupItem& item1, const StringGroupItem& item2)
+	{
+		return item1.index < item2.index;
+	}
+};
+
 class TestItem : public QObject
 {
 	Q_OBJECT
@@ -44,6 +55,7 @@ public:
 		TestItem_Insert,
 		TestItem_Delete,
 		TestItem_Update,
+		TestItem_Move,
 	};
 	Q_ENUM(TestItemOperate)
 
@@ -145,6 +157,12 @@ public:
 	}
 	void setWaitingInsert() {
 		eOperate = TestItemOperate::TestItem_Insert;
+	}
+	bool isWaitingMove() const {
+		return TestItemOperate::TestItem_Move == eOperate;
+	}
+	void setWaitingMove() {
+		eOperate = TestItemOperate::TestItem_Move;
 	}
 	bool isValid() {
 		if (this->strCode.isEmpty()

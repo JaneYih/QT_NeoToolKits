@@ -25,7 +25,7 @@ public:
 
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
-	void removeWaitingDeleteRows();
+	void removeWaitingOperateRows(TestItem::TestItemOperate operate);
 
 protected:
 	virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
@@ -35,8 +35,24 @@ protected:
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 	virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
+	
 	//virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 	virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
+	virtual bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+		const QModelIndex& destinationParent, int destinationChild) override;
+
+	virtual QStringList mimeTypes() const override;
+	virtual QMimeData* mimeData(const QModelIndexList& indexes) const override;
+	virtual bool canDropMimeData(const QMimeData* data, Qt::DropAction action,
+		int row, int column, const QModelIndex& parent) const override;
+	virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action,
+		int row, int column, const QModelIndex& parent) override;
+	virtual Qt::DropActions supportedDropActions() const override;
+	virtual Qt::DropActions supportedDragActions() const override;
+
+private:
+	QString ModelIndexsToText(const QModelIndexList& indexes) const;
+	bool DropPackage(const QList<StringGroupItem>& sourceItems, int row, const QModelIndex& parent);
 
 private:
 	QList<TestItem> m_testItems;

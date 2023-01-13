@@ -1,5 +1,6 @@
 #include "DBScriptTestItemsModel.h"
 #include <QColor>
+#include <QMimeData>
 
 DBScriptTestItemsModel::DBScriptTestItemsModel(QObject *parent)
 	: QAbstractTableModel(parent)
@@ -159,9 +160,183 @@ Qt::ItemFlags DBScriptTestItemsModel::flags(const QModelIndex& index) const
 {
 	if (index.column() == 0)
 	{
-		return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+		return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
 	}
-	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled;
+	return Qt::ItemIsSelectable  | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+}
+
+QStringList DBScriptTestItemsModel::mimeTypes() const
+{
+	QStringList types;
+	types << "text/plain";
+	return types;
+}
+
+QMimeData* DBScriptTestItemsModel::mimeData(const QModelIndexList& indexes) const
+{
+	QMimeData* mineData = new QMimeData();
+	mineData->setText(ModelIndexsToText(indexes));
+	return mineData;
+}
+
+QString DBScriptTestItemsModel::ModelIndexsToText(const QModelIndexList& indexes) const
+{
+	QList<StringGroupItem> sourceItems;
+	foreach(QModelIndex var, indexes)
+	{
+		int row = var.row();
+		if (var.column() == 0 && row < m_testItems.count())
+		{
+			StringGroupItem stringGroupItem;
+			stringGroupItem.index = row;
+			stringGroupItem.text = m_testItems[row].toString();
+			sourceItems.push_back(stringGroupItem);
+		}
+	}
+	qSort(sourceItems.begin(), sourceItems.end(), StringGroupItem::compareIndexLessThan);
+
+	QString strText;
+	for each (auto var in sourceItems)
+	{
+		strText += QString("[%1]%2;").arg(var.index).arg(var.text);
+	}
+	return strText;
+}
+
+bool DBScriptTestItemsModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
+	int row, int column, const QModelIndex& parent) const
+{
+	if (action == Qt::MoveAction
+		&& data->hasText())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool DBScriptTestItemsModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
+	int row, int column, const QModelIndex& parent)
+{
+	if (!canDropMimeData(data, action, row, column, parent))
+	{
+		return false;
+	}
+
+	if (action == Qt::IgnoreAction)
+	{
+		return true;
+	}
+
+	if (action == Qt::MoveAction)
+	{
+		QString strDataText(data->text());
+		QStringList strDatas = strDataText.split(';');
+		QList<StringGroupItem> sourceItems;
+		for each (auto var in strDatas)
+		{
+			int firstIndex = var.indexOf('[') + 1;
+			int lastIndex = var.indexOf(']');
+			if (firstIndex <= 0 || lastIndex <= 1 || firstIndex > lastIndex)
+			{
+				continue;
+			}
+			StringGroupItem item;
+			item.index = var.mid(firstIndex, lastIndex - firstIndex).toInt();
+			item.text = var.mid(lastIndex+1);
+			sourceItems.push_back(item);
+		}
+		return DropPackage(sourceItems, parent.row()+1, parent);
+	}
+
+	return false;
+}
+
+bool DBScriptTestItemsModel::DropPackage(const QList<StringGroupItem>& sourceItems, int row, const QModelIndex& parent)
+{
+	bool bDoneUpder = false;
+	int upderItemCount = 0;
+	for (int i = 0; i < sourceItems.count(); ++i)
+	{
+		int sourceRow = sourceItems[i].index;
+		int testItemsCount = m_testItems.count();
+		if (testItemsCount <= sourceRow)
+		{
+			return false;
+		}
+		if (sourceRow < row)  //ио╤н
+		{
+			if (!moveRows(QModelIndex(), sourceRow - i, 1, QModelIndex(), row))
+			{
+				return false;
+			}
+			upderItemCount++;
+			bDoneUpder = true;
+		}
+		else if (sourceRow > row) //об╤н
+		{
+			int offset = bDoneUpder ? i - upderItemCount : i;
+			if (!moveRows(QModelIndex(), sourceRow, 1, QModelIndex(), row + offset))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (!m_testItems[sourceRow].isWaitingOperate())
+			{
+				m_testItems[sourceRow].setWaitingUpdate();
+			}
+		}
+	}
+	return true;
+}
+
+bool DBScriptTestItemsModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+	const QModelIndex& destinationParent, int destinationChild)
+{
+	int sourceLast = sourceRow + count - 1;
+
+	if (sourceRow < 0 || sourceLast < 0 || destinationChild < 0)
+	{
+		return false;
+	}
+
+	QList<TestItem> sourceTestItems;
+	for (int i = 0; i < count; ++i)
+	{
+		int index = sourceRow + i;
+		if (index < m_testItems.count())
+		{
+			sourceTestItems.push_back(m_testItems[index]);
+			m_testItems[index].setWaitingMove();
+		}
+	}
+
+	beginInsertRows(destinationParent, destinationChild, destinationChild + sourceTestItems.count() - 1);
+	int index = 0;
+	for each (auto var in sourceTestItems)
+	{
+		if (!var.isWaitingOperate())
+		{
+			var.setWaitingUpdate();
+		}
+		m_testItems.insert(destinationChild + index, var);
+		++index;
+	}
+	endInsertRows();
+
+	removeWaitingOperateRows(TestItem::TestItemOperate::TestItem_Move);
+	return true;
+}
+
+Qt::DropActions DBScriptTestItemsModel::supportedDropActions() const
+{
+	return Qt::MoveAction;
+}
+
+Qt::DropActions DBScriptTestItemsModel::supportedDragActions() const
+{
+	return Qt::MoveAction;
 }
 
 bool DBScriptTestItemsModel::removeRows(int row, int count, const QModelIndex& parent)
@@ -186,10 +361,10 @@ QList<TestItem> DBScriptTestItemsModel::getTestItems() const
 
 void DBScriptTestItemsModel::resetTestItems(const QList<TestItem>& items)
 {
+	ClearTestItems();
 	int rowCount = items.count() - 1;
 	if (rowCount >= 0)
 	{
-		ClearTestItems();
 		beginInsertRows(QModelIndex(), 0, rowCount);
 		m_testItems = items;
 		endInsertRows();
@@ -258,26 +433,15 @@ bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 		}
 	}
 
-	for (int i = 0; i < m_testItems.count();)
-	{
-		if (m_testItems[i].isWaitingInsert())
-		{
-			removeRows(i, 1);
-			i = 0;
-		}
-		else
-		{
-			i++;
-		}
-	}
+	removeWaitingOperateRows(TestItem::TestItemOperate::TestItem_Insert);
 	return true;
 }
 
-void DBScriptTestItemsModel::removeWaitingDeleteRows()
+void DBScriptTestItemsModel::removeWaitingOperateRows(TestItem::TestItemOperate operate)
 {
 	for (int i = 0; i < m_testItems.count();)
 	{
-		if (m_testItems[i].isWaitingDelete())
+		if (m_testItems[i].Operate() == operate)
 		{
 			removeRows(i, 1);
 			i = 0;
@@ -288,3 +452,4 @@ void DBScriptTestItemsModel::removeWaitingDeleteRows()
 		}
 	}
 }
+

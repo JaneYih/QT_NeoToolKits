@@ -12,6 +12,7 @@ MysqlInfoPopDialog::MysqlInfoPopDialog(SqlTableInfo* pTableInfo, QWidget* parent
 	m_strIniPrefixDef(QString::fromStdWString(L"MySQLÅäÖÃ"))
 {
 	Q_ASSERT(m_pstTableInfo);
+	ui->setupUi(this);
 	initView();
 	connect(ui->btn_test, &QPushButton::clicked, this, &MysqlInfoPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_ok, &QPushButton::clicked, this, &MysqlInfoPopDialog::PushbuttonClickedSlot);
@@ -25,7 +26,6 @@ MysqlInfoPopDialog::~MysqlInfoPopDialog()
 
 void MysqlInfoPopDialog::initView(void)
 {
-	ui->setupUi(this);
 	UpdataUiData();
 }
 

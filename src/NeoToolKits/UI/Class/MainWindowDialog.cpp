@@ -6,6 +6,7 @@ MainWindowDialog::MainWindowDialog(QWidget *parent)
     m_pDbScriptEditPage(new NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorPageForm),
     m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm)
 {
+	ui->setupUi(this);
     initView();
 	connect(ui->actionDbScriptEditor, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
 	connect(ui->actionExcelDataUpload, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
@@ -19,7 +20,6 @@ MainWindowDialog::~MainWindowDialog()
 
 void MainWindowDialog::initView(void)
 {
-    ui->setupUi(this);
 	m_mapToolsPageDictionary.clear();
     ui->stackedWidget->addWidget(m_pDbScriptEditPage);
 	m_mapToolsPageDictionary[ui->actionDbScriptEditor] = m_pDbScriptEditPage;

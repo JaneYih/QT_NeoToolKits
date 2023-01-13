@@ -18,6 +18,7 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 {
 	Q_ASSERT(m_pApp);
 	Q_ASSERT(m_pDataModel);
+	ui->setupUi(this);
 	initView();
 	connect(ui->btn_ExcelPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_DBPath, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
@@ -40,7 +41,7 @@ DbScriptEditorPageForm::~DbScriptEditorPageForm()
 
 void DbScriptEditorPageForm::initView(void)
 {
-	ui->setupUi(this);
+	
 }
 
 void DbScriptEditorPageForm::showEvent(QShowEvent* event)

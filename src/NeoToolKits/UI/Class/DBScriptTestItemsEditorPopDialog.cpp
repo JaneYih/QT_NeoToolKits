@@ -18,13 +18,15 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 	Q_ASSERT(m_hTestItemDictionary);
 	Q_ASSERT(m_testItemsModel);
 	Q_ASSERT(m_testItemsDelegate);
-	initView();
+	ui->setupUi(this);
 	connect(ui->btn_ok, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_cancel, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_add, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_delete, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_refresh, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_apply, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
+	connect(ui->textEdit_TestItems, &QTextEdit::textChanged, this, &DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot);
+	initView();
 }
 
 DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
@@ -36,9 +38,6 @@ DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
 
 void DBScriptTestItemsEditorPopDialog::initView()
 {
-	ui->setupUi(this);
-	ui->textEdit_TestItems->setText(m_testItemsText);
-
 	ui->tableView_TestItems->setModel(m_testItemsModel);
 	ui->tableView_TestItems->setItemDelegateForColumn(1, m_testItemsDelegate);
 	QHeaderView* horizontalHeader = ui->tableView_TestItems->horizontalHeader();
@@ -50,9 +49,13 @@ void DBScriptTestItemsEditorPopDialog::initView()
 	ui->tableView_TestItems->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 	ui->tableView_TestItems->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 	ui->tableView_TestItems->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
+	ui->tableView_TestItems->setDragEnabled(true);
+	//ui->tableView_TestItems->setAcceptDrops(true);
+	ui->tableView_TestItems->setDragDropMode(QAbstractItemView::InternalMove);
+	ui->tableView_TestItems->setDropIndicatorShown(true);
 	ui->tableView_TestItems->show();
 
-	refresh();
+	ui->textEdit_TestItems->setText(m_testItemsText);
 }
 
 void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& testItemsText)
@@ -71,6 +74,11 @@ void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& t
 		}
 	}
 	m_testItemsModel->resetTestItems(testitems);
+}
+
+void DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot()
+{
+	refresh();
 }
 
 void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
@@ -117,7 +125,7 @@ void DBScriptTestItemsEditorPopDialog::refresh()
 
 void DBScriptTestItemsEditorPopDialog::apply()
 {
-	m_testItemsModel->removeWaitingDeleteRows();
+	m_testItemsModel->removeWaitingOperateRows(TestItem::TestItemOperate::TestItem_Delete);
 
 	QString testItemsText;
 	for each (auto var in m_testItemsModel->getTestItems())
@@ -128,7 +136,6 @@ void DBScriptTestItemsEditorPopDialog::apply()
 		}
 	}
 	ui->textEdit_TestItems->setText(testItemsText);
-	refresh();
 }
 
 void DBScriptTestItemsEditorPopDialog::closeEvent(QCloseEvent* event)

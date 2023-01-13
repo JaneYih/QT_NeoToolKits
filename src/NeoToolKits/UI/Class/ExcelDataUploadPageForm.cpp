@@ -23,6 +23,7 @@ ExcelDataUploadPageForm::ExcelDataUploadPageForm(QWidget* parent)
 	Q_ASSERT(m_pApp);
 	Q_ASSERT(m_pDataModel);
 	Q_ASSERT(m_pDataDelegate);
+	ui->setupUi(this);
 	initView();
 	connect(ui->btn_SelectExcelFile, &QPushButton::clicked, this, &ExcelDataUploadPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_SetDbInfo, &QPushButton::clicked, this, &ExcelDataUploadPageForm::PushbuttonClickedSlot);
@@ -40,7 +41,7 @@ ExcelDataUploadPageForm::~ExcelDataUploadPageForm()
 
 void ExcelDataUploadPageForm::initView(void)
 {
-	ui->setupUi(this);
+
 }
 
 void ExcelDataUploadPageForm::showEvent(QShowEvent* event)

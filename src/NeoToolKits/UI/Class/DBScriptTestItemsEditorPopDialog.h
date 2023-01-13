@@ -25,6 +25,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
+		void TextEditTextChangedSlot();
 
 	protected:
 		virtual void closeEvent(QCloseEvent* event) override;

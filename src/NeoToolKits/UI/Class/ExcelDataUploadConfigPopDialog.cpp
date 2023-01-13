@@ -13,6 +13,7 @@ ExcelDataUploadConfigPopDialog::ExcelDataUploadConfigPopDialog(QWidget* parent, 
 	m_pApp(pApp)
 {
 	Q_ASSERT(m_pApp);
+	ui->setupUi(this);
 	initView();
 	connect(ui->btn_StartOrStop, &QPushButton::clicked, this, &ExcelDataUploadConfigPopDialog::PushbuttonClickedSlot);
 	connect(m_pApp, &ExcelDataUploadApp::toDisplayItem, this, &ExcelDataUploadConfigPopDialog::DisplayItemSlot, Qt::BlockingQueuedConnection);
@@ -26,7 +27,6 @@ ExcelDataUploadConfigPopDialog::~ExcelDataUploadConfigPopDialog()
 
 void ExcelDataUploadConfigPopDialog::initView(void)
 {
-	ui->setupUi(this);
 	int iExcelUploadRowCountMax = m_pApp->LoadExcelRowCount();
 	ui->lineEdit_CountMax->setText(QString("%1").arg(iExcelUploadRowCountMax));
 	ui->lineEdit_StartLine->setValidator(new QIntValidator(2, iExcelUploadRowCountMax, this));
