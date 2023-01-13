@@ -6,15 +6,18 @@
 #include "DbScriptOperate.h"
 #include "DbScriptDataModel.h"
 #include <QMessageBox>
+#include <QDir>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
 //ini prefixs
 const QString s_ini_prefix_excel = "Excel";
+const QString s_ini_prefix_DbScript = "DbScript";
 
 //ini keys
 const QString s_ini_key_excelFile = "ExcelFlie";
 const QString s_ini_key_ColumnIndex_TestItemCode = "ColumnIndex_TestItemCode";
 const QString s_ini_key_ColumnIndex_TestItemName = "ColumnIndex_TestItemName";
+const QString s_ini_key_DbScriptDefaultDirPath = "DbScriptDefaultDirPath";
 
 DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	: QObject(parent),
@@ -25,6 +28,7 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
 	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
 	m_stTestItemExcelInfo.nColIndex_ItemName = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemName, -1).toInt();
+	m_strDbScriptDefaultDirPath = m_pCfg->ReadValue(s_ini_prefix_DbScript, s_ini_key_DbScriptDefaultDirPath, QDir::homePath()).toString();
 }
 
 DbScriptEditorApp::~DbScriptEditorApp()
@@ -61,6 +65,17 @@ void DbScriptEditorApp::setSQLiteDbPath(const QString& src)
 	m_strSQLiteDbPath = src;
 }
 
+QString DbScriptEditorApp::getDbScriptDefaultDirPath() const
+{
+	return m_strDbScriptDefaultDirPath;
+}
+
+void DbScriptEditorApp::setDbScriptDefaultDirPath(const QString& src)
+{
+	m_strDbScriptDefaultDirPath = src;
+	m_pCfg->WriteValue(s_ini_prefix_DbScript, s_ini_key_DbScriptDefaultDirPath, src);
+}
+
 void DbScriptEditorApp::CloaseSQLiteDb(DbScriptDataModel* model)
 {
 	if (m_DbScriptOperate)
@@ -92,6 +107,8 @@ bool DbScriptEditorApp::OpenSQLiteDb(DbScriptDataModel* model, const QString& db
 		if (m_DbScriptOperate->TestConnect())
 		{
 			setSQLiteDbPath(dbPath);
+			QFileInfo fileInfo(dbPath);
+			setDbScriptDefaultDirPath(fileInfo.path());
 
 			DbData outData;
 			QString strErrorMsg;

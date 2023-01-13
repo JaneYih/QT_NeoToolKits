@@ -25,6 +25,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void setTestItemExcelInfo(const TestItemExcelInfo& src);
 	
 		QString getSQLiteDbPath() const;
+		QString getDbScriptDefaultDirPath() const;
 		bool OpenSQLiteDb(DbScriptDataModel* model, const QString& dbPath);
 		void CloaseSQLiteDb(DbScriptDataModel* model = nullptr);
 		bool SaveSQLiteData(DbScriptDataModel* model, QString& strErrorMsg);
@@ -32,6 +33,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		void setSQLiteDbPath(const QString& src);
+		void setDbScriptDefaultDirPath(const QString& src);
 
 	private:
 		QString m_strIniFileName;
@@ -41,6 +43,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QMap<QString, QString> m_mapTestItemDictionary; //测试项代号与测试项名称关系表
 
 		QString m_strSQLiteDbPath;
+		QString m_strDbScriptDefaultDirPath;
 		DbScriptOperate* m_DbScriptOperate;
 	};
 }

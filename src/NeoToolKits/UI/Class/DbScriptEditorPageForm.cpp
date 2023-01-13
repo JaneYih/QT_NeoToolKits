@@ -153,9 +153,13 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	QPushButton* curBtn = static_cast<QPushButton*>(sender());
 	if (curBtn == ui->btn_ExcelPath)
 	{
+		QFileInfo fileInfo(m_pApp->getTestItemExcelInfo().strExcelPath);
 		QString fileName = QFileDialog::getOpenFileName(this,
-			tr("Open Excel File"), "", tr("Excel Files (*.xlsx)"));
-		LoadExcelInfo(fileName);
+			tr("Open Excel File"), fileInfo.path(), tr("Excel Files (*.xlsx)"));
+		if (!fileName.isEmpty())
+		{
+			LoadExcelInfo(fileName);
+		}
 	}
 	else if (curBtn == ui->btn_LoadItemDictionary)
 	{
@@ -164,7 +168,7 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 	else if (curBtn == ui->btn_DBPath)
 	{
 		QString dbPath = QFileDialog::getOpenFileName(this,
-			tr("Open SQLite File"), "", tr("SQLite Files (*.db)"));
+			tr("Open SQLite File"), m_pApp->getDbScriptDefaultDirPath(), tr("SQLite Files (*.db)"));
 		if (!dbPath.isEmpty())
 		{
 			LoadSQLiteDb(dbPath);

@@ -122,8 +122,9 @@ void ExcelDataUploadPageForm::PushbuttonClickedSlot(bool checked)
 	QPushButton* curBtn = static_cast<QPushButton*>(sender());
 	if (curBtn == ui->btn_SelectExcelFile)
 	{
+		QFileInfo fileInfo(m_pApp->getExcelFileName());
 		QString fileName = QFileDialog::getOpenFileName(this,
-			tr("Open Excel File"), "", tr("Excel Files (*.xlsx)"));
+			tr("Open Excel File"), fileInfo.path(), tr("Excel Files (*.xlsx)"));
 		EditTableViewByExcel(fileName);
 	}
 	else if (curBtn == ui->btn_SetDbInfo)
