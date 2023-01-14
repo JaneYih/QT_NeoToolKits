@@ -5,6 +5,8 @@
 #include <QFileDialog>
 #include <QComboBox>
 #include <QMessageBox>
+#include <QDragEnterEvent>
+#include <QMimeData>
 #include "DBScriptTestItemsEditorPopDialog.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
@@ -30,6 +32,7 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 	connect(ui->btn_save, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->comboBox_testCodeCol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot);
 	connect(ui->comboBox_testNameCol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot);
+	ui->tableView_DBDataTable->installEventFilter(this);
 }
 
 DbScriptEditorPageForm::~DbScriptEditorPageForm()
@@ -42,6 +45,57 @@ DbScriptEditorPageForm::~DbScriptEditorPageForm()
 void DbScriptEditorPageForm::initView(void)
 {
 	
+}
+
+bool DbScriptEditorPageForm::eventFilter(QObject* obj, QEvent* event)
+{
+	if (obj == ui->tableView_DBDataTable)
+	{
+		QEvent::Type eventType = event->type();
+		if (eventType == QEvent::DragEnter)
+		{
+			QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
+			const QMimeData* mimeData = dragEnterEvent->mimeData();
+			if (mimeData->hasUrls())
+			{
+				QList<QUrl> urls = mimeData->urls();
+				if (urls.size() != 1)
+				{
+					return false;
+				}
+
+				for each (QUrl var in urls)
+				{
+					QFileInfo FileInfo(var.path());
+					QString suffix(FileInfo.suffix());
+					if (suffix != "db")
+					{
+						return false;
+					}
+				}
+				dragEnterEvent->acceptProposedAction();
+				return true;
+			}
+		}
+		else if (eventType == QEvent::Drop)
+		{
+			QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
+			const QMimeData* mimeData(dropEvent->mimeData());
+			if (mimeData->hasUrls())
+			{
+				QList<QUrl> urls = mimeData->urls();
+				if (urls.size() > 0)
+				{
+					QString dbPath(urls.constFirst().toLocalFile());
+					LoadSQLiteDb(dbPath);
+					dropEvent->acceptProposedAction();
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	return QWidget::eventFilter(obj, event);
 }
 
 void DbScriptEditorPageForm::showEvent(QShowEvent* event)
@@ -65,6 +119,8 @@ void DbScriptEditorPageForm::showEvent(QShowEvent* event)
 		ui->tableView_DBDataTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		ui->tableView_DBDataTable->setSelectionMode(QAbstractItemView::SelectionMode::ExtendedSelection);
 		ui->tableView_DBDataTable->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectItems);
+		ui->tableView_DBDataTable->setDragDropMode(QAbstractItemView::DropOnly);
+		ui->tableView_DBDataTable->setAcceptDrops(true);
 		ui->tableView_DBDataTable->show();
 
 		m_bFirstShowData = false;

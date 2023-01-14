@@ -19,6 +19,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	protected:
 		virtual void showEvent(QShowEvent* event) override;
+		virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
