@@ -288,6 +288,7 @@ bool DBScriptTestItemsModel::DropPackage(const QList<StringGroupItem>& sourceIte
 			}
 		}
 	}
+	emit testItemsRowsMoved();
 	return true;
 }
 

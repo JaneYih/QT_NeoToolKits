@@ -26,10 +26,12 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
 		void TextEditTextChangedSlot();
+		void TestItemsRowsMovedSlot();
 
 	protected:
 		virtual void closeEvent(QCloseEvent* event) override;
 		virtual void reject() override;
+		virtual bool eventFilter(QObject* obj, QEvent* event) override;
 
 	private:
 		void initView(void);

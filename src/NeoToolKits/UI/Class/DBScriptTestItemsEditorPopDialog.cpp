@@ -30,6 +30,8 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 	connect(ui->btn_refresh, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_apply, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->textEdit_TestItems, &QTextEdit::textChanged, this, &DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot);
+	connect(m_testItemsModel, &DBScriptTestItemsModel::testItemsRowsMoved, this, &DBScriptTestItemsEditorPopDialog::TestItemsRowsMovedSlot);
+	ui->tableView_TestItems->installEventFilter(this);
 }
 
 DBScriptTestItemsEditorPopDialog::~DBScriptTestItemsEditorPopDialog()
@@ -65,6 +67,11 @@ void DBScriptTestItemsEditorPopDialog::initView()
 	refresh();
 }
 
+bool DBScriptTestItemsEditorPopDialog::eventFilter(QObject* obj, QEvent* event)
+{
+	return QWidget::eventFilter(obj, event);
+}
+
 void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& testItemsText)
 {
 	QStringList testCodeItems = testItemsText.split(';', QString::SkipEmptyParts);
@@ -81,6 +88,12 @@ void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& t
 		}
 	}
 	m_testItemsModel->resetTestItems(testitems);
+}
+
+void DBScriptTestItemsEditorPopDialog::TestItemsRowsMovedSlot()
+{
+	ui->tableView_TestItems->clearSelection();
+	ui->tableView_TestItems->setCurrentIndex(QModelIndex());
 }
 
 void DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot()

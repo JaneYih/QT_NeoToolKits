@@ -54,6 +54,9 @@ private:
 	QString ModelIndexsToText(const QModelIndexList& indexes) const;
 	bool DropPackage(const QList<StringGroupItem>& sourceItems, int row, const QModelIndex& parent);
 
+signals:
+	void testItemsRowsMoved();
+
 private:
 	QList<TestItem> m_testItems;
 	QVector<QString> m_headerDatas;
