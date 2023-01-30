@@ -55,47 +55,74 @@ bool DbScriptEditorPageForm::eventFilter(QObject* obj, QEvent* event)
 		if (eventType == QEvent::DragEnter)
 		{
 			QDragEnterEvent* dragEnterEvent = static_cast<QDragEnterEvent*>(event);
-			const QMimeData* mimeData = dragEnterEvent->mimeData();
-			if (mimeData->hasUrls())
-			{
-				QList<QUrl> urls = mimeData->urls();
-				if (urls.size() != 1)
-				{
-					return false;
-				}
-
-				for each (QUrl var in urls)
-				{
-					QFileInfo FileInfo(var.path());
-					QString suffix(FileInfo.suffix());
-					if (suffix != "db")
-					{
-						return false;
-					}
-				}
-				dragEnterEvent->acceptProposedAction();
-				return true;
-			}
+			return DragEnterDbScriptFile(dragEnterEvent);
 		}
 		else if (eventType == QEvent::Drop)
 		{
 			QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
-			const QMimeData* mimeData(dropEvent->mimeData());
-			if (mimeData->hasUrls())
-			{
-				QList<QUrl> urls = mimeData->urls();
-				if (urls.size() > 0)
-				{
-					QString dbPath(urls.constFirst().toLocalFile());
-					LoadSQLiteDb(dbPath);
-					dropEvent->acceptProposedAction();
-					return true;
-				}
-			}
-			return false;
+			return DropDbScriptFile(dropEvent);
 		}
 	}
 	return QWidget::eventFilter(obj, event);
+}
+
+bool DbScriptEditorPageForm::DragEnterDbScriptFile(QDragEnterEvent* dragEnterEvent)
+{
+	if (dragEnterEvent)
+	{
+		const QMimeData* mimeData = dragEnterEvent->mimeData();
+		if (mimeData->hasUrls())
+		{
+			QList<QUrl> urls = mimeData->urls();
+			if (urls.size() != 1)
+			{
+				return false;
+			}
+
+			for each (QUrl var in urls)
+			{
+				if (!IsDbScript(var.path()))
+				{
+					return false;
+				}
+			}
+			dragEnterEvent->acceptProposedAction();
+			return true;
+		}
+	}
+	return false;
+}
+
+bool DbScriptEditorPageForm::IsDbScript(const QString& fileName)
+{
+	QFileInfo FileInfo(fileName);
+	QString suffix(FileInfo.suffix());
+	if (suffix == "db")
+	{
+		return true; 
+	}
+	return false;
+}
+
+
+bool DbScriptEditorPageForm::DropDbScriptFile(QDropEvent* dropEvent)
+{
+	if (dropEvent)
+	{
+		const QMimeData* mimeData(dropEvent->mimeData());
+		if (mimeData->hasUrls())
+		{
+			QList<QUrl> urls = mimeData->urls();
+			if (urls.size() > 0)
+			{
+				QString dbPath(urls.constFirst().toLocalFile());
+				LoadSQLiteDb(dbPath);
+				dropEvent->acceptProposedAction();
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 void DbScriptEditorPageForm::showEvent(QShowEvent* event)
