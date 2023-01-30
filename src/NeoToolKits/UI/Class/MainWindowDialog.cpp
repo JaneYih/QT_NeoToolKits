@@ -1,4 +1,9 @@
 #include "MainWindowDialog.h"
+#include <QEvent>
+#include <QMimeData>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMessageBox>
 
 MainWindowDialog::MainWindowDialog(QWidget *parent)
     : QMainWindow(parent),
@@ -25,6 +30,8 @@ void MainWindowDialog::initView(void)
 	m_mapToolsPageDictionary[ui->actionDbScriptEditor] = m_pDbScriptEditPage;
     ui->stackedWidget->addWidget(m_pExcelDataUploadPage);
 	m_mapToolsPageDictionary[ui->actionExcelDataUpload] = m_pExcelDataUploadPage;
+
+	//setAcceptDrops(true);
 }
 
 void MainWindowDialog::PageChangeActionToggledSlot(bool toggled)
@@ -59,3 +66,38 @@ void MainWindowDialog::PageChangeActionToggledSlot(bool toggled)
 		}
 	}
 }
+
+bool MainWindowDialog::OpenDbScript(const QString& dbPath)
+{
+	if (m_pDbScriptEditPage->IsDbScript(dbPath))
+	{
+		ui->actionDbScriptEditor->setChecked(true);
+		m_pDbScriptEditPage->LoadSQLiteDb(dbPath);
+		return true;
+	}
+	return false;
+}
+
+//void MainWindowDialog::dragEnterEvent(QDragEnterEvent* event)
+//{
+//	if (ui->actionDbScriptEditor->isChecked())
+//	{
+//		if (m_pDbScriptEditPage->DragEnterDbScriptFile(event))
+//		{
+//			event->accept();
+//			return;
+//		}
+//	}
+//	event->ignore();
+//}
+//
+//void MainWindowDialog::dropEvent(QDropEvent* event)
+//{
+//	if (ui->actionDbScriptEditor->isChecked())
+//	{
+//		if (m_pDbScriptEditPage->DropDbScriptFile(event))
+//		{
+//			event->accept();
+//		}
+//	}
+//}

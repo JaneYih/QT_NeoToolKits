@@ -14,6 +14,12 @@ public:
     MainWindowDialog(QWidget *parent = nullptr);
     ~MainWindowDialog();
 
+    bool OpenDbScript(const QString& dbPath);
+
+//protected:
+//	virtual void dragEnterEvent(QDragEnterEvent* event) override;
+//	virtual void dropEvent(QDropEvent* event) override;
+
 private:
 	void initView(void);
 
