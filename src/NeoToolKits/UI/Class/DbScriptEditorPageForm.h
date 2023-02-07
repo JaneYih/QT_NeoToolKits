@@ -41,6 +41,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		Ui::DbScriptEditorPageForm* ui;
+		QWidget* m_pParentWidget;
 		DbScriptEditorApp* m_pApp;
 		DbScriptDataModel* m_pDataModel;
 		volatile bool m_bFirstShowData;

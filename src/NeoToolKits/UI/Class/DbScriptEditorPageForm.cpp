@@ -12,7 +12,8 @@
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
 DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
-	: QWidget(parent),
+	: QWidget(parent), 
+	m_pParentWidget(parent),
 	ui(new Ui::DbScriptEditorPageForm),
 	m_pApp(new DbScriptEditorApp(this)),
 	m_bFirstShowData(true),
@@ -168,10 +169,12 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 				return;
 			}
 			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), &map, this);
+			this->m_pParentWidget->setVisible(false);
 			if (dlg.exec() == QDialog::Accepted)
 			{
 				m_pDataModel->setItemData(index, dlg.getTestItemsText());
 			}
+			this->m_pParentWidget->setVisible(true);
 			ui->tableView_DBDataTable->clearSelection();
 		}
 	}

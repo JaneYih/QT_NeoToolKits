@@ -8,8 +8,8 @@
 MainWindowDialog::MainWindowDialog(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindowDialogClass),
-    m_pDbScriptEditPage(new NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorPageForm),
-    m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm)
+    m_pDbScriptEditPage(new NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorPageForm(this)),
+    m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm(this))
 {
 	ui->setupUi(this);
     initView();

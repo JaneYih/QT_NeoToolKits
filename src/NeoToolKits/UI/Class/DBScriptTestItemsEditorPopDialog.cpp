@@ -2,6 +2,9 @@
 #include <QPushButton>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QKeyEvent>
+#include <QGuiApplication>
+#include <QClipboard>
 #include "DBScriptTestItemsModel.h"
 #include "DBScriptTestItemsDelegate.h"
 
@@ -69,6 +72,32 @@ void DBScriptTestItemsEditorPopDialog::initView()
 
 bool DBScriptTestItemsEditorPopDialog::eventFilter(QObject* obj, QEvent* event)
 {
+	if (obj == ui->tableView_TestItems)
+	{
+		if (event->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			if (keyEvent->modifiers() == Qt::ControlModifier
+				&& keyEvent->key() == Qt::Key_C)
+			{
+				QModelIndexList selectedIndexes = ui->tableView_TestItems->selectionModel()->selectedIndexes();
+				QString strCopyText("");
+				for each (QModelIndex var in selectedIndexes)
+				{
+					if (var.isValid() && var.column() == 1)
+					{
+						TestItem* testitem = static_cast<TestItem*>(var.internalPointer());
+						if (testitem)
+						{
+							strCopyText += QString("%1=1\r\n").arg(testitem->name());
+						}
+					}
+				}
+				QGuiApplication::clipboard()->setText(strCopyText);
+				return true;
+			}
+		}
+	}
 	return QWidget::eventFilter(obj, event);
 }
 
