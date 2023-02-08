@@ -77,11 +77,12 @@ bool DBScriptTestItemsEditorPopDialog::eventFilter(QObject* obj, QEvent* event)
 		if (event->type() == QEvent::KeyPress)
 		{
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			int curKey = keyEvent->key();
 			if (keyEvent->modifiers() == Qt::ControlModifier
-				&& keyEvent->key() == Qt::Key_C)
+				&& (curKey == Qt::Key_C || curKey == Qt::Key_D))
 			{
 				QModelIndexList selectedIndexes = ui->tableView_TestItems->selectionModel()->selectedIndexes();
-				QString strCopyText("");
+				QList<TestItem*> testitems;
 				for each (QModelIndex var in selectedIndexes)
 				{
 					if (var.isValid() && var.column() == 1)
@@ -89,16 +90,130 @@ bool DBScriptTestItemsEditorPopDialog::eventFilter(QObject* obj, QEvent* event)
 						TestItem* testitem = static_cast<TestItem*>(var.internalPointer());
 						if (testitem)
 						{
-							strCopyText += QString("%1=1\r\n").arg(testitem->name());
+							testitems.push_back(testitem);
 						}
 					}
 				}
+
+				QString strCopyText("");
+				if (curKey == Qt::Key_C)
+				{
+					for each (auto var in testitems)
+					{
+						strCopyText += QString("%1=1\r\n").arg(var->name());
+					}
+				}
+				else if (curKey == Qt::Key_D)
+				{
+					strCopyText += GetTemplateCodeString1(testitems);
+					strCopyText += GetTemplateCodeString2(testitems);
+					strCopyText += GetTemplateCodeString3(testitems);
+					strCopyText += GetTemplateCodeString4(testitems);
+					strCopyText += GetTemplateCodeString5(testitems);
+					strCopyText += GetTemplateCodeString6(testitems);
+					strCopyText += GetTemplateCodeString7(testitems);
+				}
+
 				QGuiApplication::clipboard()->setText(strCopyText);
+				ui->tableView_TestItems->clearSelection();
 				return true;
 			}
 		}
 	}
 	return QWidget::eventFilter(obj, event);
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString1(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	装载样式1\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("AddTestItemToDictionary(\"%1\", \"%2\", &CDlgTestUnit::TestUnit_%1);\r\n").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString2(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	装载样式2-名字装载\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("\
+else if (\"%1\" == TestItemCode)\r\n\
+{\r\n\
+	return \"%2\";\r\n\
+}\r\n\
+").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString3(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	装载样式2-函数指针装载\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("\
+else if (\"%1\" == TestItemCode)\r\n\
+{\r\n\
+	return &CDlgTestUnit::TestUnit_%1; //%2;\r\n\
+}\r\n\
+").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString4(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	CDlgTestUnit的声明\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("BOOL TestUnit_%1(const CString& testName, CString& errMsg);   //%2 \r\n").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString5(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	CDlgTestUnit的定义\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("\
+//Test Unit: %2 \r\n\
+BOOL CDlgTestUnit::TestUnit_%1(const CString& testName, CString& errMsg)\r\n\
+{\r\n\
+	bool bSucceed = m_cTestUnit->Test_%1(g_testDevMode, errMsg);\r\n\
+	return bSucceed;\r\n\
+}\r\n\r\n\
+").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString6(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	CTestUnit的声明\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("BOOL Test_%1(testMode target, CString& errMsg);   //%2 \r\n").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
+}
+
+QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString7(const QList<TestItem*>& selectedTestitems)
+{
+	QString text = QString::fromStdWString(L"/***************************\r\n*	CTestUnit的定义\r\n***************************/\r\n");
+	for each (auto var in selectedTestitems)
+	{
+		text += QString("\
+//Test Unit: %2 \r\n\
+BOOL CTestUnit::Test_%1(testMode target, CString& errMsg)\r\n\
+{\r\n\
+	return FALSE;\r\n\
+}\r\n\r\n\
+").arg(var->code()).arg(var->name());
+	}
+	return text + "\r\n\r\n\r\n";
 }
 
 void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& testItemsText)

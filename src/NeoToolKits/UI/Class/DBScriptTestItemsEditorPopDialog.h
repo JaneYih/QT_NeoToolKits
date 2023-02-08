@@ -42,6 +42,14 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void setAppliedFlag(bool isApplied);
 		bool getAppliedFlag() const;
 
+		QString GetTemplateCodeString1(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString2(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString3(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString4(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString5(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString6(const QList<TestItem*>& selectedTestitems);
+		QString GetTemplateCodeString7(const QList<TestItem*>& selectedTestitems);
+
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
 		QString m_testItemsText;
