@@ -19,18 +19,14 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 	private:
 		QString GenerateInsertCommand(const QString& tableName,
 			const QVector<UploadData>& data,
+			const QString& strProductionOrderID,
 			QString& displayText);
 		QString GenerateUpdateCommand(const QString& tableName,
 			const QVector<UploadData>& data,
 			const QString& strProductionOrderID,
 			QString& displayText);
 
-		enum cmdType
-		{
-			InsertCommand,
-			UpdateCommand
-		};
-		bool OperateExcelData(cmdType type, const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
+		bool OperateExcelData(UploadOptions type, const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
 
 	private:
 		SqlTableInfo m_stSqlInfo;

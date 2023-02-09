@@ -23,10 +23,17 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 
 	}ExcelDataUploadInfo, * pExcelDataUploadInfo;
 
+	enum UploadOptions
+	{
+		InsertCommand = 1,
+		UpdateCommand = 2
+	};
+
 	typedef struct _ExcelDataUploadConfig_
 	{
 		void* pApp = nullptr;
 		bool bErrorStop = false;
+		UploadOptions eOpentions = UploadOptions::UpdateCommand;
 		int iRowCountMax = 0;
 		int iRowCount = 0;
 		int iRowStartRowIndex = 2;

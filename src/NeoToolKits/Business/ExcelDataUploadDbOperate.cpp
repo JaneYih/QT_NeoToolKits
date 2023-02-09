@@ -13,16 +13,16 @@ ExcelDataUploadDbOperate::~ExcelDataUploadDbOperate()
 bool ExcelDataUploadDbOperate::InsertExcelData(const QList<QVector<UploadData>>& dataList, 
 	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
 {
-	return OperateExcelData(cmdType::InsertCommand, dataList, stUploadConfig, pstUploadingInfo);
+	return OperateExcelData(UploadOptions::InsertCommand, dataList, stUploadConfig, pstUploadingInfo);
 }
 
 bool ExcelDataUploadDbOperate::UpdateExcelData(const QList<QVector<UploadData>>& dataList,
 	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
 {
-	return OperateExcelData(cmdType::UpdateCommand, dataList, stUploadConfig, pstUploadingInfo);
+	return OperateExcelData(UploadOptions::UpdateCommand, dataList, stUploadConfig, pstUploadingInfo);
 }
 
-bool ExcelDataUploadDbOperate::OperateExcelData(cmdType type, const QList<QVector<UploadData>>& dataList,
+bool ExcelDataUploadDbOperate::OperateExcelData(UploadOptions type, const QList<QVector<UploadData>>& dataList,
 	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
 {
 	if (!DatabaseInstence->IsInit())
@@ -40,7 +40,7 @@ bool ExcelDataUploadDbOperate::OperateExcelData(cmdType type, const QList<QVecto
 		switch (type)
 		{
 		case InsertCommand:
-			command = GenerateInsertCommand(m_stSqlInfo.tableName, row, displayText);
+			command = GenerateInsertCommand(m_stSqlInfo.tableName, row, stUploadConfig.strProductionOrderID, displayText);
 			break;
 		case UpdateCommand:
 			command = GenerateUpdateCommand(m_stSqlInfo.tableName, row, stUploadConfig.strProductionOrderID, displayText);
@@ -104,11 +104,13 @@ bool ExcelDataUploadDbOperate::OperateExcelData(cmdType type, const QList<QVecto
 }
 
 QString ExcelDataUploadDbOperate::GenerateInsertCommand(const QString& tableName, 
-	const QVector<UploadData>& data,
+	const QVector<UploadData>& data, 
+	const QString& strProductionOrderID,
 	QString& displayText)
 {
-	QString strKeys;
-	QString strValues;
+	displayText = QString("[work_order_id]<<\"%1\";").arg(strProductionOrderID);
+	QString strKeys("work_order_id,");
+	QString strValues(QString("\"%1\",").arg(strProductionOrderID));
 	foreach(auto var, data)
 	{
 		strKeys += QString("%1,").arg(var.key);

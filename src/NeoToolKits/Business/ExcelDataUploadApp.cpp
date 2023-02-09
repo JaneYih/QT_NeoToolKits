@@ -173,12 +173,20 @@ void ExcelDataUploadWorker::DoWork(ExcelDataUploadApp* const& pApp)
 	emit pApp->toDisplayItem(QString::fromStdWString(L"正在玩命加载Excel内容,请耐心等候...."), 0, 0);
 	QList<QVector<UploadData>> dataList;
 	pApp->PackingUploadDataList(dataList);
-	emit pApp->toDisplayItem(QString::fromStdWString(L"Excel内容完毕。"), 0, dataList.count());
+	emit pApp->toDisplayItem(QString::fromStdWString(L"Excel内容加载完毕。"), 0, dataList.count());
 
 	if (dataList.count() == pApp->getUploadConfig().iRowCount)
 	{
 		ExcelDataUploadDbOperate db(*(pApp->getSqlTableInfoPointer()));
-		db.UpdateExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
+		if (pApp->getUploadConfig().eOpentions == UploadOptions::InsertCommand)
+		{
+			db.InsertExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
+		}
+		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand)
+		{
+			db.UpdateExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
+		}
+
 	}
 	else
 	{

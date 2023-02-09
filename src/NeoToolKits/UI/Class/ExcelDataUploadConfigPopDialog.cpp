@@ -35,6 +35,10 @@ void ExcelDataUploadConfigPopDialog::initView(void)
 	ui->lineEdit_Count->setText(QString("%1").arg(iExcelUploadRowCountMax));
 	ui->lineEdit_ProductionOrderID->setValidator(new QRegExpValidator(QRegExp("^[0-9]{5,10}$"), this));
 	ui->checkBox_ErrorStop->setChecked(true);
+	ui->comboBox_Options->clear();
+	ui->comboBox_Options->addItem(QString::fromStdWString(L"更新数据"));
+	ui->comboBox_Options->addItem(QString::fromStdWString(L"插入数据"));
+	ui->comboBox_Options->setCurrentText(QString::fromStdWString(L"更新数据"));
 	ui->progressBar->setMinimum(0);
 	ui->progressBar->setMaximum(iExcelUploadRowCountMax);
 	ui->progressBar->setValue(0);
@@ -89,6 +93,12 @@ void ExcelDataUploadConfigPopDialog::PushbuttonClickedSlot(bool checked)
 			stUploadConfig.iRowCount = ui->lineEdit_Count->text().toInt();
 			stUploadConfig.strProductionOrderID = ui->lineEdit_ProductionOrderID->text();
 			stUploadConfig.bErrorStop = ui->checkBox_ErrorStop->checkState() == Qt::Checked;
+
+			QString strCurrentOptions = ui->comboBox_Options->currentText();
+			stUploadConfig.eOpentions = strCurrentOptions == QString::fromStdWString(L"插入数据")
+				? UploadOptions::InsertCommand 
+				: UploadOptions::UpdateCommand;
+
 			QString strWarningMsg;
 			if (!stUploadConfig.isValid(strWarningMsg))
 			{
