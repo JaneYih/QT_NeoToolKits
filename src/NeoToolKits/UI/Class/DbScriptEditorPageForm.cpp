@@ -169,6 +169,16 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 				return;
 			}
 			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), &map, this);
+			DbData dbdata = m_pDataModel->getDbScriptData();
+			int rowIndex = index.row();
+			if (dbdata.rows.count() > rowIndex)
+			{
+				pDbFieldGroup rowdata = dbdata.rows[rowIndex];
+				if (rowdata && rowdata->fields.count() > 2)
+				{
+					dlg.setWindowTitle(dlg.windowTitle() + QString::fromStdWString(L"(<%1><%2>)").arg(rowdata->fields[2].value()).arg(rowdata->fields[1].value()));
+				}
+			}
 			this->m_pParentWidget->setVisible(false);
 			if (dlg.exec() == QDialog::Accepted)
 			{
