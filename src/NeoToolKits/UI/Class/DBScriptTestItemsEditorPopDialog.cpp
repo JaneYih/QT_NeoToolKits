@@ -182,8 +182,11 @@ QString DBScriptTestItemsEditorPopDialog::GetTemplateCodeString5(const QList<Tes
 //Test Unit: %2 \r\n\
 BOOL CDlgTestUnit::TestUnit_%1(const CString& testName, CString& errMsg)\r\n\
 {\r\n\
-	bool bSucceed = m_cTestUnit->Test_%1(g_testDevMode, errMsg);\r\n\
-	return bSucceed;\r\n\
+	if(m_cTestUnit->Test_%1(g_testDevMode, errMsg))\r\n\
+	{\r\n\
+		return TRUE;\r\n\
+	}\r\n\
+	return FALSE;\r\n\
 }\r\n\r\n\
 ").arg(var->code()).arg(var->name());
 	}
