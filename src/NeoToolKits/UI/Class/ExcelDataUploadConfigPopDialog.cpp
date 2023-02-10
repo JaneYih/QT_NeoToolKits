@@ -32,7 +32,7 @@ void ExcelDataUploadConfigPopDialog::initView(void)
 	ui->lineEdit_StartLine->setValidator(new QIntValidator(2, iExcelUploadRowCountMax, this));
 	ui->lineEdit_StartLine->setText("2");
 	ui->lineEdit_Count->setValidator(new QIntValidator(1, iExcelUploadRowCountMax, this));
-	ui->lineEdit_Count->setText(QString("%1").arg(iExcelUploadRowCountMax));
+	ui->lineEdit_Count->setText(QString("%1").arg(iExcelUploadRowCountMax-1));
 	ui->lineEdit_ProductionOrderID->setValidator(new QRegExpValidator(QRegExp("^[0-9]{5,10}$"), this));
 	ui->checkBox_ErrorStop->setChecked(true);
 	ui->comboBox_Options->clear();
