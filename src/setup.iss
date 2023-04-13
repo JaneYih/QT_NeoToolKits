@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "NeoToolKits"
-#define MyAppVersion "1.1.3"
+#define MyAppVersion "1.1.4"
 #define MyAppPublisher "Neoway, Inc."
 #define MyAppURL "http://www.neoway.com"
 #define MyAppExeName "NeoToolKits.exe"
