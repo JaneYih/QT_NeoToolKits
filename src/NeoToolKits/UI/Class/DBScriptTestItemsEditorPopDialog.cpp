@@ -11,7 +11,7 @@
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
 DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString& testItemsText,
-	QMap<QString, QString>* hTestItemDictionary, QWidget* parent)
+	QMap<QString, TestItem>* hTestItemDictionary, QWidget* parent)
 	: QDialog(parent),
 	ui(new Ui::DBScriptTestItemsEditorPopDlg),
 	m_testItemsText(testItemsText),
@@ -227,7 +227,7 @@ void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& t
 	{
 		if (m_hTestItemDictionary->find(var) != m_hTestItemDictionary->end())
 		{
-			TestItem item(var, (*m_hTestItemDictionary)[var]);
+			TestItem item((*m_hTestItemDictionary)[var]);
 			if (item.isValid())
 			{
 				testitems.push_back(item);

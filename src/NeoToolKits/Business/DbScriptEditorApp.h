@@ -20,7 +20,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 		void LoadExcelColumns(const QString& fileName);
 		bool LoadExcelTestItemDictionary();
-		QMap<QString, QString> getTestItemDictionary() const;
+		QMap<QString, TestItem> getTestItemDictionary() const;
 		TestItemExcelInfo getTestItemExcelInfo() const;
 		void setTestItemExcelInfo(const TestItemExcelInfo& src);
 	
@@ -40,7 +40,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		IniOperation* m_pCfg;
 
 		TestItemExcelInfo m_stTestItemExcelInfo;
-		QMap<QString, QString> m_mapTestItemDictionary; //测试项代号与测试项名称关系表
+		QMap<QString, TestItem> m_mapTestItemDictionary; //测试项代号与测试项名称关系表
 
 		QString m_strSQLiteDbPath;
 		QString m_strDbScriptDefaultDirPath;

@@ -12,7 +12,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		Q_OBJECT
 
 	public:
-		explicit DBScriptTestItemsDelegate(QMap<QString, QString>* hTestItemDictionary, QObject* parent = nullptr);
+		explicit DBScriptTestItemsDelegate(QMap<QString, TestItem>* hTestItemDictionary, QObject* parent = nullptr);
 		~DBScriptTestItemsDelegate();
 
 		// editing
@@ -30,10 +30,10 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		void setComboCtrlOptionsByKeyword(QComboBox* comboControl, const QString& keyword) const;
-		QStringList getTestItemsByKeyword(const QString& keyword) const;
+		QList<TestItem> getTestItemsByKeyword(const QString& keyword) const;
 
 	private:
-		QMap<QString, QString>* m_hTestItemDictionary;
+		QMap<QString, TestItem>* m_hTestItemDictionary;
 		QStringList m_comboCtrlOptions;
 	};
 };

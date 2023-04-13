@@ -28,6 +28,8 @@ DbScriptEditorApp::DbScriptEditorApp(QObject *parent)
 	m_stTestItemExcelInfo.strExcelPath = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString();
 	m_stTestItemExcelInfo.nColIndex_ItemCode = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemCode, -1).toInt();
 	m_stTestItemExcelInfo.nColIndex_ItemName = m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_ColumnIndex_TestItemName, -1).toInt();
+	m_stTestItemExcelInfo.nColIndex_ItemATCommand = m_stTestItemExcelInfo.nColIndex_ItemName + 1;
+	m_stTestItemExcelInfo.nColIndex_ItemRemark = m_stTestItemExcelInfo.nColIndex_ItemName + 2;
 	m_strDbScriptDefaultDirPath = m_pCfg->ReadValue(s_ini_prefix_DbScript, s_ini_key_DbScriptDefaultDirPath, QDir::homePath()).toString();
 }
 
@@ -37,7 +39,7 @@ DbScriptEditorApp::~DbScriptEditorApp()
 	delete m_pCfg;
 }
 
-QMap<QString, QString> DbScriptEditorApp::getTestItemDictionary() const
+QMap<QString, TestItem> DbScriptEditorApp::getTestItemDictionary() const
 {
 	return m_mapTestItemDictionary;
 }
@@ -241,13 +243,25 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 		int StartRowIndex = 2;
 		for (int row = StartRowIndex; row < rowCount; ++row)
 		{
+			TestItem curTestItem;
+
 			Cell* cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemCode);
 			QString strCurCode(cell->readValue().toString());
+			curTestItem.setCode(strCurCode);
+
 			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemName);
 			QString strCurName(cell->readValue().toString());
+			curTestItem.setName(strCurName);
+
+			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemATCommand);
+			curTestItem.setATComand(cell->readValue().toString());
+
+			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemRemark);
+			curTestItem.setRemark(cell->readValue().toString());
+
 			if (m_mapTestItemDictionary.find(strCurCode) == m_mapTestItemDictionary.end())
 			{
-				m_mapTestItemDictionary[strCurCode] = strCurName;
+				m_mapTestItemDictionary[strCurCode] = curTestItem;
 			}
 			else
 			{

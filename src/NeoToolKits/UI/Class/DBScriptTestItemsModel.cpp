@@ -78,7 +78,9 @@ QVariant DBScriptTestItemsModel::data(const QModelIndex& index, int role) const
 				{
 					if (testitem->isValid())
 					{
-						return QVariant(testitem->toString());
+						return QVariant(role == Qt::ToolTipRole 
+										? testitem->toTipsString()
+										: testitem->toString());
 					}
 					return QVariant();
 				}
@@ -136,6 +138,8 @@ bool DBScriptTestItemsModel::setData(const QModelIndex& index, const QVariant& v
 						if (*testitem != inputValue)
 						{
 							testitem->setValue(inputValue.code(), inputValue.name());
+							testitem->setATComand(inputValue.atComand());
+							testitem->setRemark(inputValue.remark());
 							bChanged = true;
 						}
 					}

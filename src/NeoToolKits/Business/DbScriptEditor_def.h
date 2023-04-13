@@ -19,6 +19,12 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		int nColIndex_ItemName; //Excel中测试项名称列序号
 		QString strColName_ItemName; //Excel中测试项名称列标题
 	
+		int nColIndex_ItemATCommand;//Excel中指令列序号
+		QString strColName_ItemATCommand;//Excel中测试项指令列标题
+
+		int nColIndex_ItemRemark;//Excel中备注列序号
+		QString strColName_ItemRemark;//Excel中测试项备注列标题
+
 		bool isValid()
 		{
 			if (strExcelPath.isEmpty()
@@ -62,7 +68,9 @@ public:
 	TestItem() 
 		: eOperate(TestItemOperate::TestItem_NOP),
 		strCode(""),
-		strName("")
+		strName(""),
+		strATComand(""),
+		strRemark("")
 	{}
 	explicit TestItem(const QString& code, const QString& name)
 		: eOperate(TestItemOperate::TestItem_NOP),
@@ -93,6 +101,12 @@ public:
 		this->eOperate = src.Operate();
 		this->strCode = src.code();
 		this->strName = src.name();
+		this->strATComand = src.atComand();
+		this->strRemark = src.remark();
+	}
+	QString toTipsString() const {
+		return QString::fromStdWString(L"[%1]<------->[%2]\r\n\r\n指令:\r\n%3\r\n\r\n备注:\r\n%4")
+			.arg(strName).arg(strCode).arg(strATComand).arg(strRemark);
 	}
 	QString toString() const {
 		return QString::fromStdWString(L"[%1]<------->[%2]").arg(strName).arg(strCode);
@@ -130,6 +144,18 @@ public:
 	}
 	void setName(const QString& name) {
 		this->strName = name;
+	}
+	QString atComand() const {
+		return this->strATComand;
+	}
+	void setATComand(const QString& atComand) {
+		this->strATComand = atComand;
+	}
+	QString remark() const {
+		return this->strRemark;
+	}
+	void setRemark(const QString& remark) {
+		this->strRemark = remark;
 	}
 	TestItemOperate Operate() const {
 		return this->eOperate;
@@ -176,6 +202,8 @@ private:
 	TestItemOperate eOperate;
 	QString strCode;
 	QString strName;
+	QString strATComand;
+	QString strRemark;
 };
 
 Q_DECLARE_METATYPE(TestItem);

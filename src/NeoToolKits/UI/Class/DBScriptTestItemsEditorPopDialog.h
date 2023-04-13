@@ -16,7 +16,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	public:
 		explicit DBScriptTestItemsEditorPopDialog(const QString& testItemsText, 
-			QMap<QString, QString>* hTestItemDictionary, QWidget* parent = nullptr);
+			QMap<QString, TestItem>* hTestItemDictionary, QWidget* parent = nullptr);
 		~DBScriptTestItemsEditorPopDialog();
 
 		QString getTestItemsText() const {
@@ -53,7 +53,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
 		QString m_testItemsText;
-		QMap<QString, QString>* m_hTestItemDictionary;
+		QMap<QString, TestItem>* m_hTestItemDictionary;
 		DBScriptTestItemsModel* m_testItemsModel;
 		DBScriptTestItemsDelegate* m_testItemsDelegate;
 		volatile bool m_bApplied;

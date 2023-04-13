@@ -5,29 +5,33 @@
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
-DBScriptTestItemsDelegate::DBScriptTestItemsDelegate(QMap<QString, QString>* hTestItemDictionary, QObject *parent)
+DBScriptTestItemsDelegate::DBScriptTestItemsDelegate(QMap<QString, TestItem>* hTestItemDictionary, QObject *parent)
 	: QStyledItemDelegate(parent),
 	m_hTestItemDictionary(hTestItemDictionary)
 {
 	Q_ASSERT(m_hTestItemDictionary);
-	m_comboCtrlOptions = getTestItemsByKeyword("");
+	m_comboCtrlOptions.clear();
+	QList<TestItem> testItems = getTestItemsByKeyword("");
+	for each (auto var in testItems)
+	{
+		m_comboCtrlOptions.append(var.toString());
+	}
 }
 
 DBScriptTestItemsDelegate::~DBScriptTestItemsDelegate()
 {}
 
-QStringList DBScriptTestItemsDelegate::getTestItemsByKeyword(const QString& keyword) const
+QList<TestItem> DBScriptTestItemsDelegate::getTestItemsByKeyword(const QString& keyword) const
 {
-	QStringList outTestItems;
-	QMapIterator<QString, QString> i(*m_hTestItemDictionary);
+	QList<TestItem> outTestItems;
+	QMapIterator<QString, TestItem> i(*m_hTestItemDictionary);
 	while (i.hasNext())
 	{
 		i.next();
-		TestItem testItem(i.key(), i.value());
-		QString strTestItem = testItem.toString();
+		QString strTestItem = i.value().toString();
 		if (strTestItem.indexOf(keyword) != -1)
 		{
-			outTestItems.push_back(strTestItem);
+			outTestItems.push_back(i.value());
 		}
 	}
 	return outTestItems;
@@ -38,8 +42,11 @@ void DBScriptTestItemsDelegate::setComboCtrlOptionsByKeyword(QComboBox* comboCon
 	if (comboControl)
 	{
 		comboControl->clear();
-		QStringList testItems = getTestItemsByKeyword(keyword);
-		comboControl->addItems(testItems);
+		QList<TestItem> testItems = getTestItemsByKeyword(keyword);
+		for each (auto var in testItems)
+		{
+			comboControl->addItem(var.toString());
+		}
 	}
 }
 
@@ -84,14 +91,12 @@ void DBScriptTestItemsDelegate::setModelData(QWidget* editor,
 	{
 		QComboBox* comboControl = static_cast<QComboBox*>(editor);
 		QString strData = comboControl->currentText();
-		QStringList testItems = getTestItemsByKeyword(strData);
+		QList<TestItem> testItems = getTestItemsByKeyword(strData);
 		if (testItems.count() == 1)
 		{
-			if (testItems[0] == strData)
+			if (testItems[0].toString() == strData)
 			{
-				TestItem testItem;
-				testItem.fromString(strData);
-				model->setData(index, QVariant::fromValue<TestItem>(testItem));
+				model->setData(index, QVariant::fromValue<TestItem>(testItems[0]));
 			}
 		}
 		return;

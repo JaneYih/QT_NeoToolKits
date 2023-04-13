@@ -162,7 +162,7 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 		QString horizontalHeaderName = m_pDataModel->GetHorizontalHeaderName(index.column());
 		if ("TESTLIST" == horizontalHeaderName)
 		{
-			QMap<QString, QString> map = m_pApp->getTestItemDictionary();
+			QMap<QString, TestItem> map = m_pApp->getTestItemDictionary();
 			if (map.count() <= 0)
 			{
 				QMessageBox::warning(this, "warning", QString::fromStdWString(L"请先点击加载关系表"));
@@ -307,13 +307,13 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 void DbScriptEditorPageForm::LoadItemDictionary()
 {
 	m_pApp->LoadExcelTestItemDictionary();
-	QMap<QString, QString> map = m_pApp->getTestItemDictionary();
+	QMap<QString, TestItem> map = m_pApp->getTestItemDictionary();
 	ui->comboBox_ItemDictionary->clear();
-	QMapIterator<QString, QString> i(map);
+	QMapIterator<QString, TestItem> i(map);
 	while (i.hasNext())
 	{
 		i.next();
-		ui->comboBox_ItemDictionary->addItem(QString("%1:%2").arg(i.key()).arg(i.value()));
+		ui->comboBox_ItemDictionary->addItem(QString("%1:%2").arg(i.key()).arg(i.value().name()));
 	}
 }
 
