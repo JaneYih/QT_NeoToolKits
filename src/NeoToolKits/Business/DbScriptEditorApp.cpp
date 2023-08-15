@@ -272,3 +272,29 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 	}
 	return true;
 }
+
+QList<TestItem> DbScriptEditorApp::TestItemsTextConverter(const QString& testItemsText, 
+	const QMap<QString, TestItem>& testItemDictionary)
+{
+	QStringList testCodeItems = testItemsText.split(';', QString::SkipEmptyParts);
+	QList<TestItem> testitems;
+	for each (auto var in testCodeItems)
+	{
+		if (testItemDictionary.find(var) != testItemDictionary.end())
+		{
+			TestItem item(testItemDictionary[var]);
+			if (item.isValid())
+			{
+				testitems.push_back(item);
+				continue;
+			}
+		}
+
+		TestItem invalidItem;
+		invalidItem.setName(QString::fromStdWString(L"ÎÞÐ§·ûºÅ"));
+		invalidItem.setCode(var);
+		invalidItem.setWaitingDelete();
+		testitems.push_back(invalidItem);
+	}
+	return testitems;
+}

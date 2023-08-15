@@ -15,6 +15,7 @@ public:
 public:
 	DbData getDbScriptData() const;
 	void setDbScriptData(const DbData& data);
+	void setTestItemDictionary(const QMap<QString, TestItem>& mapTestItemDictionary);
 	void ClearDbScriptData();
 	bool setItemData(const QModelIndex& index, const QString& strValue);
 	QString getItemData(const QModelIndex& index) const;
@@ -36,6 +37,10 @@ protected:
 
 private:
 	mutable DbData m_DbScriptData;
+	QMap<QString, TestItem> m_mapTestItemDictionary;
+
+public:
+	static const QString s_TestListHeaderName;
 };
 
 

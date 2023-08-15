@@ -7,6 +7,7 @@
 #include <QClipboard>
 #include "DBScriptTestItemsModel.h"
 #include "DBScriptTestItemsDelegate.h"
+#include "DbScriptEditorApp.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -221,19 +222,7 @@ BOOL CTestUnit::Test_%1(testMode target, CString& errMsg)\r\n\
 
 void DBScriptTestItemsEditorPopDialog::ResetTestItemTableByText(const QString& testItemsText)
 {
-	QStringList testCodeItems = testItemsText.split(';', QString::SkipEmptyParts);
-	QList<TestItem> testitems;
-	for each (auto var in testCodeItems)
-	{
-		if (m_hTestItemDictionary->find(var) != m_hTestItemDictionary->end())
-		{
-			TestItem item((*m_hTestItemDictionary)[var]);
-			if (item.isValid())
-			{
-				testitems.push_back(item);
-			}
-		}
-	}
+	QList<TestItem> testitems = DbScriptEditorApp::TestItemsTextConverter(testItemsText, *m_hTestItemDictionary);
 	m_testItemsModel->resetTestItems(testitems);
 }
 

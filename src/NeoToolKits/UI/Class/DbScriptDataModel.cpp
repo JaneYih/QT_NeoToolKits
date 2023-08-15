@@ -1,5 +1,8 @@
 #include "DbScriptDataModel.h"
 #include <QColor>
+#include "DbScriptEditorApp.h"
+
+const QString DbScriptDataModel::s_TestListHeaderName("TESTLIST");
 
 DbScriptDataModel::DbScriptDataModel(QObject* parent)
 	: QAbstractTableModel(parent)
@@ -30,6 +33,11 @@ void DbScriptDataModel::setDbScriptData(const DbData& data)
 		endInsertColumns();
 		endInsertRows();
 	}
+}
+
+void DbScriptDataModel::setTestItemDictionary(const QMap<QString, TestItem>& mapTestItemDictionary)
+{
+	m_mapTestItemDictionary = mapTestItemDictionary;
 }
 
 void DbScriptDataModel::ClearDbScriptData()
@@ -108,10 +116,11 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 	if (index.isValid())
 	{
 		DbDataCell* cellValue = nullptr;
+		pDbFieldGroup pRowData = nullptr;
 		int row = index.row();
 		if (row < m_DbScriptData.rows.size())
 		{
-			pDbFieldGroup pRowData = m_DbScriptData.rows[row];
+			pRowData = m_DbScriptData.rows[row];
 			int column = index.column();
 			if (pRowData != nullptr
 				&& column < pRowData->fields.size())
@@ -120,12 +129,27 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 			}
 		}
 
-		if (cellValue)
+		if (cellValue && pRowData)
 		{
 			if (role == Qt::DisplayRole
 				|| role == Qt::ToolTipRole
 				|| role == Qt::EditRole)
 			{
+				if (GetHorizontalHeaderName(index.column()) == s_TestListHeaderName
+					&& role == Qt::ToolTipRole
+					&& m_mapTestItemDictionary.size() > 0)
+				{
+					QList<TestItem> testItems = NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorApp::TestItemsTextConverter(cellValue->value(), m_mapTestItemDictionary);
+					QString strTipText("");
+					strTipText += pRowData->fields[2].value() + "\r\n";
+					strTipText += pRowData->fields[1].value() + "\r\n";
+					int index = 0;
+					for each (TestItem var in testItems)
+					{
+						strTipText += QString("%1. %2\r\n").arg(++index).arg(var.toString()); var.toString();
+					}
+					return strTipText;
+				}
 				return cellValue->value();
 			}
 			else if (role == Qt::BackgroundRole)
@@ -192,7 +216,7 @@ bool DbScriptDataModel::setData(const QModelIndex& index, const QVariant& value,
 
 Qt::ItemFlags DbScriptDataModel::flags(const QModelIndex& index) const
 {
-	if (GetHorizontalHeaderName(index.column()) == "TESTLIST")
+	if (GetHorizontalHeaderName(index.column()) == s_TestListHeaderName)
 	{
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 	}

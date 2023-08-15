@@ -23,7 +23,9 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QMap<QString, TestItem> getTestItemDictionary() const;
 		TestItemExcelInfo getTestItemExcelInfo() const;
 		void setTestItemExcelInfo(const TestItemExcelInfo& src);
-	
+		static QList<TestItem> TestItemsTextConverter(const QString& testItemsText,
+			const QMap<QString, TestItem>& testItemDictionary);
+
 		QString getSQLiteDbPath() const;
 		QString getDbScriptDefaultDirPath() const;
 		bool OpenSQLiteDb(DbScriptDataModel* model, const QString& dbPath);

@@ -160,7 +160,7 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 	if (index.isValid())
 	{
 		QString horizontalHeaderName = m_pDataModel->GetHorizontalHeaderName(index.column());
-		if ("TESTLIST" == horizontalHeaderName)
+		if (DbScriptDataModel::s_TestListHeaderName == horizontalHeaderName)
 		{
 			QMap<QString, TestItem> map = m_pApp->getTestItemDictionary();
 			if (map.count() <= 0)
@@ -179,13 +179,13 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 					dlg.setWindowTitle(dlg.windowTitle() + QString::fromStdWString(L" <%1> <%2>").arg(rowdata->fields[2].value()).arg(rowdata->fields[1].value()));
 				}
 			}
-			//this->m_pParentWidget->setVisible(false);
-			this->m_pParentWidget->setWindowState(Qt::WindowMinimized);
+			this->m_pParentWidget->setVisible(false);
+			//this->m_pParentWidget->setWindowState(Qt::WindowMinimized);
 			if (dlg.exec() == QDialog::Accepted)
 			{
 				m_pDataModel->setItemData(index, dlg.getTestItemsText());
 			}
-			//this->m_pParentWidget->setVisible(true);
+			this->m_pParentWidget->setVisible(true);
 			this->m_pParentWidget->setWindowState(Qt::WindowActive);
 			ui->tableView_DBDataTable->clearSelection();
 		}
@@ -308,6 +308,7 @@ void DbScriptEditorPageForm::LoadItemDictionary()
 {
 	m_pApp->LoadExcelTestItemDictionary();
 	QMap<QString, TestItem> map = m_pApp->getTestItemDictionary();
+	m_pDataModel->setTestItemDictionary(map);
 	ui->comboBox_ItemDictionary->clear();
 	QMapIterator<QString, TestItem> i(map);
 	while (i.hasNext())
