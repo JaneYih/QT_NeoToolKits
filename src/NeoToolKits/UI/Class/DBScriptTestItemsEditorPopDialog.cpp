@@ -320,8 +320,15 @@ void DBScriptTestItemsEditorPopDialog::apply()
 			testItemsText += QString("%1;").arg(var.code());
 		}
 	}
-	ui->textEdit_TestItems->setText(testItemsText);
-	setAppliedFlag(true);
+	if (testItemsText != ui->textEdit_TestItems->toPlainText())
+	{
+		ui->textEdit_TestItems->setText(testItemsText);
+		setAppliedFlag(true);
+	}
+	else
+	{
+		refresh();
+	}
 }
 
 void DBScriptTestItemsEditorPopDialog::closeEvent(QCloseEvent* event)
