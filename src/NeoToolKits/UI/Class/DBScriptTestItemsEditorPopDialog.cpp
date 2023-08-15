@@ -287,6 +287,7 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_delete)
 	{
+		//m_testItemsModel->removeWaitingInsertRow(ui->tableView_TestItems->selectionModel()->currentIndex());
 		m_testItemsModel->removeRows(ui->tableView_TestItems->selectionModel()->selectedIndexes());
 		ui->tableView_TestItems->clearSelection();
 	}

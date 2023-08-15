@@ -25,6 +25,7 @@ public:
 
 	void insertRow(const QModelIndex& selection);
 	bool removeRows(const QModelIndexList& selection);
+	bool removeWaitingInsertRow(const QModelIndex& selection);
 	void removeWaitingOperateRows(TestItem::TestItemOperate operate);
 
 protected:

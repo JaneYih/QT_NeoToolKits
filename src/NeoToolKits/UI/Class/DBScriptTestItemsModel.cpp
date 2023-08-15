@@ -430,7 +430,7 @@ bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 			if (curRow < m_testItems.count())
 			{
 				TestItem* testitem = const_cast<TestItem*>(&m_testItems[curRow]);
-				if (!testitem->isWaitingInsert())
+				//if (!testitem->isWaitingInsert())
 				{
 					testitem->setWaitingDelete();
 				}
@@ -438,8 +438,22 @@ bool DBScriptTestItemsModel::removeRows(const QModelIndexList& selection)
 		}
 	}
 
-	removeWaitingOperateRows(TestItem::TestItemOperate::TestItem_Insert);
+	//removeWaitingOperateRows(TestItem::TestItemOperate::TestItem_Insert);
 	return true;
+}
+
+
+bool DBScriptTestItemsModel::removeWaitingInsertRow(const QModelIndex& selection)
+{
+	if (selection.isValid())
+	{
+		TestItem* testitem = const_cast<TestItem*>(&m_testItems[selection.row()]);
+		if (testitem->isWaitingInsert())
+		{
+			removeRows(selection.row(), 1);
+		}
+	}
+	return false;
 }
 
 void DBScriptTestItemsModel::removeWaitingOperateRows(TestItem::TestItemOperate operate)
