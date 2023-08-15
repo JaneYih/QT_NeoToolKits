@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QGuiApplication>
+#include <QClipboard>
 #include "DBScriptTestItemsEditorPopDialog.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
@@ -62,6 +64,31 @@ bool DbScriptEditorPageForm::eventFilter(QObject* obj, QEvent* event)
 		{
 			QDropEvent* dropEvent = static_cast<QDropEvent*>(event);
 			return DropDbScriptFile(dropEvent);
+		}
+		else if (eventType == QEvent::KeyPress)
+		{
+			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			int curKey = keyEvent->key();
+			if (keyEvent->modifiers() == Qt::ControlModifier)
+			{
+				QModelIndex currentselectedIndex = ui->tableView_DBDataTable->selectionModel()->currentIndex();
+				if (currentselectedIndex.isValid())
+				{
+					QString strCopyText("");
+					if (curKey == Qt::Key_C)
+					{
+						strCopyText = m_pDataModel->getItemData(currentselectedIndex);
+						QGuiApplication::clipboard()->setText(strCopyText);
+						ui->tableView_DBDataTable->clearSelection();
+					}
+					else if (curKey == Qt::Key_V)
+					{
+						strCopyText = QGuiApplication::clipboard()->text();
+						m_pDataModel->setItemData(currentselectedIndex, strCopyText);
+					}
+					return true;
+				}
+			}
 		}
 	}
 	return QWidget::eventFilter(obj, event);
