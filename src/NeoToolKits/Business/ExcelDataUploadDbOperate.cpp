@@ -16,10 +16,16 @@ bool ExcelDataUploadDbOperate::InsertExcelData(const QList<QVector<UploadData>>&
 	return OperateExcelData(UploadOptions::InsertCommand, dataList, stUploadConfig, pstUploadingInfo);
 }
 
-bool ExcelDataUploadDbOperate::UpdateExcelData(const QList<QVector<UploadData>>& dataList,
+bool ExcelDataUploadDbOperate::UpdateExcelData_EmptyFill(const QList<QVector<UploadData>>& dataList,
 	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
 {
-	return OperateExcelData(UploadOptions::UpdateCommand, dataList, stUploadConfig, pstUploadingInfo);
+	return OperateExcelData(UploadOptions::UpdateCommand_EmptyFill, dataList, stUploadConfig, pstUploadingInfo);
+}
+
+bool ExcelDataUploadDbOperate::UpdateExcelData_Rewrite(const QList<QVector<UploadData>>& dataList,
+	const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo)
+{
+	return OperateExcelData(UploadOptions::UpdateCommand_Rewrite, dataList, stUploadConfig, pstUploadingInfo);
 }
 
 bool ExcelDataUploadDbOperate::OperateExcelData(UploadOptions type, const QList<QVector<UploadData>>& dataList,
@@ -33,6 +39,18 @@ bool ExcelDataUploadDbOperate::OperateExcelData(UploadOptions type, const QList<
 	int res = DatabaseInstence->BeginTransaction();
 	int count = 0;
 	int countMax = dataList.count();
+	
+	if (type == UpdateCommand_Rewrite)
+	{
+		//清空一下数据
+		foreach(auto row, dataList)
+		{
+			QString displayText;
+			const QString deleteCommand = GenerateClearDataCommand(m_stSqlInfo.tableName, row, stUploadConfig.strProductionOrderID, displayText);
+			res |= DatabaseInstence->ExcuteCommand(deleteCommand.toLocal8Bit());
+		}
+	}
+
 	foreach(auto row, dataList)
 	{
 		QString command;
@@ -42,7 +60,8 @@ bool ExcelDataUploadDbOperate::OperateExcelData(UploadOptions type, const QList<
 		case InsertCommand:
 			command = GenerateInsertCommand(m_stSqlInfo.tableName, row, stUploadConfig.strProductionOrderID, displayText);
 			break;
-		case UpdateCommand:
+		case UpdateCommand_Rewrite:
+		case UpdateCommand_EmptyFill:
 			command = GenerateUpdateCommand(m_stSqlInfo.tableName, row, stUploadConfig.strProductionOrderID, displayText);
 			break;
 		default:
@@ -128,7 +147,7 @@ QString ExcelDataUploadDbOperate::GenerateInsertCommand(const QString& tableName
 	return command;
 }
 
-QString ExcelDataUploadDbOperate::GenerateUpdateCommand(const QString& tableName, 
+QString ExcelDataUploadDbOperate::GenerateUpdateCommand(const QString& tableName,
 	const QVector<UploadData>& data, 
 	const QString& strProductionOrderID,
 	QString& displayText)
@@ -143,6 +162,38 @@ QString ExcelDataUploadDbOperate::GenerateUpdateCommand(const QString& tableName
 	}
 	strSets = strSets.left(strSets.length() - 1);
 	strCondition += QString("work_order_id=\"%1\"").arg(strProductionOrderID);
+
+	QString command = QString("UPDATE %1 SET %2 WHERE %3 LIMIT 1;")
+		.arg(tableName)
+		.arg(strSets)
+		.arg(strCondition);
+
+	return command;
+}
+
+QString ExcelDataUploadDbOperate::GenerateClearDataCommand(const QString& tableName,
+	const QVector<UploadData>& data,
+	const QString& strProductionOrderID,
+	QString& displayText)
+{
+	QString strSets;
+	QString strCondition;
+	int index = 0;
+	foreach(auto var, data)
+	{
+		strSets += QString("%1=\"\",").arg(var.key);
+
+		strCondition += QString("(%1 IS NOT NULL AND %1<>\"\")").arg(var.key);
+		if (index < data.size() - 1)
+		{
+			strCondition += " OR ";
+		}
+
+		displayText += QString("[%1]<<\"\";").arg(var.key);
+		++index;
+	}
+	strSets = strSets.left(strSets.length() - 1);
+	strCondition += QString("AND work_order_id=\"%1\"").arg(strProductionOrderID);
 
 	QString command = QString("UPDATE %1 SET %2 WHERE %3 LIMIT 1;")
 		.arg(tableName)

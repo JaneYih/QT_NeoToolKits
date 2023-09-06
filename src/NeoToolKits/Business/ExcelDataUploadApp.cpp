@@ -182,11 +182,14 @@ void ExcelDataUploadWorker::DoWork(ExcelDataUploadApp* const& pApp)
 		{
 			db.InsertExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
 		}
-		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand)
+		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand_EmptyFill)
 		{
-			db.UpdateExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
+			db.UpdateExcelData_EmptyFill(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
 		}
-
+		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand_Rewrite)
+		{
+			db.UpdateExcelData_Rewrite(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
+		}
 	}
 	else
 	{

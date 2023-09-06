@@ -26,14 +26,15 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 	enum UploadOptions
 	{
 		InsertCommand = 1,
-		UpdateCommand = 2
+		UpdateCommand_EmptyFill = 2, //填充空的项
+		UpdateCommand_Rewrite = 3, //覆盖原有的项
 	};
 
 	typedef struct _ExcelDataUploadConfig_
 	{
 		void* pApp = nullptr;
 		bool bErrorStop = false;
-		UploadOptions eOpentions = UploadOptions::UpdateCommand;
+		UploadOptions eOpentions = UploadOptions::UpdateCommand_EmptyFill;
 		int iRowCountMax = 0;
 		int iRowCount = 0;
 		int iRowStartRowIndex = 2;

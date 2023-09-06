@@ -14,7 +14,8 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 	public:
 		bool test(QString& strErrMsg);
 		bool InsertExcelData(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
-		bool UpdateExcelData(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
+		bool UpdateExcelData_EmptyFill(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
+		bool UpdateExcelData_Rewrite(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
 
 	private:
 		QString GenerateInsertCommand(const QString& tableName,
@@ -22,6 +23,10 @@ namespace NAMESPACENAME_EXCEL_DATA_UPLOAD
 			const QString& strProductionOrderID,
 			QString& displayText);
 		QString GenerateUpdateCommand(const QString& tableName,
+			const QVector<UploadData>& data,
+			const QString& strProductionOrderID,
+			QString& displayText);
+		QString GenerateClearDataCommand(const QString& tableName,
 			const QVector<UploadData>& data,
 			const QString& strProductionOrderID,
 			QString& displayText);
