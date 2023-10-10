@@ -1,6 +1,32 @@
-// xlsxsharedstrings.cpp
-
-#include <QtGlobal>
+/****************************************************************************
+** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
+** All right reserved.
+**
+** Permission is hereby granted, free of charge, to any person obtaining
+** a copy of this software and associated documentation files (the
+** "Software"), to deal in the Software without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Software, and to
+** permit persons to whom the Software is furnished to do so, subject to
+** the following conditions:
+**
+** The above copyright notice and this permission notice shall be
+** included in all copies or substantial portions of the Software.
+**
+** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+**
+****************************************************************************/
+#include "xlsxrichstring.h"
+#include "xlsxsharedstrings_p.h"
+#include "xlsxutility_p.h"
+#include "xlsxformat_p.h"
+#include "xlsxcolor_p.h"
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QDir>
@@ -8,13 +34,7 @@
 #include <QDebug>
 #include <QBuffer>
 
-#include "xlsxrichstring.h"
-#include "xlsxsharedstrings_p.h"
-#include "xlsxutility_p.h"
-#include "xlsxformat_p.h"
-#include "xlsxcolor_p.h"
-
-QT_BEGIN_NAMESPACE_XLSX
+namespace QXlsx {
 
 /*
  * Note that, when we open an existing .xlsx file (broken file?),
@@ -25,7 +45,7 @@ QT_BEGIN_NAMESPACE_XLSX
  */
 
 SharedStrings::SharedStrings(CreateFlag flag)
-    :AbstractOOXmlFile(flag)
+    : AbstractOOXmlFile(flag)
 {
     m_stringCount = 0;
 }
@@ -49,10 +69,10 @@ int SharedStrings::addSharedString(const RichString &string)
 {
     m_stringCount += 1;
 
-    auto it = m_stringTable.find(string);
-    if (it != m_stringTable.end()) {
-        it->count += 1;
-        return it->index;
+    if (m_stringTable.contains(string)) {
+        XlsxSharedStringInfo &item = m_stringTable[string];
+        item.count += 1;
+        return item.index;
     }
 
     int index = m_stringList.size();
@@ -63,7 +83,7 @@ int SharedStrings::addSharedString(const RichString &string)
 
 void SharedStrings::incRefByStringIndex(int idx)
 {
-    if (idx <0 || idx >= m_stringList.size()) {
+    if (idx < 0 || idx >= m_stringList.size()) {
         qDebug("SharedStrings: invlid index");
         return;
     }
@@ -84,19 +104,19 @@ void SharedStrings::removeSharedString(const QString &string)
  */
 void SharedStrings::removeSharedString(const RichString &string)
 {
-    auto it = m_stringTable.find(string);
-    if (it == m_stringTable.end())
+    if (!m_stringTable.contains(string))
         return;
 
     m_stringCount -= 1;
 
-    it->count -= 1;
+    XlsxSharedStringInfo &item = m_stringTable[string];
+    item.count -= 1;
 
-    if (it->count <= 0) {
-        for (int i=it->index+1; i<m_stringList.size(); ++i)
+    if (item.count <= 0) {
+        for (int i = item.index + 1; i < m_stringList.size(); ++i)
             m_stringTable[m_stringList[i]].index -= 1;
 
-        m_stringList.removeAt(it->index);
+        m_stringList.removeAt(item.index);
         m_stringTable.remove(string);
     }
 }
@@ -108,9 +128,8 @@ int SharedStrings::getSharedStringIndex(const QString &string) const
 
 int SharedStrings::getSharedStringIndex(const RichString &string) const
 {
-    auto it = m_stringTable.constFind(string);
-    if (it != m_stringTable.constEnd())
-        return it->index;
+    if (m_stringTable.contains(string))
+        return m_stringTable[string].index;
     return -1;
 }
 
@@ -145,7 +164,7 @@ void SharedStrings::writeRichStringPart_rPr(QXmlStreamWriter &writer, const Form
         Format::FontUnderline u = format.fontUnderline();
         if (u != Format::FontUnderlineNone) {
             writer.writeEmptyElement(QStringLiteral("u"));
-            if (u== Format::FontUnderlineDouble)
+            if (u == Format::FontUnderlineDouble)
                 writer.writeAttribute(QStringLiteral("val"), QStringLiteral("double"));
             else if (u == Format::FontUnderlineSingleAccounting)
                 writer.writeAttribute(QStringLiteral("val"), QStringLiteral("singleAccounting"));
@@ -180,12 +199,14 @@ void SharedStrings::writeRichStringPart_rPr(QXmlStreamWriter &writer, const Form
     }
     if (format.hasProperty(FormatPrivate::P_Font_Family)) {
         writer.writeEmptyElement(QStringLiteral("family"));
-        writer.writeAttribute(QStringLiteral("val"), QString::number(format.intProperty(FormatPrivate::P_Font_Family)));
+        writer.writeAttribute(QStringLiteral("val"),
+                              QString::number(format.intProperty(FormatPrivate::P_Font_Family)));
     }
 
     if (format.hasProperty(FormatPrivate::P_Font_Scheme)) {
         writer.writeEmptyElement(QStringLiteral("scheme"));
-        writer.writeAttribute(QStringLiteral("val"), format.stringProperty(FormatPrivate::P_Font_Scheme));
+        writer.writeAttribute(QStringLiteral("val"),
+                              format.stringProperty(FormatPrivate::P_Font_Scheme));
     }
 }
 
@@ -194,35 +215,37 @@ void SharedStrings::saveToXmlFile(QIODevice *device) const
     QXmlStreamWriter writer(device);
 
     if (m_stringList.size() != m_stringTable.size()) {
-        //Duplicated string items exist in m_stringList
-        //Clean up can not be done here, as the indices
-        //have been used when we save the worksheets part.
+        // Duplicated string items exist in m_stringList
+        // Clean up can not be done here, as the indices
+        // have been used when we save the worksheets part.
     }
 
     writer.writeStartDocument(QStringLiteral("1.0"), true);
     writer.writeStartElement(QStringLiteral("sst"));
-    writer.writeAttribute(QStringLiteral("xmlns"), QStringLiteral("http://schemas.openxmlformats.org/spreadsheetml/2006/main"));
+    writer.writeAttribute(
+        QStringLiteral("xmlns"),
+        QStringLiteral("http://schemas.openxmlformats.org/spreadsheetml/2006/main"));
     writer.writeAttribute(QStringLiteral("count"), QString::number(m_stringCount));
     writer.writeAttribute(QStringLiteral("uniqueCount"), QString::number(m_stringList.size()));
 
-    for (const RichString &string : m_stringList) {
+    foreach (RichString string, m_stringList) {
         writer.writeStartElement(QStringLiteral("si"));
         if (string.isRichString()) {
-            //Rich text string
-            for (int i=0; i<string.fragmentCount(); ++i) {
+            // Rich text string
+            for (int i = 0; i < string.fragmentCount(); ++i) {
                 writer.writeStartElement(QStringLiteral("r"));
                 if (string.fragmentFormat(i).hasFontData()) {
                     writer.writeStartElement(QStringLiteral("rPr"));
                     writeRichStringPart_rPr(writer, string.fragmentFormat(i));
-                    writer.writeEndElement();// rPr
+                    writer.writeEndElement(); // rPr
                 }
                 writer.writeStartElement(QStringLiteral("t"));
                 if (isSpaceReserveNeeded(string.fragmentText(i)))
                     writer.writeAttribute(QStringLiteral("xml:space"), QStringLiteral("preserve"));
                 writer.writeCharacters(string.fragmentText(i));
-                writer.writeEndElement();// t
+                writer.writeEndElement(); // t
 
-                writer.writeEndElement(); //r
+                writer.writeEndElement(); // r
             }
         } else {
             writer.writeStartElement(QStringLiteral("t"));
@@ -230,12 +253,12 @@ void SharedStrings::saveToXmlFile(QIODevice *device) const
             if (isSpaceReserveNeeded(pString))
                 writer.writeAttribute(QStringLiteral("xml:space"), QStringLiteral("preserve"));
             writer.writeCharacters(pString);
-            writer.writeEndElement();//t
+            writer.writeEndElement(); // t
         }
-        writer.writeEndElement();//si
+        writer.writeEndElement(); // si
     }
 
-    writer.writeEndElement(); //sst
+    writer.writeEndElement(); // sst
     writer.writeEndDocument();
 }
 
@@ -245,7 +268,9 @@ void SharedStrings::readString(QXmlStreamReader &reader)
 
     RichString richString;
 
-    while (!reader.atEnd() && !(reader.name() == QLatin1String("si") && reader.tokenType() == QXmlStreamReader::EndElement)) {
+    while (!reader.atEnd()
+           && !(reader.name() == QLatin1String("si")
+                && reader.tokenType() == QXmlStreamReader::EndElement)) {
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("r"))
@@ -266,7 +291,9 @@ void SharedStrings::readRichStringPart(QXmlStreamReader &reader, RichString &ric
 
     QString text;
     Format format;
-    while (!reader.atEnd() && !(reader.name() == QLatin1String("r") && reader.tokenType() == QXmlStreamReader::EndElement)) {
+    while (!reader.atEnd()
+           && !(reader.name() == QLatin1String("r")
+                && reader.tokenType() == QXmlStreamReader::EndElement)) {
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("rPr")) {
@@ -283,9 +310,8 @@ void SharedStrings::readPlainStringPart(QXmlStreamReader &reader, RichString &ri
 {
     Q_ASSERT(reader.name() == QLatin1String("t"));
 
-    //QXmlStreamAttributes attributes = reader.attributes();
+    // QXmlStreamAttributes attributes = reader.attributes();
 
-	// NOTICE: CHECK POINT
     QString text = reader.readElementText();
     richString.addFragment(text, Format());
 }
@@ -294,16 +320,20 @@ Format SharedStrings::readRichStringPart_rPr(QXmlStreamReader &reader)
 {
     Q_ASSERT(reader.name() == QLatin1String("rPr"));
     Format format;
-    while (!reader.atEnd() && !(reader.name() == QLatin1String("rPr") && reader.tokenType() == QXmlStreamReader::EndElement)) {
+    while (!reader.atEnd()
+           && !(reader.name() == QLatin1String("rPr")
+                && reader.tokenType() == QXmlStreamReader::EndElement)) {
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             QXmlStreamAttributes attributes = reader.attributes();
             if (reader.name() == QLatin1String("rFont")) {
                 format.setFontName(attributes.value(QLatin1String("val")).toString());
             } else if (reader.name() == QLatin1String("charset")) {
-                format.setProperty(FormatPrivate::P_Font_Charset, attributes.value(QLatin1String("val")).toInt());
+                format.setProperty(FormatPrivate::P_Font_Charset,
+                                   attributes.value(QLatin1String("val")).toString().toInt());
             } else if (reader.name() == QLatin1String("family")) {
-                format.setProperty(FormatPrivate::P_Font_Family, attributes.value(QLatin1String("val")).toInt());
+                format.setProperty(FormatPrivate::P_Font_Family,
+                                   attributes.value(QLatin1String("val")).toString().toInt());
             } else if (reader.name() == QLatin1String("b")) {
                 format.setFontBold(true);
             } else if (reader.name() == QLatin1String("i")) {
@@ -315,15 +345,17 @@ Format SharedStrings::readRichStringPart_rPr(QXmlStreamReader &reader)
             } else if (reader.name() == QLatin1String("shadow")) {
                 format.setProperty(FormatPrivate::P_Font_Shadow, true);
             } else if (reader.name() == QLatin1String("condense")) {
-                format.setProperty(FormatPrivate::P_Font_Condense, attributes.value(QLatin1String("val")).toInt());
+                format.setProperty(FormatPrivate::P_Font_Condense,
+                                   attributes.value(QLatin1String("val")).toString().toInt());
             } else if (reader.name() == QLatin1String("extend")) {
-                format.setProperty(FormatPrivate::P_Font_Extend, attributes.value(QLatin1String("val")).toInt());
+                format.setProperty(FormatPrivate::P_Font_Extend,
+                                   attributes.value(QLatin1String("val")).toString().toInt());
             } else if (reader.name() == QLatin1String("color")) {
                 XlsxColor color;
                 color.loadFromXml(reader);
                 format.setProperty(FormatPrivate::P_Font_Color, color);
             } else if (reader.name() == QLatin1String("sz")) {
-                format.setFontSize(attributes.value(QLatin1String("val")).toInt());
+                format.setFontSize(attributes.value(QLatin1String("val")).toString().toInt());
             } else if (reader.name() == QLatin1String("u")) {
                 QString value = attributes.value(QLatin1String("val")).toString();
                 if (value == QLatin1String("double"))
@@ -341,7 +373,8 @@ Format SharedStrings::readRichStringPart_rPr(QXmlStreamReader &reader)
                 else if (value == QLatin1String("subscript"))
                     format.setFontScript(Format::FontScriptSub);
             } else if (reader.name() == QLatin1String("scheme")) {
-                format.setProperty(FormatPrivate::P_Font_Scheme, attributes.value(QLatin1String("val")).toString());
+                format.setProperty(FormatPrivate::P_Font_Scheme,
+                                   attributes.value(QLatin1String("val")).toString());
             }
         }
     }
@@ -352,18 +385,18 @@ bool SharedStrings::loadFromXmlFile(QIODevice *device)
 {
     QXmlStreamReader reader(device);
     int count = 0;
-    bool hasUniqueCountAttr=true;
+    bool hasUniqueCountAttr = true;
     while (!reader.atEnd()) {
-         QXmlStreamReader::TokenType token = reader.readNext();
-         if (token == QXmlStreamReader::StartElement) {
-             if (reader.name() == QLatin1String("sst")) {
-                 QXmlStreamAttributes attributes = reader.attributes();
-                 if ((hasUniqueCountAttr = attributes.hasAttribute(QLatin1String("uniqueCount"))))
-                     count = attributes.value(QLatin1String("uniqueCount")).toInt();
-             } else if (reader.name() == QLatin1String("si")) {
-                 readString(reader);
-             }
-         }
+        QXmlStreamReader::TokenType token = reader.readNext();
+        if (token == QXmlStreamReader::StartElement) {
+            if (reader.name() == QLatin1String("sst")) {
+                QXmlStreamAttributes attributes = reader.attributes();
+                if ((hasUniqueCountAttr = attributes.hasAttribute(QLatin1String("uniqueCount"))))
+                    count = attributes.value(QLatin1String("uniqueCount")).toString().toInt();
+            } else if (reader.name() == QLatin1String("si")) {
+                readString(reader);
+            }
+        }
     }
 
     if (hasUniqueCountAttr && m_stringList.size() != count) {
@@ -372,11 +405,11 @@ bool SharedStrings::loadFromXmlFile(QIODevice *device)
     }
 
     if (m_stringList.size() != m_stringTable.size()) {
-        //qDebug("Warning: Duplicated items exist in shared string table.");
-        //Nothing we can do here, as indices of the strings will be used when loading sheets.
+        // qDebug("Warning: Duplicated items exist in shared string table.");
+        // Nothing we can do here, as indices of the strings will be used when loading sheets.
     }
 
     return true;
 }
 
-QT_END_NAMESPACE_XLSX
+} // namespace

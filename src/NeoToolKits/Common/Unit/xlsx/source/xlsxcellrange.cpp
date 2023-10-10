@@ -1,12 +1,32 @@
-// xlsxcellrange.cpp
-
-#include <QtGlobal>
+/****************************************************************************
+** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
+** All right reserved.
+**
+** Permission is hereby granted, free of charge, to any person obtaining
+** a copy of this software and associated documentation files (the
+** "Software"), to deal in the Software without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Software, and to
+** permit persons to whom the Software is furnished to do so, subject to
+** the following conditions:
+**
+** The above copyright notice and this permission notice shall be
+** included in all copies or substantial portions of the Software.
+**
+** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+**
+****************************************************************************/
+#include "xlsxcellrange.h"
+#include "xlsxcellreference.h"
 #include <QString>
 #include <QPoint>
 #include <QStringList>
-
-#include "xlsxcellrange.h"
-#include "xlsxcellreference.h"
 
 QT_BEGIN_NAMESPACE_XLSX
 
@@ -24,7 +44,10 @@ QT_BEGIN_NAMESPACE_XLSX
     whose rowCount() and columnCount() are 0.
 */
 CellRange::CellRange()
-    : top(-1), left(-1), bottom(-2), right(-2)
+    : top(-1)
+    , left(-1)
+    , bottom(-2)
+    , right(-2)
 {
 }
 
@@ -35,13 +58,18 @@ CellRange::CellRange()
     \sa topRow(), leftColumn(), bottomRow(), rightColumn()
 */
 CellRange::CellRange(int top, int left, int bottom, int right)
-    : top(top), left(left), bottom(bottom), right(right)
+    : top(top)
+    , left(left)
+    , bottom(bottom)
+    , right(right)
 {
 }
 
 CellRange::CellRange(const CellReference &topLeft, const CellReference &bottomRight)
-    : top(topLeft.row()), left(topLeft.column())
-    , bottom(bottomRight.row()), right(bottomRight.column())
+    : top(topLeft.row())
+    , left(topLeft.column())
+    , bottom(bottomRight.row())
+    , right(bottomRight.column())
 {
 }
 
@@ -87,7 +115,10 @@ void CellRange::init(const QString &range)
     other range.
 */
 CellRange::CellRange(const CellRange &other)
-    : top(other.top), left(other.left), bottom(other.bottom), right(other.right)
+    : top(other.top)
+    , left(other.left)
+    , bottom(other.bottom)
+    , right(other.right)
 {
 }
 
@@ -107,7 +138,7 @@ QString CellRange::toString(bool row_abs, bool col_abs) const
         return QString();
 
     if (left == right && top == bottom) {
-        //Single cell
+        // Single cell
         return CellReference(top, left).toString(row_abs, col_abs);
     }
 

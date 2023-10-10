@@ -246,18 +246,18 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 			TestItem curTestItem;
 
 			Cell* cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemCode);
-			QString strCurCode(cell->readValue().toString());
+			QString strCurCode(cell->value().toString());
 			curTestItem.setCode(strCurCode);
 
 			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemName);
-			QString strCurName(cell->readValue().toString());
+			QString strCurName(cell->value().toString());
 			curTestItem.setName(strCurName);
 
 			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemATCommand);
-			curTestItem.setATComand(cell->readValue().toString());
+			curTestItem.setATComand(cell->value().toString());
 
 			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemRemark);
-			curTestItem.setRemark(cell->readValue().toString());
+			curTestItem.setRemark(cell->value().toString());
 
 			if (m_mapTestItemDictionary.find(strCurCode) == m_mapTestItemDictionary.end())
 			{

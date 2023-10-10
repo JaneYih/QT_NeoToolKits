@@ -153,7 +153,7 @@ void ExcelDataUploadApp::PackingUploadDataList(QList<QVector<UploadData>>& dataL
 					Cell* cell = xlsx.cellAt(row, var.ExcelColumnIndex);
 					if (cell != NULL)
 					{
-						rowData.push_back(UploadData(var.DbFieldName, cell->readValue().toString()));
+						rowData.push_back(UploadData(var.DbFieldName, cell->value().toString()));
 					}
 					else
 					{

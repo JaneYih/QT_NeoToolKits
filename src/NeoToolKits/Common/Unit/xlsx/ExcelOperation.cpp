@@ -33,7 +33,7 @@ QStringList ExcelOperation::LoadExcelColumns(const QString& fileName)
 			Cell* cell = xlsx.cellAt(1, col);
 			if (cell != NULL)
 			{
-				QVariant var = cell->readValue();
+				QVariant var = cell->value();
 				strOutList.push_back(var.toString());
 			}
 		}
@@ -44,7 +44,7 @@ QStringList ExcelOperation::LoadExcelColumns(const QString& fileName)
 
 CellRange ExcelOperation::OpenExcelSheet(const QXlsx::Document& xlsx, int index)
 {
-	if (xlsx.load())
+	//if (xlsx.load())
 	{
 		QXlsx::Workbook* workBook = xlsx.workbook();
 		if (workBook)
@@ -56,10 +56,10 @@ CellRange ExcelOperation::OpenExcelSheet(const QXlsx::Document& xlsx, int index)
 			}
 		}
 	}
-	else
-	{
-		//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
-	}
+	//else
+	//{
+	//	//	QMessageBox::critical(nullptr, "error", "excel open fail:" + fileName);
+	//}
 	return CellRange();
 }
 
