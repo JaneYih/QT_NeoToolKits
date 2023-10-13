@@ -111,11 +111,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Business\DatabaseDataExportApp.cpp" />
+    <ClCompile Include="Business\DatabaseDataExportDbOperate.cpp" />
     <ClCompile Include="Business\DbScriptEditorApp.cpp" />
     <ClCompile Include="Business\DbScriptEditor_def.cpp" />
     <ClCompile Include="Business\DbScriptOperate.cpp" />
     <ClCompile Include="Business\ExcelDataUploadApp.cpp" />
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
+    <ClCompile Include="Common\iconhelper.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
     <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp" />
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp" />
@@ -123,6 +126,9 @@
     <ClCompile Include="Common\Unit\DataBase\SQLiteDatabase.cpp" />
     <ClCompile Include="Common\Unit\DataBase\usersDataTable.cpp" />
     <ClCompile Include="Common\Unit\xlsx\ExcelOperation.cpp" />
+    <ClCompile Include="UI\Class\DatabaseDataExportDelegate.cpp" />
+    <ClCompile Include="UI\Class\DatabaseDataExportModel.cpp" />
+    <ClCompile Include="UI\Class\DatabaseDataExportPageForm.cpp" />
     <ClCompile Include="UI\Class\DbScriptDataModel.cpp" />
     <ClCompile Include="UI\Class\DBScriptDataTableView.cpp" />
     <ClCompile Include="UI\Class\DbScriptEditorPageForm.cpp" />
@@ -135,9 +141,9 @@
     <ClCompile Include="UI\Class\ExcelDataUploadPageForm.cpp" />
     <ClCompile Include="UI\Class\MainWindowDialog.cpp" />
     <ClCompile Include="UI\Class\MysqlInfoPopDialog.cpp" />
-    <QtRcc Include="MainWindowDialog.qrc" />
     <ClCompile Include="main.cpp" />
     <None Include="NeoToolKits.ico" />
+    <QtUic Include="UI\Form\DatabaseDataExportPageForm.ui" />
     <QtUic Include="UI\Form\DbScriptEditorPageForm.ui" />
     <QtUic Include="UI\Form\DBScriptTestItemsEditorPopDialog.ui" />
     <QtUic Include="UI\Form\ExcelDataUploadConfigPopDialog.ui" />
@@ -156,6 +162,9 @@
     <QtMoc Include="UI\Class\MainWindowDialog.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="UI\Class\DatabaseDataExportDelegate.h" />
+    <QtMoc Include="UI\Class\DatabaseDataExportModel.h" />
+    <QtMoc Include="UI\Class\DatabaseDataExportPageForm.h" />
     <QtMoc Include="UI\Class\DBScriptTestItemsDelegate.h" />
     <QtMoc Include="UI\Class\DBScriptTestItemsModel.h" />
     <QtMoc Include="UI\Class\DBScriptTestItemsEditorPopDialog.h" />
@@ -166,9 +175,13 @@
     <QtMoc Include="Business\ExcelDataUploadApp.h" />
     <QtMoc Include="Business\DbScriptEditorApp.h" />
     <QtMoc Include="Business\DbScriptEditor_def.h" />
+    <QtMoc Include="Business\DatabaseDataExportApp.h" />
+    <ClInclude Include="Business\DatabaseDataExportDbOperate.h" />
+    <ClInclude Include="Business\DatabaseDataExport_def.h" />
     <ClInclude Include="Business\DbScriptOperate.h" />
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
     <ClInclude Include="Business\ExcelDataUpload_def.h" />
+    <QtMoc Include="Common\iconhelper.h" />
     <ClInclude Include="Common\IniOperation.h" />
     <ClInclude Include="Common\Type\common_def.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />
@@ -180,6 +193,9 @@
     <ClInclude Include="Common\Unit\DataBase\usersDataTable.h" />
     <QtMoc Include="Common\Unit\xlsx\ExcelOperation.h" />
     <QtMoc Include="Common\Unit\DataBase\SQLiteDatabase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="MainWindowDialog.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

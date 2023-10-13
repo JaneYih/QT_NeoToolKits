@@ -57,6 +57,7 @@
     </property>
     <addaction name="actionDbScriptEditor"/>
     <addaction name="actionExcelDataUpload"/>
+    <addaction name="actionDatabaseDataExport"/>
    </widget>
    <addaction name="menuSetting"/>
    <addaction name="menuTools"/>
@@ -88,13 +89,14 @@
    </attribute>
    <addaction name="actionDbScriptEditor"/>
    <addaction name="actionExcelDataUpload"/>
+   <addaction name="actionDatabaseDataExport"/>
   </widget>
   <action name="actionDbScriptEditor">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../../MainWindowDialog.qrc">
      <normaloff>:/MainWindowDialog/rc/2.png</normaloff>:/MainWindowDialog/rc/2.png</iconset>
    </property>
    <property name="text">
@@ -109,7 +111,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="../../MainWindowDialog.qrc">
      <normaloff>:/MainWindowDialog/rc/1.ico</normaloff>:/MainWindowDialog/rc/1.ico</iconset>
    </property>
    <property name="text">
@@ -119,10 +121,28 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
+  <action name="actionDatabaseDataExport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../../MainWindowDialog.qrc">
+     <normaloff>:/MainWindowDialog/rc/3.png</normaloff>:/MainWindowDialog/rc/3.png</iconset>
+   </property>
+   <property name="text">
+    <string>数据库数据导出工具</string>
+   </property>
+   <property name="toolTip">
+    <string>数据库数据导出工具</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="MainWindowDialog.qrc"/>
+  <include location="../../MainWindowDialog.qrc"/>
  </resources>
  <connections/>
 </ui>

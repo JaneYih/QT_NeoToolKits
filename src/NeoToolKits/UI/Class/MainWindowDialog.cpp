@@ -9,12 +9,18 @@ MainWindowDialog::MainWindowDialog(QWidget *parent)
     : QMainWindow(parent),
     ui(new Ui::MainWindowDialogClass),
     m_pDbScriptEditPage(new NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorPageForm(this)),
-    m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm(this))
+    m_pExcelDataUploadPage(new NAMESPACENAME_EXCEL_DATA_UPLOAD::ExcelDataUploadPageForm(this)),
+	m_pDatabaseDataExport(new NAMESPACENAME_DATABASE_DATA_EXPORT::DatabaseDataExportPageForm(this))
 {
+	Q_ASSERT(m_pDbScriptEditPage);
+	Q_ASSERT(m_pExcelDataUploadPage);
+	Q_ASSERT(m_pDatabaseDataExport);
+
 	ui->setupUi(this);
     initView();
 	connect(ui->actionDbScriptEditor, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
 	connect(ui->actionExcelDataUpload, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
+	connect(ui->actionDatabaseDataExport, &QAction::toggled, this, &MainWindowDialog::PageChangeActionToggledSlot);
 	ui->actionDbScriptEditor->setChecked(true);
 }
 
@@ -30,7 +36,8 @@ void MainWindowDialog::initView(void)
 	m_mapToolsPageDictionary[ui->actionDbScriptEditor] = m_pDbScriptEditPage;
     ui->stackedWidget->addWidget(m_pExcelDataUploadPage);
 	m_mapToolsPageDictionary[ui->actionExcelDataUpload] = m_pExcelDataUploadPage;
-
+	ui->stackedWidget->addWidget(m_pDatabaseDataExport);
+	m_mapToolsPageDictionary[ui->actionDatabaseDataExport] = m_pDatabaseDataExport;
 	//setAcceptDrops(true);
 }
 

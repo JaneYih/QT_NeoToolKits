@@ -103,11 +103,29 @@
     <Filter Include="Tools\ExcelDataUpload\UI\Class\Model">
       <UniqueIdentifier>{d643c8d9-654b-4f48-a7d8-424f54681e09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\DatabaseDataExport">
+      <UniqueIdentifier>{8daa849d-0923-449c-a653-ab95b1b54e1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\Business">
+      <UniqueIdentifier>{3562aee3-7f50-49d3-aa6c-981a6ec7eae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\UI">
+      <UniqueIdentifier>{6b42aff4-7665-4d8d-b596-c0cc32552b42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\UI\Class">
+      <UniqueIdentifier>{344b1724-6ab2-453b-a617-f323a9dd6c16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\UI\Class\Delegat">
+      <UniqueIdentifier>{4713169e-7922-4811-8ba4-7cfdfdc4dae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\UI\Class\Model">
+      <UniqueIdentifier>{879477f6-0816-4861-911e-631157904beb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\DatabaseDataExport\UI\Form">
+      <UniqueIdentifier>{9ae90b77-aa13-405b-b854-de73207e631b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="MainWindowDialog.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
     <None Include="NeoToolKits.ico">
       <Filter>Resource Files</Filter>
     </None>
@@ -191,6 +209,27 @@
     <ClCompile Include="UI\Class\DBScriptTestItemsDelegate.cpp">
       <Filter>Tools\DbScriptEditor\UI\Class\Delegat</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Class\DatabaseDataExportPageForm.cpp">
+      <Filter>Tools\DatabaseDataExport\UI\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Class\DatabaseDataExportPageForm.cpp">
+      <Filter>Tools\DatabaseDataExport\UI\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Class\DatabaseDataExportModel.cpp">
+      <Filter>Tools\DatabaseDataExport\UI\Class\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Business\DatabaseDataExportApp.cpp">
+      <Filter>Tools\DatabaseDataExport\Business</Filter>
+    </ClCompile>
+    <ClCompile Include="Business\DatabaseDataExportDbOperate.cpp">
+      <Filter>Tools\DatabaseDataExport\Business</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\iconhelper.cpp">
+      <Filter>Common\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Class\DatabaseDataExportDelegate.cpp">
+      <Filter>Tools\DatabaseDataExport\UI\Class\Delegat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -244,6 +283,21 @@
     <QtMoc Include="UI\Class\DBScriptTestItemsDelegate.h">
       <Filter>Tools\DbScriptEditor\UI\Class\Delegat</Filter>
     </QtMoc>
+    <QtMoc Include="UI\Class\DatabaseDataExportPageForm.h">
+      <Filter>Tools\DatabaseDataExport\UI\Class</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Class\DatabaseDataExportModel.h">
+      <Filter>Tools\DatabaseDataExport\UI\Class\Model</Filter>
+    </QtMoc>
+    <QtMoc Include="Business\DatabaseDataExportApp.h">
+      <Filter>Tools\DatabaseDataExport\Business</Filter>
+    </QtMoc>
+    <QtMoc Include="Common\iconhelper.h">
+      <Filter>Common\Unit</Filter>
+    </QtMoc>
+    <QtMoc Include="UI\Class\DatabaseDataExportDelegate.h">
+      <Filter>Tools\DatabaseDataExport\UI\Class\Delegat</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="UI\Form\ExcelDataUploadConfigPopDialog.ui">
@@ -263,6 +317,9 @@
     </QtUic>
     <QtUic Include="UI\Form\DBScriptTestItemsEditorPopDialog.ui">
       <Filter>Tools\DbScriptEditor\UI\Form</Filter>
+    </QtUic>
+    <QtUic Include="UI\Form\DatabaseDataExportPageForm.ui">
+      <Filter>Tools\DatabaseDataExport\UI\Form</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
@@ -302,5 +359,16 @@
     <ClInclude Include="Business\DbScriptOperate.h">
       <Filter>Tools\DbScriptEditor\Business</Filter>
     </ClInclude>
+    <ClInclude Include="Business\DatabaseDataExport_def.h">
+      <Filter>Tools\DatabaseDataExport\Business</Filter>
+    </ClInclude>
+    <ClInclude Include="Business\DatabaseDataExportDbOperate.h">
+      <Filter>Tools\DatabaseDataExport\Business</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="MainWindowDialog.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>
