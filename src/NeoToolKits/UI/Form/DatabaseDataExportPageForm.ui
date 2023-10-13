@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_WorkOrder"/>
+      <widget class="QLineEdit" name="lineEdit_WorkOrderID"/>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -61,7 +61,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit__BoxNumberEnd"/>
+      <widget class="QLineEdit" name="lineEdit_BoxNumberEnd"/>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">

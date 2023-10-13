@@ -14,3 +14,22 @@ typedef struct _ExportDataUnit_
 		bExport(false)
 	{}
 }ExportDataUnit, * pExportDataUnit;
+
+typedef struct _DatabaseDataIndexCondition_ 
+{
+	QString workOrderID; //工单号
+	QString BoxNumberStart; //起始箱号
+	QString BoxNumberEnd;//末尾箱号
+	void clear()
+	{
+		workOrderID = "";
+		BoxNumberStart = "";
+		BoxNumberEnd = "";
+	}
+}DatabaseDataIndexCondition, * pDatabaseDataIndexCondition;
+
+typedef struct _ExportConfig_
+{
+	DatabaseDataIndexCondition dataIndexCondition;  //数据索引条件
+	QList<ExportDataUnit> exportFields; //导出数据字段
+}ExportConfig, * pExportConfig;

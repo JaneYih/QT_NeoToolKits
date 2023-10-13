@@ -170,7 +170,7 @@ bool DatabaseDataExportModel::setData(const QModelIndex& index, const QVariant& 
 						&& i != row
 						&& strValue != "")
 					{
-						QMessageBox::warning(nullptr, "warning", QString::fromStdWString(L"%1已经被其他项(%2)选择使用，禁止重复选择！").arg(strValue).arg(m_stData[i].ExcelTitle));
+						QMessageBox::warning(nullptr, "warning", QString::fromStdWString(L"%1已经被其他项(%2)使用，禁止Excel标题重复！").arg(strValue).arg(m_stData[i].DbKey));
 						return false;
 					}
 				}

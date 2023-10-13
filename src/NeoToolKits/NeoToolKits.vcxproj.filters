@@ -230,6 +230,9 @@
     <ClCompile Include="UI\Class\DatabaseDataExportDelegate.cpp">
       <Filter>Tools\DatabaseDataExport\UI\Class\Delegat</Filter>
     </ClCompile>
+    <ClCompile Include="Common\msgbox.cpp">
+      <Filter>Common\Unit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="UI\Class\ExcelDataUploadConfigPopDialog.h">
@@ -297,6 +300,9 @@
     </QtMoc>
     <QtMoc Include="UI\Class\DatabaseDataExportDelegate.h">
       <Filter>Tools\DatabaseDataExport\UI\Class\Delegat</Filter>
+    </QtMoc>
+    <QtMoc Include="Common\msgbox.h">
+      <Filter>Common\Unit</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

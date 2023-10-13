@@ -120,6 +120,7 @@
     <ClCompile Include="Business\ExcelDataUploadDbOperate.cpp" />
     <ClCompile Include="Common\iconhelper.cpp" />
     <ClCompile Include="Common\IniOperation.cpp" />
+    <ClCompile Include="Common\msgbox.cpp" />
     <ClCompile Include="Common\Unit\DataBase\DataTableTest.cpp" />
     <ClCompile Include="Common\Unit\DataBase\ITableManage.cpp" />
     <ClCompile Include="Common\Unit\DataBase\MysqlDatabase.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Business\ExcelDataUpload_def.h" />
     <QtMoc Include="Common\iconhelper.h" />
     <ClInclude Include="Common\IniOperation.h" />
+    <QtMoc Include="Common\msgbox.h" />
     <ClInclude Include="Common\Type\common_def.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseBaseClass.h" />
     <ClInclude Include="Common\Unit\DataBase\DatabaseFactory.h" />

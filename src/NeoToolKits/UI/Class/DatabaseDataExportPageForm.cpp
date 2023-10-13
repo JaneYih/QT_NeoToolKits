@@ -4,6 +4,8 @@
 #include "DatabaseDataExportApp.h"
 #include "DatabaseDataExportDelegate.h"
 #include "DatabaseDataExportDbOperate.h"
+#include <QMessageBox>
+#include <QDebug>
 
 using namespace NAMESPACENAME_DATABASE_DATA_EXPORT;
 
@@ -96,6 +98,17 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 	}
 	else if (curBtn == ui->btn_Export)
 	{
+		ExportConfig exportCfg;
+		exportCfg.dataIndexCondition.workOrderID = ui->lineEdit_WorkOrderID->text();
+		exportCfg.dataIndexCondition.BoxNumberStart = ui->lineEdit_BoxNumberStart->text();
+		exportCfg.dataIndexCondition.BoxNumberEnd = ui->lineEdit_BoxNumberEnd->text();
+		for each (auto var in m_pDataModel->getData())
+		{
+			if (var.bExport)
+			{
+				exportCfg.exportFields.push_back(var);
+			}
+		}
 
 	}
 }
