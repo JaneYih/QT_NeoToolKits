@@ -13,25 +13,11 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 
 	public:
 		bool test(QString& strErrMsg);
-		//bool InsertExcelData(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
-		//bool UpdateExcelData_EmptyFill(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
-		//bool UpdateExcelData_Rewrite(const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
+		bool QueryDataByIndexCondition(const ExportConfig& queryCfg, DataTable& outputData, QString& strErrorMsg);
 
 	private:
-		//QString GenerateInsertCommand(const QString& tableName,
-		//	const QVector<UploadData>& data,
-		//	const QString& strProductionOrderID,
-		//	QString& displayText);
-		//QString GenerateUpdateCommand(const QString& tableName,
-		//	const QVector<UploadData>& data,
-		//	const QString& strProductionOrderID,
-		//	QString& displayText);
-		//QString GenerateClearDataCommand(const QString& tableName,
-		//	const QVector<UploadData>& data,
-		//	const QString& strProductionOrderID,
-		//	QString& displayText);
-
-		//bool OperateExcelData(UploadOptions type, const QList<QVector<UploadData>>& dataList, const ExcelDataUploadConfig& stUploadConfig, pUploadingInfo pstUploadingInfo);
+		QString CreateSelectDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
+		bool ExcuteDataSelectCommand(const QString& cmd, DataTable& outputData, QString& strErrorMsg);
 
 	private:
 		SqlTableInfo m_stSqlInfo;
