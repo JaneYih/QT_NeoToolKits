@@ -1,73 +1,65 @@
 #pragma once
 
-#include <QObject>
+#include <QWidget>
 #include "Database_def.h"
 #include "DatabaseDataExport_def.h"
+#include "DatabaseDataExportDbOperate.h"
+
 
 class QThread;
 class IniOperation;
+class QProgressDialog;
 
 namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 {
-	class DatabaseDataExportApp : public QObject
+	class DatabaseDataExportWorker;
+
+	class DatabaseDataExportApp : public QWidget
 	{
 		Q_OBJECT
 
 	public:
-		DatabaseDataExportApp(QObject* parent);
+		DatabaseDataExportApp(QWidget* parent);
 		~DatabaseDataExportApp();
 
-		//bool StartUpload();
-		//void PackingUploadDataList(QList<QVector<UploadData>>& dataList);
-
-		//QStringList LoadExcelColumns(const QString& fileName);
-		//int LoadExcelRowCount() {
-		//	return LoadExcelRowCount(m_strExcelFileName);
-		//}
-
-		//QString getExcelFileName() const;
-		//void setExcelFileName(const QString& filename);
+		bool StartExport(const ExportConfig& cfg);
 
 		QString getIniFileName() const;
 		QString getIniSqlCfgPrefix() const;
-
-		//void setDataMap(const QVector<ExcelDataUploadInfo>& dataMap);
-		//const QVector<ExcelDataUploadInfo> getDataMap() const;
-
-		//void setUploadConfig(const ExcelDataUploadConfig& stUploadConfig);
-		//const ExcelDataUploadConfig getUploadConfig() const;
-
-		//bool getUploading() const;
-		//void setUploading(bool bUploading);
-
 		SqlTableInfo* getSqlTableInfoPointer() const;
-		//UploadingInfo* getUploadingInfoPointer() const;
+		ExportConfig getExportConfig() const;
 
-	private:
-		//int LoadExcelRowCount(const QString& fileName);
-
+	public:
+		QProgressDialog* m_progressDialog;
+		
 	private:
 		QString m_strIniFileName;
 		IniOperation* m_pCfg;
-		//QString m_strExcelFileName;
 
+		ExportConfig m_exportConfig;
 		SqlTableInfo m_stTableInfo; //数据库配置信息
-		//QVector<ExcelDataUploadInfo> m_vecDataMap; //Excel信息与数据库字段关系表
-		//ExcelDataUploadConfig m_stUploadConfig; //上传配置信息
-
-		//QThread* m_pUploadWorkerThread; //上传工作线程
-		//UploadingInfo* m_pstUploadingInfo; //上传的运行时信息
+		QThread* m_pWorkerThread; //工作线程
+		DatabaseDataExportWorker* m_pWorker;
 
 	Q_SIGNALS:
-		/*void toUploadWork(DatabaseDataExportApp* const& pApp);
-		void toDisplayItem(const QString& text, int count, int countMax);
-		void toDisplayFinish();*/
+		void toWork(DatabaseDataExportApp* const& pApp);
+		void toExportFinish(bool result, const QString& errorMsg);
 	};
 
 	class DatabaseDataExportWorker : public QObject
 	{
 		Q_OBJECT
+
+	Q_SIGNALS:
+		void setRange(int minimum, int maximum);
+		void setValue(int progress);
+		void setLabelText(const QString& text);
+
 	public slots:
-		//void DoWork(DatabaseDataExportApp* const& pApp);
+		void DoWork(DatabaseDataExportApp* const& pApp);
+
+	private:
+		bool SaveAsExcelSheet(const ExportConfig& queryCfg, const DataTable& data,
+			QProgressDialog* progressDialog, QString& strErrorMsg);
 	};
 };

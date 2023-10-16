@@ -69,7 +69,14 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 		selectKeys += var.DbKey;
 		selectKeys += ",";
 	}
-	selectKeys.mid(selectKeys.length() - 1);
+	if (selectKeys.isEmpty())
+	{
+		selectKeys = "*";
+	}
+	else
+	{
+		selectKeys = selectKeys.mid(0, selectKeys.length() - 1);
+	}
 
 	QString selectSqlHead = QString("SELECT %1 FROM %2 ").arg(selectKeys, m_stSqlInfo.tableName);
 	QString selectSql = QString("%1 WHERE ").arg(selectSqlHead);
@@ -84,7 +91,7 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 		if (BoxNumberEnd.isEmpty())
 		{
 			selectSql += bFirstCondition ? "" : "AND ";
-			selectSql += QString("package_no == \"%1\" ").arg(BoxNumberStart); //ÏäºÅ×Ö¶ÎÃû³Æ
+			selectSql += QString("package_no = \"%1\" ").arg(BoxNumberStart); //ÏäºÅ×Ö¶ÎÃû³Æ
 		}
 		else
 		{
@@ -103,7 +110,7 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 					break;
 				}
 			}
-			QString strBoxNumberHead = BoxNumberStart.mid(0, indexDiff+1);
+			QString strBoxNumberHead = BoxNumberStart.mid(0, indexDiff);
 			QString strStartNum = BoxNumberStart.mid(indexDiff);
 			QString strEndNum = BoxNumberEnd.mid(indexDiff);
 			bool isNum = false;
@@ -119,8 +126,8 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 				strErrorMsg = QString::fromStdWString(L"Ä©Î²ÏäºÅÁ÷Ë®ºÅÒì³££¡");
 				return false;
 			}
-			int BoxNumberCount = iEndNum - iStartNum; //ÏäºÅ¸öÊý
-			if (BoxNumberCount < 0)
+			int BoxNumberCount = iEndNum - iStartNum + 1; //ÏäºÅ¸öÊý
+			if (BoxNumberCount <= 0)
 			{
 				strErrorMsg = QString::fromStdWString(L"Òì³££ºÆðÊ¼ÏäºÅÁ÷Ë®ºÅ > Ä©Î²ÏäºÅÁ÷Ë®ºÅ£¡");
 				return false;
@@ -133,8 +140,8 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 				{
 					selectSql += "(";
 				}
-				QString strCurBoxNumber = QString("%1%2").arg(strBoxNumberHead).arg(iStartNum+i);
-				selectSql += QString("package_no == \"%1\" ").arg(strCurBoxNumber);
+				QString strCurBoxNumber = QString("%1%2").arg(strBoxNumberHead).arg(iStartNum+i, strEndNum.length(), 10, QLatin1Char('0'));
+				selectSql += QString("package_no = \"%1\" ").arg(strCurBoxNumber);
 				if (i == BoxNumberCount-1)
 				{
 					selectSql += ") ";
@@ -162,7 +169,7 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 		return false;
 	}
 
-	if (!BoxNumberStart.isEmpty())
+	if (!BoxNumberStart.isEmpty() && selectKeys.contains("package_no"))
 	{
 		selectSql += QString("ORDER BY package_no ASC "); //¸ù¾ÝÏäºÅÉýÐòÅÅÐò
 	}

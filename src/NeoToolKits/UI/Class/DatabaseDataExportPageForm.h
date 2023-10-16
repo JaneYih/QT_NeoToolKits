@@ -27,6 +27,7 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
+		void onExportFinish(bool result, const QString& errorMsg);
 
 	private:
 		void initView(void);

@@ -6,6 +6,10 @@
 #include "DatabaseDataExportDbOperate.h"
 #include <QMessageBox>
 #include <QDebug>
+#include <QFileDialog>
+#include <QDateTime>
+#include <QProgressDialog>
+#include "msgbox.h"
 
 using namespace NAMESPACENAME_DATABASE_DATA_EXPORT;
 
@@ -22,6 +26,7 @@ DatabaseDataExportPageForm::DatabaseDataExportPageForm(QWidget *parent)
 	Q_ASSERT(m_pDataDelegate);
 	ui->setupUi(this);
 	initView();
+	connect(m_pApp, &DatabaseDataExportApp::toExportFinish, this, &DatabaseDataExportPageForm::onExportFinish);
 	connect(ui->btn_SetDbInfo, &QPushButton::clicked, this, &DatabaseDataExportPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_Export, &QPushButton::clicked, this, &DatabaseDataExportPageForm::PushbuttonClickedSlot);
 }
@@ -46,6 +51,11 @@ void DatabaseDataExportPageForm::showEvent(QShowEvent* event)
 
 		EditTableViewByDbConnect();  //加载数据库的字段信息
 	
+		ExportConfig exportConfig = m_pApp->getExportConfig();
+		ui->lineEdit_WorkOrderID->setText(exportConfig.dataIndexCondition.workOrderID);
+		ui->lineEdit_BoxNumberStart->setText(exportConfig.dataIndexCondition.BoxNumberStart);
+		ui->lineEdit_BoxNumberEnd->setText(exportConfig.dataIndexCondition.BoxNumberEnd);
+
 		ui->tableView->setModel(m_pDataModel);
 		ui->tableView->setItemDelegateForColumn(m_pDataDelegate->GetDelegateColumnIndex(), m_pDataDelegate);
 		ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
@@ -109,6 +119,31 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 				exportCfg.exportFields.push_back(var);
 			}
 		}
-
+		QString excelFileName = QFileDialog::getSaveFileName(this,
+			QString::fromStdWString(L"保存文件"),
+			QString("%1/data_%2").arg(QDir::homePath()).arg(QDateTime::currentDateTime().toString("yyyyMMdd_hh_mm_ss")),
+			"Excel File(*.xlsx)");
+		if (!excelFileName.isEmpty())
+		{
+			exportCfg.excelName = excelFileName;
+			ui->btn_Export->setEnabled(false);
+			m_pApp->StartExport(exportCfg);
+		}
 	}
+}
+
+void DatabaseDataExportPageForm::onExportFinish(bool result, const QString& errorMsg)
+{
+	m_pApp->m_progressDialog->close();
+	delete m_pApp->m_progressDialog;
+	m_pApp->m_progressDialog = nullptr;
+	if (result)
+	{
+		msgBox::show("Tip", QString::fromStdWString(L"导出成功！！"), msgBox::msgBoxType::information);
+	}
+	else
+	{
+		msgBox::show("error", QString::fromStdWString(L"导出失败：%1").arg(errorMsg), msgBox::msgBoxType::critical);
+	}
+	ui->btn_Export->setEnabled(true);
 }

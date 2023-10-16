@@ -4,60 +4,47 @@
 #include "IniOperation.h"
 #include "ExcelOperation.h"
 #include <QThread>
+#include <QProgressDialog>
 #include <QtXlsx>
 using namespace QXlsx;
 
 using namespace NAMESPACENAME_DATABASE_DATA_EXPORT;
 
 //ini prefixs
-const QString s_ini_prefix_excel = "Excel";
 const QString s_ini_prefix_sql = QString::fromStdWString(L"MySQL配置");
+const QString s_ini_prefix_queryCondition = QString::fromStdWString(L"查询条件");
 
 //ini keys
-//const QString s_ini_key_excelFile = "ExcelFlie";
+const QString s_ini_key_workOrderID = QString::fromStdWString(L"工单号");
+const QString s_ini_key_boxNumStart = QString::fromStdWString(L"起始箱号");
+const QString s_ini_key_boxNumEnd = QString::fromStdWString(L"末尾箱号");
 
-DatabaseDataExportApp::DatabaseDataExportApp(QObject* parent)
-	: QObject(parent),
-	m_strIniFileName(QCoreApplication::applicationDirPath() + "/DatabaseDataExportTool.ini"),
-	m_pCfg(new IniOperation(m_strIniFileName))//,
-	//m_strExcelFileName(m_pCfg->ReadValue(s_ini_prefix_excel, s_ini_key_excelFile, "").toString()),
-	//m_pstUploadingInfo(new UploadingInfo())
+DatabaseDataExportApp::DatabaseDataExportApp(QWidget* parent)
+	: QWidget(parent)
+	, m_strIniFileName(QCoreApplication::applicationDirPath() + "/DatabaseDataExportTool.ini")
+	, m_pCfg(new IniOperation(m_strIniFileName))
 {
-	//Q_ASSERT(m_pstUploadingInfo);
-	//m_pUploadWorkerThread = new QThread();
-	//ExcelDataUploadWorker* uploadWorkerWorker = new ExcelDataUploadWorker();
-	//uploadWorkerWorker->moveToThread(m_pUploadWorkerThread);
-	//connect(this, &DatabaseDataExportApp::toUploadWork, uploadWorkerWorker, &ExcelDataUploadWorker::DoWork);
-	//m_pUploadWorkerThread->start();
+	m_exportConfig.dataIndexCondition.workOrderID = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_workOrderID, "").toString();
+	m_exportConfig.dataIndexCondition.BoxNumberStart = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_boxNumStart, "").toString();
+	m_exportConfig.dataIndexCondition.BoxNumberEnd = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_boxNumEnd, "").toString();
+
+	m_pWorkerThread = new QThread();
+	m_pWorker = new DatabaseDataExportWorker();
+	m_pWorker->moveToThread(m_pWorkerThread);
+	connect(this, &DatabaseDataExportApp::toWork, m_pWorker, &DatabaseDataExportWorker::DoWork);
+	m_pWorkerThread->start();
 }
 
 DatabaseDataExportApp::~DatabaseDataExportApp()
 {
-	//delete m_pstUploadingInfo;
 	delete m_pCfg;
 }
 
-//void DatabaseDataExportApp::setDataMap(const QVector<ExcelDataUploadInfo>& dataMap)
-//{
-//	m_vecDataMap = dataMap;
-//}
-//
-//const QVector<ExcelDataUploadInfo> DatabaseDataExportApp::getDataMap() const
-//{
-//	return m_vecDataMap;
-//}
-//
-//void DatabaseDataExportApp::setExcelFileName(const QString& filename)
-//{
-//	m_strExcelFileName = filename;
-//	m_pCfg->WriteValue(s_ini_prefix_excel, s_ini_key_excelFile, filename);
-//}
-//
-//QString DatabaseDataExportApp::getExcelFileName() const
-//{
-//	return m_strExcelFileName;
-//}
-//
+ExportConfig DatabaseDataExportApp::getExportConfig() const
+{
+	return m_exportConfig;
+}
+
 QString DatabaseDataExportApp::getIniFileName() const
 {
 	return m_strIniFileName;
@@ -73,82 +60,146 @@ SqlTableInfo* DatabaseDataExportApp::getSqlTableInfoPointer() const
 	return (SqlTableInfo*)(&m_stTableInfo);
 }
 
-//void DatabaseDataExportApp::setUploadConfig(const ExcelDataUploadConfig& stUploadConfig)
-//{
-//	m_stUploadConfig = stUploadConfig;
-//}
-//
-//const ExcelDataUploadConfig DatabaseDataExportApp::getUploadConfig() const
-//{
-//	return m_stUploadConfig;
-//}
-//
-//bool DatabaseDataExportApp::getUploading() const 
-//{
-//	return m_pstUploadingInfo->bUploading;
-//};
-//
-//void DatabaseDataExportApp::setUploading(bool bUploading)
-//{
-//	m_pstUploadingInfo->bUploading = bUploading;
-//};
-//
-//UploadingInfo* DatabaseDataExportApp::getUploadingInfoPointer() const
-//{
-//	return m_pstUploadingInfo;
-//}
-//
-//QStringList DatabaseDataExportApp::LoadExcelColumns(const QString& fileName)
-//{
-//	return ExcelOperation::LoadExcelColumns(fileName);
-//}
-//
-//int DatabaseDataExportApp::LoadExcelRowCount(const QString& fileName)
-//{
-//	return ExcelOperation::LoadExcelRowCount(fileName);
-//}
-//
-//bool DatabaseDataExportApp::StartUpload()
-//{
-//	m_pstUploadingInfo->clear();
-//	emit toUploadWork(this);
-//	return true;
-//}
-//
-//
-//void ExcelDataUploadWorker::DoWork(DatabaseDataExportApp* const& pApp)
-//{
-//	pApp->setUploading(true);
-//
-//	emit pApp->toDisplayItem(QString::fromStdWString(L"正在玩命加载Excel内容,请耐心等候...."), 0, 0);
-//	QList<QVector<UploadData>> dataList;
-//	pApp->PackingUploadDataList(dataList);
-//	emit pApp->toDisplayItem(QString::fromStdWString(L"Excel内容加载完毕。"), 0, dataList.count());
-//
-//	if (dataList.count() == pApp->getUploadConfig().iRowCount)
-//	{
-//		ExcelDataUploadDbOperate db(*(pApp->getSqlTableInfoPointer()));
-//		if (pApp->getUploadConfig().eOpentions == UploadOptions::InsertCommand)
-//		{
-//			db.InsertExcelData(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
-//		}
-//		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand_EmptyFill)
-//		{
-//			db.UpdateExcelData_EmptyFill(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
-//		}
-//		else if (pApp->getUploadConfig().eOpentions == UploadOptions::UpdateCommand_Rewrite)
-//		{
-//			db.UpdateExcelData_Rewrite(dataList, pApp->getUploadConfig(), pApp->getUploadingInfoPointer());
-//		}
-//	}
-//	else
-//	{
-//		emit pApp->toDisplayItem(QString::fromStdWString(L"整理的数据数量(%1)与期望(%2)不一致")
-//								.arg(dataList.count()).arg(pApp->getUploadConfig().iRowCount), 
-//								0, dataList.count());
-//	}
-//
-//	pApp->setUploading(false);
-//	emit pApp->toDisplayFinish();
-//}
-//
+bool DatabaseDataExportApp::StartExport(const ExportConfig& cfg)
+{
+	m_progressDialog = new QProgressDialog(this);
+	m_progressDialog->setWindowTitle(QString::fromStdWString(L"导出数据"));
+	m_progressDialog->setWindowModality(Qt::WindowModal);
+	m_progressDialog->setLabelText(QString::fromStdWString(L"正在查询数据..."));
+	m_progressDialog->setRange(0, 1);
+	m_progressDialog->show();
+	QCoreApplication::processEvents();
+
+	connect(m_pWorker, &DatabaseDataExportWorker::setRange, m_progressDialog, &QProgressDialog::setRange);
+	connect(m_pWorker, &DatabaseDataExportWorker::setValue, m_progressDialog, &QProgressDialog::setValue);
+	connect(m_pWorker, &DatabaseDataExportWorker::setLabelText, m_progressDialog, &QProgressDialog::setLabelText);
+
+	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_workOrderID, cfg.dataIndexCondition.workOrderID);
+	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_boxNumStart, cfg.dataIndexCondition.BoxNumberStart);
+	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_boxNumEnd, cfg.dataIndexCondition.BoxNumberEnd);
+	m_exportConfig = cfg;
+	emit toWork(this);
+	return true;
+}
+
+#pragma region DatabaseDataExportWorker
+void DatabaseDataExportWorker::DoWork(DatabaseDataExportApp* const& pApp)
+{
+	bool bExportSucceed = false;
+	QString strErrorMsg;
+	do
+	{
+		DatabaseDataExportDbOperate db(*(pApp->getSqlTableInfoPointer()));
+		DataTable outputData;
+		if (!db.QueryDataByIndexCondition(pApp->getExportConfig(), outputData, strErrorMsg))
+		{
+			break;
+		}
+		emit setValue(1);
+		emit setLabelText(QString::fromStdWString(L"正在生成Excel..."));
+		emit setRange(0, outputData.RowList.size());
+		if (!SaveAsExcelSheet(pApp->getExportConfig(), outputData, pApp->m_progressDialog, strErrorMsg))
+		{
+			break;
+		}
+		bExportSucceed = true;
+	} while (false);
+
+	emit pApp->toExportFinish(bExportSucceed, strErrorMsg);
+}
+
+bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, const DataTable& data,
+	QProgressDialog* progressDialog, QString& strErrorMsg)
+{
+	if (data.RowList.size() <= 0)
+	{
+		strErrorMsg = QString::fromStdWString(L"查询数据为空，无法导出数据！");
+		return false;
+	}
+
+	QMap<QString, QString> dbKeyExcelTitleMap;
+	for each (auto var in queryCfg.exportFields)
+	{
+		dbKeyExcelTitleMap[var.DbKey] = var.ExcelTitle;
+	}
+
+	QXlsx::Document xlsx;
+	QXlsx::Format format1;
+	format1.setFontBold(true);
+	format1.setFontColor(QColor(Qt::black));
+	format1.setBorderStyle(Format::BorderThin);
+	format1.setFontSize(12);
+	format1.setVerticalAlignment(Format::AlignVCenter);
+	format1.setHorizontalAlignment(Format::AlignHCenter);
+
+	//标题
+	int ColumnsIndex = 1;
+	int rowIndex = 1;
+	for each (auto var in data.FieldName.FieldListValue)
+	{
+		QString dbKey = QString::fromStdString(var);
+		QString strText(dbKey);
+		if (dbKeyExcelTitleMap.find(dbKey) != dbKeyExcelTitleMap.end())
+		{
+			strText = dbKeyExcelTitleMap[dbKey];
+		}
+		if (!strText.isEmpty())
+		{
+			xlsx.setColumnWidth(ColumnsIndex, strText.length() + 5);
+		}
+		if (!xlsx.write(rowIndex, ColumnsIndex, strText, format1))
+		{
+			strErrorMsg = QString::fromStdWString(L"<%1行,%2列>标题写入失败").arg(rowIndex).arg(ColumnsIndex);
+			return false;
+		}
+		ColumnsIndex++;
+	}
+	xlsx.setRowHeight(rowIndex, 25);
+
+	//内容
+	format1.setFontBold(false);
+	format1.setFontColor(QColor(Qt::black));
+	rowIndex = 2;
+	for each (auto row in data.RowList)
+	{
+		ColumnsIndex = 1;
+		for each (auto var in row.FieldListValue)
+		{
+			QString strText = QString::fromStdString(var);
+			if (!strText.isEmpty())
+			{
+				int newColumnWidth = strText.length() + 5;
+				int oldColumnWidth = xlsx.columnWidth(ColumnsIndex);
+				if (newColumnWidth > oldColumnWidth)
+				{
+					xlsx.setColumnWidth(ColumnsIndex, newColumnWidth);
+				}
+			}
+			if (!xlsx.write(rowIndex, ColumnsIndex, strText, format1))
+			{
+				strErrorMsg = QString::fromStdWString(L"<%1行,%2列>内容写入失败").arg(rowIndex).arg(ColumnsIndex);
+				return false;
+			}
+			ColumnsIndex++;
+		}
+
+		emit setValue(rowIndex);
+
+		xlsx.setRowHeight(rowIndex, 22);
+		rowIndex++;
+
+		if (progressDialog->wasCanceled())
+		{
+			strErrorMsg = QString::fromStdWString(L"用户取消操作。");
+			return false;
+		}
+	}
+
+	if (!xlsx.saveAs(queryCfg.excelName))
+	{
+		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(queryCfg.excelName);
+		return false;
+	}
+	return true;
+}
+#pragma endregion DatabaseDataExportWorker

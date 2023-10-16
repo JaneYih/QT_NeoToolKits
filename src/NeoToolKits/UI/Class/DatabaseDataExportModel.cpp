@@ -148,6 +148,14 @@ QVariant DatabaseDataExportModel::data(const QModelIndex& index, int role) const
 					return m_stData[row].bExport;
 				}
 			}*/
+			else if (role == Qt::BackgroundRole)
+			{
+				if (m_stData[row].bExport)
+				{
+					return QColor(243, 245, 152);//»Æ
+				}
+				return QColor(Qt::white);
+			}
 		}
 	}
 	return QVariant();
@@ -180,6 +188,7 @@ bool DatabaseDataExportModel::setData(const QModelIndex& index, const QVariant& 
 			else if (index.column() == 0)
 			{
 				m_stData[row].bExport = value.toBool();
+				emit dataChanged(index, createIndex(row, columnCount()));
 				return true;
 			}
 		}

@@ -30,6 +30,7 @@ typedef struct _DatabaseDataIndexCondition_
 
 typedef struct _ExportConfig_
 {
+	QString excelName;
 	DatabaseDataIndexCondition dataIndexCondition;  //数据索引条件
 	QList<ExportDataUnit> exportFields; //导出数据字段
 }ExportConfig, * pExportConfig;
