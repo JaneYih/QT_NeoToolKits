@@ -61,7 +61,7 @@ void DatabaseDataExportPageForm::showEvent(QShowEvent* event)
 		ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 		ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter);
 		ui->tableView->horizontalHeader()->setStretchLastSection(true);
-		ui->tableView->setAlternatingRowColors(true);
+		//ui->tableView->setAlternatingRowColors(true);
 		ui->tableView->show();
 
 		m_bFirstShowData = false;
