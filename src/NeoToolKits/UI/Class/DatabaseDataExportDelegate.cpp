@@ -60,13 +60,13 @@ void DatabaseDataExportDelegate::setModelData(QWidget* editor,
 	QStyledItemDelegate::setModelData(editor, model, index);
 }
 
-void DatabaseDataExportDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option,
-	const QModelIndex& index) const
-{
-	Q_UNUSED(index)
-	editor->setGeometry(option.rect);
-	//QStyledItemDelegate::updateEditorGeometry(editor, option, index);
-}
+//void DatabaseDataExportDelegate::updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option,
+//	const QModelIndex& index) const
+//{
+//	Q_UNUSED(index)
+//	editor->setGeometry(option.rect);
+//	//QStyledItemDelegate::updateEditorGeometry(editor, option, index);
+//}
 
 QSize DatabaseDataExportDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
@@ -78,12 +78,22 @@ void DatabaseDataExportDelegate::paint(QPainter* painter, const QStyleOptionView
 	if (index.isValid() && index.column() == s_DelegateColumnIndex)
 	{
 		ExportDataUnit* pData = static_cast<ExportDataUnit*>(index.internalPointer());
-		painter->setPen(QColor("#00aaff"));
+		
+		QPen pen;
+		pen.setBrush(Qt::transparent);
+		painter->setPen(pen);
+		QBrush barBackgroundBrush;
+		barBackgroundBrush.setStyle(Qt::SolidPattern);
+		barBackgroundBrush.setColor(pData->bExport ? QColor(243, 245, 152) : QColor(Qt::white));
+		painter->setBrush(barBackgroundBrush);
+		painter->drawRect(option.rect);
+		
 		QFont font = IconHelper::Instance()->GetIconFont();
-		font.setPointSize(option.font.pointSize() * 2);
+		font.setPointSize(option.font.pointSize() * 2.5);
 		painter->setFont(font);
+		painter->setPen(QColor("#00aaff"));
 		painter->setBrush(option.backgroundBrush);
-		painter->drawText(option.rect, Qt::AlignLeft, pData->bExport ? QChar(0xf205) : QChar(0xf204));
+		painter->drawText(option.rect, Qt::AlignCenter, pData->bExport ? QChar(0xf205) : QChar(0xf204));
 		return;
 	}
 	return QStyledItemDelegate::paint(painter, option, index);

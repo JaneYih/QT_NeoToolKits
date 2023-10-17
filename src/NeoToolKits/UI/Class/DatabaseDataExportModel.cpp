@@ -154,7 +154,10 @@ QVariant DatabaseDataExportModel::data(const QModelIndex& index, int role) const
 				{
 					return QColor(243, 245, 152);//»Æ
 				}
-				return QColor(Qt::white);
+				else
+				{
+					return QColor(Qt::white);
+				}
 			}
 		}
 	}

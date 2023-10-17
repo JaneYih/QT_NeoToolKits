@@ -27,9 +27,9 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 		virtual void setModelData(QWidget* editor,
 									QAbstractItemModel* model,
 									const QModelIndex& index) const override;
-		void updateEditorGeometry(QWidget* editor,
+		/*void updateEditorGeometry(QWidget* editor,
 			const QStyleOptionViewItem& option,
-			const QModelIndex& index) const override;
+			const QModelIndex& index) const override;*/
 
 		int GetDelegateColumnIndex() const;
 
