@@ -106,8 +106,16 @@ bool DatabaseDataExportDelegate::editorEvent(QEvent* event, QAbstractItemModel* 
 	{
 		ExportDataUnit* pData = static_cast<ExportDataUnit*>(index.internalPointer());
 		QEvent::Type eEventType = event->type();
-		if (eEventType == QEvent::MouseButtonPress)
+		qDebug() << index  << ": " << eEventType << endl;
+		static QModelIndex lastIndex;
+		if (eEventType == QEvent::MouseButtonPress
+			|| (eEventType == QEvent::MouseMove && lastIndex != index))
 		{
+			if (eEventType == QEvent::MouseMove && lastIndex.isValid())//鼠标左键按下拖滑开关
+			{
+				model->setData(lastIndex, !pData->bExport);
+			}
+			lastIndex = index;
 			model->setData(index, !pData->bExport);
 			return true;
 		}
