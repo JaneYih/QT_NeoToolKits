@@ -15,7 +15,7 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 		~DatabaseDataExportModel();
 
 	public:
-		void initData(const QStringList& exportDataColumns);
+		//void initData(const QStringList& exportDataColumns);
 		void setData(const QVector<ExportDataUnit>& data);
 		QVector<ExportDataUnit> getData() const;
 

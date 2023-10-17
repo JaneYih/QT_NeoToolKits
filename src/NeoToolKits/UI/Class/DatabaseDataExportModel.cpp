@@ -14,16 +14,16 @@ DatabaseDataExportModel::~DatabaseDataExportModel()
 
 }
 
-void DatabaseDataExportModel::initData(const QStringList& exportDataColumns)
-{
-	QVector<ExportDataUnit> data;
-	int index = 0;
-	foreach (QString var, exportDataColumns)
-	{
-		data.append(ExportDataUnit(var, var));
-	}
-	setData(data);
-}
+//void DatabaseDataExportModel::initData(const QStringList& exportDataColumns)
+//{
+//	QVector<ExportDataUnit> data;
+//	int index = 0;
+//	foreach (QString var, exportDataColumns)
+//	{
+//		data.append(ExportDataUnit(var, var));
+//	}
+//	setData(data);
+//}
 
 void DatabaseDataExportModel::setData(const QVector<ExportDataUnit>& data)
 {

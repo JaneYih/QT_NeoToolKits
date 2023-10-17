@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include <QProgressDialog>
 #include "msgbox.h"
+#include "IniOperation.h"
 
 using namespace NAMESPACENAME_DATABASE_DATA_EXPORT;
 
@@ -76,12 +77,26 @@ void DatabaseDataExportPageForm::EditTableViewByDbConnect()
 	FieldList fields;
 	if (db.GetTableFullFields(m_pApp->getSqlTableInfoPointer()->tableName.toUtf8(), fields))
 	{
-		QStringList options;
+		QVector<ExportDataUnit> options;
+		IniOperation ini(m_pApp->getIniFileName());
 		for each (auto var in fields.FieldListValue)
 		{
-			options.push_back(QString::fromStdString(var));
+			QString dbKey = QString::fromStdString(var);
+			QString excelTitle = dbKey;
+			bool onOff = false;
+			QString optionInfo = ini.ReadValue(m_pApp->getSqlTableInfoPointer()->tableName, dbKey, "").toString();
+			if (!optionInfo.isEmpty() && optionInfo.contains(','))
+			{
+				auto infos = optionInfo.split(',');
+				if (infos.size() >= 2)
+				{
+					onOff = QVariant(infos[0]).toBool();
+					excelTitle = infos[1];
+				}
+			}
+			options.push_back(ExportDataUnit(dbKey, excelTitle, onOff));
 		}
-		m_pDataModel->initData(options);
+		m_pDataModel->setData(options);
 		ui->lineEdit_DbInfo->setStyleSheet("background-color: rgb(0, 255, 0);");
 	}
 	else
@@ -112,8 +127,10 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 		exportCfg.dataIndexCondition.workOrderID = ui->lineEdit_WorkOrderID->text();
 		exportCfg.dataIndexCondition.BoxNumberStart = ui->lineEdit_BoxNumberStart->text();
 		exportCfg.dataIndexCondition.BoxNumberEnd = ui->lineEdit_BoxNumberEnd->text();
+		IniOperation ini(m_pApp->getIniFileName());
 		for each (auto var in m_pDataModel->getData())
 		{
+			ini.WriteValue(m_pApp->getSqlTableInfoPointer()->tableName, var.DbKey, QString("%1,%2").arg(var.bExport).arg(var.ExcelTitle));
 			if (var.bExport)
 			{
 				exportCfg.exportFields.push_back(var);
