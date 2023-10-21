@@ -66,13 +66,13 @@ bool DatabaseDataExportApp::StartExport(const ExportConfig& cfg)
 	m_progressDialog->setWindowTitle(QString::fromStdWString(L"导出数据"));
 	m_progressDialog->setWindowModality(Qt::WindowModal);
 	m_progressDialog->setLabelText(QString::fromStdWString(L"正在查询数据..."));
-	m_progressDialog->setRange(0, 1);
+	m_progressDialog->setAutoClose(true);
 	m_progressDialog->show();
 	QCoreApplication::processEvents();
 
-	connect(m_pWorker, &DatabaseDataExportWorker::setRange, m_progressDialog, &QProgressDialog::setRange);
-	connect(m_pWorker, &DatabaseDataExportWorker::setValue, m_progressDialog, &QProgressDialog::setValue);
-	connect(m_pWorker, &DatabaseDataExportWorker::setLabelText, m_progressDialog, &QProgressDialog::setLabelText);
+	connect(m_pWorker, &DatabaseDataExportWorker::toSetRange, m_progressDialog, &QProgressDialog::setRange);
+	connect(m_pWorker, &DatabaseDataExportWorker::toSetValue, m_progressDialog, &QProgressDialog::setValue);
+	connect(m_pWorker, &DatabaseDataExportWorker::toSetLabelText, m_progressDialog, &QProgressDialog::setLabelText);
 
 	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_workOrderID, cfg.dataIndexCondition.workOrderID);
 	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_boxNumStart, cfg.dataIndexCondition.BoxNumberStart);
@@ -95,9 +95,8 @@ void DatabaseDataExportWorker::DoWork(DatabaseDataExportApp* const& pApp)
 		{
 			break;
 		}
-		emit setValue(1);
-		emit setLabelText(QString::fromStdWString(L"正在生成Excel..."));
-		emit setRange(0, outputData.RowList.size());
+		emit toSetLabelText(QString::fromStdWString(L"正在生成Excel..."));
+		emit toSetRange(1, outputData.RowList.size()+2);
 		if (!SaveAsExcelSheet(pApp->getExportConfig(), outputData, pApp->m_progressDialog, strErrorMsg))
 		{
 			break;
@@ -155,6 +154,8 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 		ColumnsIndex++;
 	}
 	xlsx.setRowHeight(rowIndex, 25);
+	int ProgressValue = 1;
+	emit toSetValue(ProgressValue++);
 
 	//内容
 	format1.setFontBold(false);
@@ -183,11 +184,9 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 			ColumnsIndex++;
 		}
 
-		emit setValue(rowIndex);
-
 		xlsx.setRowHeight(rowIndex, 22);
 		rowIndex++;
-
+		emit toSetValue(ProgressValue++);
 		if (progressDialog->wasCanceled())
 		{
 			strErrorMsg = QString::fromStdWString(L"用户取消操作。");
@@ -200,6 +199,7 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(queryCfg.excelName);
 		return false;
 	}
+	emit toSetValue(ProgressValue++);
 	return true;
 }
 #pragma endregion DatabaseDataExportWorker

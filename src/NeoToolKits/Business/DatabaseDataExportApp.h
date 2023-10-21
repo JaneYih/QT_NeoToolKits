@@ -51,9 +51,9 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 		Q_OBJECT
 
 	Q_SIGNALS:
-		void setRange(int minimum, int maximum);
-		void setValue(int progress);
-		void setLabelText(const QString& text);
+		void toSetRange(int minimum, int maximum);
+		void toSetValue(int progress);
+		void toSetLabelText(const QString& text);
 
 	public slots:
 		void DoWork(DatabaseDataExportApp* const& pApp);
