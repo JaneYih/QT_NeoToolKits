@@ -101,13 +101,13 @@
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -183,6 +183,7 @@
     <ClInclude Include="Business\ExcelDataUploadDbOperate.h" />
     <ClInclude Include="Business\ExcelDataUpload_def.h" />
     <QtMoc Include="Common\iconhelper.h" />
+    <ClInclude Include="Common\DumpFile.h" />
     <ClInclude Include="Common\IniOperation.h" />
     <QtMoc Include="Common\msgbox.h" />
     <ClInclude Include="Common\Type\common_def.h" />

@@ -165,14 +165,16 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 
 	if (bFirstCondition)
 	{
-		strErrorMsg = QString::fromStdWString(L"查询条件不能为空");
-		return false;
+		//strErrorMsg = QString::fromStdWString(L"查询条件不能为空");
+		//return false;
+		selectSql = QString("%1 LIMIT 5 ").arg(selectSqlHead);
 	}
 
 	if (!BoxNumberStart.isEmpty() && selectKeys.contains("package_no"))
 	{
 		selectSql += QString("ORDER BY package_no ASC "); //根据箱号升序排序
 	}
+
 
 	return ExcuteDataSelectCommand(selectSql, outputData, strErrorMsg);
 }

@@ -1,10 +1,13 @@
 #include "MainWindowDialog.h"
 #include <QtWidgets/QApplication>
 #include <QMessageBox>
+#include "DumpFile.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    DeclareDumpFile();
+
     MainWindowDialog w;
     w.show();
     if (argc == 2)

@@ -151,6 +151,7 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 
 void DatabaseDataExportPageForm::onExportFinish(bool result, const QString& errorMsg)
 {
+	m_pApp->m_progressDialog->close();
 	if (result)
 	{
 		msgBox::show("Tip", QString::fromStdWString(L"导出成功！！"), msgBox::msgBoxType::information);

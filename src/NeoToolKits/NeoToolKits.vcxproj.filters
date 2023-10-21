@@ -371,6 +371,9 @@
     <ClInclude Include="Business\DatabaseDataExportDbOperate.h">
       <Filter>Tools\DatabaseDataExport\Business</Filter>
     </ClInclude>
+    <ClInclude Include="Common\DumpFile.h">
+      <Filter>Common\Unit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainWindowDialog.qrc">
