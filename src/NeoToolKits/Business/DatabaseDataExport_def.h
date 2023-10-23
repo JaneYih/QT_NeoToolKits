@@ -20,11 +20,15 @@ typedef struct _DatabaseDataIndexCondition_
 	QString workOrderID; //¹¤µ¥ºÅ
 	QString BoxNumberStart; //ÆðÊ¼ÏäºÅ
 	QString BoxNumberEnd;//Ä©Î²ÏäºÅ
+	QString TrayNoStart; //ÆðÊ¼ÍÐÅÌºÅ
+	QString TrayNoEnd;//Ä©Î²ÍÐÅÌºÅ
 	void clear()
 	{
 		workOrderID = "";
 		BoxNumberStart = "";
 		BoxNumberEnd = "";
+		TrayNoStart = "";
+		TrayNoEnd = "";
 	}
 }DatabaseDataIndexCondition, * pDatabaseDataIndexCondition;
 

@@ -18,6 +18,8 @@ const QString s_ini_prefix_queryCondition = QString::fromStdWString(L"²éÑ¯Ìõ¼þ")
 const QString s_ini_key_workOrderID = QString::fromStdWString(L"¹¤µ¥ºÅ");
 const QString s_ini_key_boxNumStart = QString::fromStdWString(L"ÆðÊ¼ÏäºÅ");
 const QString s_ini_key_boxNumEnd = QString::fromStdWString(L"Ä©Î²ÏäºÅ");
+const QString s_ini_key_trayNoStart = QString::fromStdWString(L"ÆðÊ¼ÍÐÅÌºÅ");
+const QString s_ini_key_trayNoEnd = QString::fromStdWString(L"Ä©Î²ÍÐÅÌºÅ");
 
 DatabaseDataExportApp::DatabaseDataExportApp(QWidget* parent)
 	: QWidget(parent)
@@ -27,6 +29,8 @@ DatabaseDataExportApp::DatabaseDataExportApp(QWidget* parent)
 	m_exportConfig.dataIndexCondition.workOrderID = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_workOrderID, "").toString();
 	m_exportConfig.dataIndexCondition.BoxNumberStart = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_boxNumStart, "").toString();
 	m_exportConfig.dataIndexCondition.BoxNumberEnd = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_boxNumEnd, "").toString();
+	m_exportConfig.dataIndexCondition.TrayNoStart = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_trayNoStart, "").toString();
+	m_exportConfig.dataIndexCondition.TrayNoEnd = m_pCfg->ReadValue(s_ini_prefix_queryCondition, s_ini_key_trayNoEnd, "").toString();
 
 	m_pWorkerThread = new QThread();
 	m_pWorker = new DatabaseDataExportWorker();
@@ -77,6 +81,8 @@ bool DatabaseDataExportApp::StartExport(const ExportConfig& cfg)
 	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_workOrderID, cfg.dataIndexCondition.workOrderID);
 	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_boxNumStart, cfg.dataIndexCondition.BoxNumberStart);
 	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_boxNumEnd, cfg.dataIndexCondition.BoxNumberEnd);
+	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_trayNoStart, cfg.dataIndexCondition.TrayNoStart);
+	m_pCfg->WriteValue(s_ini_prefix_queryCondition, s_ini_key_trayNoEnd, cfg.dataIndexCondition.TrayNoEnd);
 	m_exportConfig = cfg;
 	emit toWork(this);
 	return true;

@@ -18,6 +18,10 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 	private:
 		QString CreateSelectDataCommand(const DbFieldGroup& fields, const DbFieldGroup& values);
 		bool ExcuteDataSelectCommand(const QString& cmd, DataTable& outputData, QString& strErrorMsg);
+		bool packageSqlBySerialNumberCondition(QString& selectSql, bool& bFirstCondition,
+			const QString& name, const QString& dbKey,
+			const QString& startNum, const QString& endNum,
+			QString& strErrorMsg);
 
 	private:
 		SqlTableInfo m_stSqlInfo;

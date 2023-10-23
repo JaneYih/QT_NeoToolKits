@@ -88,71 +88,25 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 	QString BoxNumberEnd(queryCfg.dataIndexCondition.BoxNumberEnd);
 	if (!BoxNumberStart.isEmpty())
 	{
-		if (BoxNumberEnd.isEmpty())
+		if (!packageSqlBySerialNumberCondition(selectSql, bFirstCondition,
+			QString::fromStdWString(L"箱号"), "package_no",
+			BoxNumberStart, BoxNumberEnd, strErrorMsg))
 		{
-			selectSql += bFirstCondition ? "" : "AND ";
-			selectSql += QString("package_no = \"%1\" ").arg(BoxNumberStart); //箱号字段名称
+			return false;
 		}
-		else
-		{
-			if (BoxNumberStart.length() > BoxNumberEnd.length())
-			{
-				strErrorMsg = QString::fromStdWString(L"末尾箱号长度小于起始箱号长度");
-				return false;
-			}
-			auto BoxNumberEndArry = BoxNumberEnd.toLocal8Bit();
-			auto BoxNumberStartArry = BoxNumberStart.toLocal8Bit();
-			size_t indexDiff = 0;
-			for (; indexDiff < BoxNumberStartArry.size(); indexDiff++)
-			{
-				if (BoxNumberStartArry[indexDiff] != BoxNumberEndArry[indexDiff])
-				{
-					break;
-				}
-			}
-			QString strBoxNumberHead = BoxNumberStart.mid(0, indexDiff);
-			QString strStartNum = BoxNumberStart.mid(indexDiff);
-			QString strEndNum = BoxNumberEnd.mid(indexDiff);
-			bool isNum = false;
-			int iStartNum = strStartNum.toInt(&isNum);
-			if (!isNum)
-			{
-				strErrorMsg = QString::fromStdWString(L"起始箱号流水号异常！");
-				return false;
-			}
-			int iEndNum = strEndNum.toInt(&isNum);
-			if (!isNum)
-			{
-				strErrorMsg = QString::fromStdWString(L"末尾箱号流水号异常！");
-				return false;
-			}
-			int BoxNumberCount = iEndNum - iStartNum + 1; //箱号个数
-			if (BoxNumberCount <= 0)
-			{
-				strErrorMsg = QString::fromStdWString(L"异常：起始箱号流水号 > 末尾箱号流水号！");
-				return false;
-			}
+	}
 
-			selectSql += bFirstCondition ? "" : "AND ";
-			for (size_t i = 0; i < BoxNumberCount; i++)
-			{
-				if (i == 0)
-				{
-					selectSql += "(";
-				}
-				QString strCurBoxNumber = QString("%1%2").arg(strBoxNumberHead).arg(iStartNum+i, strEndNum.length(), 10, QLatin1Char('0'));
-				selectSql += QString("package_no = \"%1\" ").arg(strCurBoxNumber);
-				if (i == BoxNumberCount-1)
-				{
-					selectSql += ") ";
-				}
-				else
-				{
-					selectSql += "OR ";
-				}
-			}
+	//通过托盘号范围搜索数据
+	QString TrayNoStart(queryCfg.dataIndexCondition.TrayNoStart);
+	QString TrayNoEnd(queryCfg.dataIndexCondition.TrayNoEnd);
+	if (!TrayNoStart.isEmpty())
+	{
+		if (!packageSqlBySerialNumberCondition(selectSql, bFirstCondition,
+			QString::fromStdWString(L"托盘号"), "tray_no",
+			TrayNoStart, TrayNoEnd, strErrorMsg))
+		{
+			return false;
 		}
-		bFirstCondition = false;
 	}
 
 	//通过工单号搜索数据
@@ -174,11 +128,94 @@ bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& 
 	{
 		selectSql += QString("ORDER BY package_no ASC "); //根据箱号升序排序
 	}
-
+	if (!TrayNoStart.isEmpty() && selectKeys.contains("tray_no"))
+	{
+		//根据托盘号升序排序
+		if (selectSql.contains("ORDER BY"))
+		{
+			selectSql += QString(", tray_no ASC ");
+		}
+		else
+		{
+			selectSql += QString("ORDER BY tray_no ASC "); 
+		}
+	}
 
 	return ExcuteDataSelectCommand(selectSql, outputData, strErrorMsg);
 }
 
+
+bool DatabaseDataExportDbOperate::packageSqlBySerialNumberCondition(QString& selectSql, bool& bFirstCondition,
+	const QString& name, const QString& dbKey,
+	const QString& startNum, const QString& endNum,
+	QString& strErrorMsg)
+{
+	if (endNum.isEmpty() || startNum == endNum)
+	{
+		selectSql += bFirstCondition ? "" : "AND ";
+		selectSql += QString("%1 = \"%2\" ").arg(dbKey).arg(startNum); //字段名称
+	}
+	else
+	{
+		if (startNum.length() > endNum.length())
+		{
+			strErrorMsg = QString::fromStdWString(L"末尾%1长度小于起始%1长度").arg(name);
+			return false;
+		}
+		auto EndArry = endNum.toLocal8Bit();
+		auto StartArry = startNum.toLocal8Bit();
+		size_t indexDiff = 0;
+		for (; indexDiff < StartArry.size(); indexDiff++)
+		{
+			if (StartArry[indexDiff] != EndArry[indexDiff])
+			{
+				break;
+			}
+		}
+		QString strNumberHead = startNum.mid(0, indexDiff);
+		QString strStartNum = startNum.mid(indexDiff);
+		QString strEndNum = endNum.mid(indexDiff);
+		bool isNum = false;
+		int iStartNum = strStartNum.toInt(&isNum);
+		if (!isNum)
+		{
+			strErrorMsg = QString::fromStdWString(L"起始%1流水号异常！").arg(name);
+			return false;
+		}
+		int iEndNum = strEndNum.toInt(&isNum);
+		if (!isNum)
+		{
+			strErrorMsg = QString::fromStdWString(L"末尾%1流水号异常！").arg(name);
+			return false;
+		}
+		int NumberCount = iEndNum - iStartNum + 1; //个数
+		if (NumberCount <= 0)
+		{
+			strErrorMsg = QString::fromStdWString(L"异常：起始%1流水号 > 末尾%1流水号！").arg(name);
+			return false;
+		}
+
+		selectSql += bFirstCondition ? "" : "AND ";
+		for (size_t i = 0; i < NumberCount; i++)
+		{
+			if (i == 0)
+			{
+				selectSql += "(";
+			}
+			QString strCurNumber = QString("%1%2").arg(strNumberHead).arg(iStartNum + i, strEndNum.length(), 10, QLatin1Char('0'));
+			selectSql += QString("%1 = \"%2\" ").arg(dbKey).arg(strCurNumber);
+			if (i == NumberCount - 1)
+			{
+				selectSql += ") ";
+			}
+			else
+			{
+				selectSql += "OR ";
+			}
+		}
+	}
+	bFirstCondition = false;
+}
 
 bool DatabaseDataExportDbOperate::test(QString& strErrMsg)
 {

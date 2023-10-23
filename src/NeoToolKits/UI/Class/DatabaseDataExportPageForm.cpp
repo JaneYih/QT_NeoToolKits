@@ -56,6 +56,8 @@ void DatabaseDataExportPageForm::showEvent(QShowEvent* event)
 		ui->lineEdit_WorkOrderID->setText(exportConfig.dataIndexCondition.workOrderID);
 		ui->lineEdit_BoxNumberStart->setText(exportConfig.dataIndexCondition.BoxNumberStart);
 		ui->lineEdit_BoxNumberEnd->setText(exportConfig.dataIndexCondition.BoxNumberEnd);
+		ui->lineEdit_TrayNoStart->setText(exportConfig.dataIndexCondition.TrayNoStart);
+		ui->lineEdit_TrayNoEnd->setText(exportConfig.dataIndexCondition.TrayNoEnd);
 
 		ui->tableView->setModel(m_pDataModel);
 		ui->tableView->setItemDelegateForColumn(m_pDataDelegate->GetDelegateColumnIndex(), m_pDataDelegate);
@@ -127,6 +129,8 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 		exportCfg.dataIndexCondition.workOrderID = ui->lineEdit_WorkOrderID->text();
 		exportCfg.dataIndexCondition.BoxNumberStart = ui->lineEdit_BoxNumberStart->text();
 		exportCfg.dataIndexCondition.BoxNumberEnd = ui->lineEdit_BoxNumberEnd->text();
+		exportCfg.dataIndexCondition.TrayNoStart = ui->lineEdit_TrayNoStart->text();
+		exportCfg.dataIndexCondition.TrayNoEnd = ui->lineEdit_TrayNoEnd->text();
 		IniOperation ini(m_pApp->getIniFileName());
 		for each (auto var in m_pDataModel->getData())
 		{
