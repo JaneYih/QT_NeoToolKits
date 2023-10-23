@@ -60,7 +60,10 @@ void DatabaseDataExportPageForm::showEvent(QShowEvent* event)
 		ui->lineEdit_TrayNoEnd->setText(exportConfig.dataIndexCondition.TrayNoEnd);
 
 		ui->tableView->setModel(m_pDataModel);
-		ui->tableView->setItemDelegateForColumn(m_pDataDelegate->GetDelegateColumnIndex(), m_pDataDelegate);
+		for each (auto var in m_pDataDelegate->GetDelegateColumnIndexs())
+		{
+			ui->tableView->setItemDelegateForColumn(var, m_pDataDelegate);
+		}
 		ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 		ui->tableView->horizontalHeader()->setDefaultAlignment(Qt::AlignHCenter);
 		ui->tableView->horizontalHeader()->setStretchLastSection(true);
@@ -86,17 +89,19 @@ void DatabaseDataExportPageForm::EditTableViewByDbConnect()
 			QString dbKey = QString::fromStdString(var);
 			QString excelTitle = dbKey;
 			bool onOff = false;
+			bool emptyUnexport = false;
 			QString optionInfo = ini.ReadValue(m_pApp->getSqlTableInfoPointer()->tableName, dbKey, "").toString();
 			if (!optionInfo.isEmpty() && optionInfo.contains(','))
 			{
 				auto infos = optionInfo.split(',');
-				if (infos.size() >= 2)
+				if (infos.size() >= 3)
 				{
 					onOff = QVariant(infos[0]).toBool();
-					excelTitle = infos[1];
+					emptyUnexport = QVariant(infos[1]).toBool();
+					excelTitle = infos[2];
 				}
 			}
-			options.push_back(ExportDataUnit(dbKey, excelTitle, onOff));
+			options.push_back(ExportDataUnit(dbKey, excelTitle, onOff, emptyUnexport));
 		}
 		m_pDataModel->setData(options);
 		ui->lineEdit_DbInfo->setStyleSheet("background-color: rgb(0, 255, 0);");
@@ -134,7 +139,7 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 		IniOperation ini(m_pApp->getIniFileName());
 		for each (auto var in m_pDataModel->getData())
 		{
-			ini.WriteValue(m_pApp->getSqlTableInfoPointer()->tableName, var.DbKey, QString("%1,%2").arg(var.bExport).arg(var.ExcelTitle));
+			ini.WriteValue(m_pApp->getSqlTableInfoPointer()->tableName, var.DbKey, QString("%1,%2,%3").arg(var.bExport).arg(var.bAllEmptyUnexport).arg(var.ExcelTitle));
 			if (var.bExport)
 			{
 				exportCfg.exportFields.push_back(var);

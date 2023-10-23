@@ -6,12 +6,14 @@
 typedef struct _ExportDataUnit_
 {
 	bool bExport; //是否导出
+	bool bAllEmptyUnexport; //如果查询的结果内容全为空，则不导出该列
 	QString DbKey;   //数据库字段名
 	QString ExcelTitle; //Excel标题名
-	_ExportDataUnit_(const QString& key, const QString& name, bool onoff = false)
+	_ExportDataUnit_(const QString& key, const QString& name, bool onoff, bool emptyUnexport)
 		: DbKey(key)
 		, ExcelTitle(name)
 		, bExport(onoff)
+		, bAllEmptyUnexport(emptyUnexport)
 	{}
 }ExportDataUnit, * pExportDataUnit;
 

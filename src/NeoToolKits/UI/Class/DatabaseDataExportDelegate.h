@@ -13,29 +13,25 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 		DatabaseDataExportDelegate(QObject* parent = nullptr);
 		~DatabaseDataExportDelegate();
 
-		//// painting
 		void paint(QPainter* painter,
 			const QStyleOptionViewItem& option, const QModelIndex& index) const override;
-		QSize sizeHint(const QStyleOptionViewItem& option,
-			const QModelIndex& index) const override;
 
-		// editing
-		virtual QWidget* createEditor(QWidget* parent,
-										const QStyleOptionViewItem& option,
-										const QModelIndex& index) const override;
-		virtual void setEditorData(QWidget* editor, const QModelIndex& index) const override;
-		virtual void setModelData(QWidget* editor,
-									QAbstractItemModel* model,
-									const QModelIndex& index) const override;
-		/*void updateEditorGeometry(QWidget* editor,
-			const QStyleOptionViewItem& option,
-			const QModelIndex& index) const override;*/
-
-		int GetDelegateColumnIndex() const;
+		QList<int> GetDelegateColumnIndexs() const;
 
 	protected:
 		bool editorEvent(QEvent* event, QAbstractItemModel* model,
 			const QStyleOptionViewItem& option, const QModelIndex& index) override;
+
+	private:
+		QList<int> m_ColumnIndexs;
+
+	private:
+		void DatabaseDataExportDelegate::paintSub(QPainter* painter,
+			const QStyleOptionViewItem& option,
+			bool value,
+			const QColor& checkedColor,
+			const QColor& uncheckedColor) const;
+
 	};
 };
 
