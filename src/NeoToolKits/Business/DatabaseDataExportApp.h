@@ -61,5 +61,6 @@ namespace NAMESPACENAME_DATABASE_DATA_EXPORT
 	private:
 		bool SaveAsExcelSheet(const ExportConfig& queryCfg, const DataTable& data,
 			QProgressDialog* progressDialog, QString& strErrorMsg);
+		void RemoveAllEmptyFieldData(const ExportConfig& queryCfg, DataTable& data);
 	};
 };

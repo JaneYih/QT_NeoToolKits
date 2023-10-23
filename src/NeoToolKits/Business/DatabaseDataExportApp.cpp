@@ -89,6 +89,7 @@ bool DatabaseDataExportApp::StartExport(const ExportConfig& cfg)
 }
 
 #pragma region DatabaseDataExportWorker
+
 void DatabaseDataExportWorker::DoWork(DatabaseDataExportApp* const& pApp)
 {
 	bool bExportSucceed = false;
@@ -101,6 +102,10 @@ void DatabaseDataExportWorker::DoWork(DatabaseDataExportApp* const& pApp)
 		{
 			break;
 		}
+
+		emit toSetLabelText(QString::fromStdWString(L"正在过滤全空列..."));
+		RemoveAllEmptyFieldData(pApp->getExportConfig(), outputData);
+
 		emit toSetLabelText(QString::fromStdWString(L"正在生成Excel..."));
 		emit toSetRange(1, outputData.RowList.size()+2);
 		if (!SaveAsExcelSheet(pApp->getExportConfig(), outputData, pApp->m_progressDialog, strErrorMsg))
@@ -208,4 +213,83 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 	emit toSetValue(ProgressValue++);
 	return true;
 }
+
+void DatabaseDataExportWorker::RemoveAllEmptyFieldData(const ExportConfig& queryCfg, DataTable& data)
+{
+	QMap<QString, bool> dbKeyEmptyUnexportMap;
+	for each (auto var in queryCfg.exportFields)
+	{
+		dbKeyEmptyUnexportMap[var.DbKey] = var.bAllEmptyUnexport;
+	}
+
+	QVector<int> allEmptyColIndexs;
+	int colIndex = 0;
+	for each (auto var in data.FieldName.FieldListValue) //每一列
+	{
+		QString dbKey = QString::fromStdString(var);
+		if (dbKeyEmptyUnexportMap.find(dbKey) != dbKeyEmptyUnexportMap.end())
+		{
+			if (dbKeyEmptyUnexportMap[dbKey])
+			{
+				bool isAllEmpty = true;
+				for each (auto row in data.RowList) 
+				{
+					int cols = 0;
+					for each (auto var in row.FieldListValue)  
+					{
+						if (cols == colIndex) //这一列的每一行数据
+						{
+							QString dbValue = QString::fromStdString(var);
+							if (!dbValue.isEmpty())
+							{
+								isAllEmpty = false;
+								break;
+							}
+						}
+						cols++;
+					}
+					if (!isAllEmpty)
+					{
+						break;
+					}
+				}
+				if (isAllEmpty)
+				{
+					allEmptyColIndexs.push_back(colIndex);
+				}
+			}
+		}
+		colIndex++;
+	}
+
+	//移除标题
+	FieldList NewFieldName;
+	int i = 0;
+	for each (auto var in data.FieldName.FieldListValue)
+	{
+		if (!allEmptyColIndexs.contains(i++))
+		{
+			NewFieldName.FieldListValue.push_back(var);
+		}
+	}
+	data.FieldName = NewFieldName;
+
+	//移除内容
+	vector<FieldList> NewRowList;
+	for each (auto row in data.RowList)
+	{
+		FieldList newRow;
+		int cols = 0;
+		for each (auto var in row.FieldListValue)
+		{
+			if (!allEmptyColIndexs.contains(cols++))
+			{
+				newRow.FieldListValue.push_back(var);
+			}
+		}
+		NewRowList.push_back(newRow);
+	}
+	data.RowList = NewRowList;
+}
+
 #pragma endregion DatabaseDataExportWorker

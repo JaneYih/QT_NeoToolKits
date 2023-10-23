@@ -64,12 +64,18 @@ bool DatabaseDataExportDbOperate::ExcuteDataSelectCommand(const QString& cmd, Da
 bool DatabaseDataExportDbOperate::QueryDataByIndexCondition(const ExportConfig& queryCfg, DataTable& outputData, QString& strErrorMsg)
 {
 	QString selectKeys;
+	bool bExportNothing = true;
 	for each (auto var in queryCfg.exportFields)
 	{
 		selectKeys += var.DbKey;
 		selectKeys += ",";
+
+		if (bExportNothing && var.bExport)
+		{
+			bExportNothing = false;
+		}
 	}
-	if (selectKeys.isEmpty())
+	if (selectKeys.isEmpty() || bExportNothing)
 	{
 		selectKeys = "*";
 	}
@@ -215,6 +221,7 @@ bool DatabaseDataExportDbOperate::packageSqlBySerialNumberCondition(QString& sel
 		}
 	}
 	bFirstCondition = false;
+	return true;
 }
 
 bool DatabaseDataExportDbOperate::test(QString& strErrMsg)

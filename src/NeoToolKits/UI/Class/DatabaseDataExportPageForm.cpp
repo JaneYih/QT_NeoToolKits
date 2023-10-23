@@ -140,7 +140,7 @@ void DatabaseDataExportPageForm::PushbuttonClickedSlot(bool checked)
 		for each (auto var in m_pDataModel->getData())
 		{
 			ini.WriteValue(m_pApp->getSqlTableInfoPointer()->tableName, var.DbKey, QString("%1,%2,%3").arg(var.bExport).arg(var.bAllEmptyUnexport).arg(var.ExcelTitle));
-			if (var.bExport)
+			if (var.bExport || var.bAllEmptyUnexport)
 			{
 				exportCfg.exportFields.push_back(var);
 			}
