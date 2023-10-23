@@ -219,7 +219,14 @@ void DatabaseDataExportWorker::RemoveAllEmptyFieldData(const ExportConfig& query
 	QMap<QString, bool> dbKeyEmptyUnexportMap;
 	for each (auto var in queryCfg.exportFields)
 	{
-		dbKeyEmptyUnexportMap[var.DbKey] = var.bAllEmptyUnexport;
+		if (var.bAllEmptyUnexport)
+		{
+			dbKeyEmptyUnexportMap[var.DbKey] = var.bAllEmptyUnexport;
+		}
+	}
+	if (dbKeyEmptyUnexportMap.isEmpty())
+	{
+		return;
 	}
 
 	QVector<int> allEmptyColIndexs;
