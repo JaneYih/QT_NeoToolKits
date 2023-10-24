@@ -204,8 +204,6 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 			ColumnsIndex++;
 		}
 
-		Sleep(500);
-
 		xlsx.setRowHeight(rowIndex, 22);
 		emit toSetValue(ProgressValue++);
 		emit toSetLabelText(QString::fromStdWString(L"正在生成Excel【%1/%2】...").arg(++iDataIndex).arg(data.RowList.size()));
