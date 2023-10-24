@@ -6,6 +6,7 @@
 #include<QMessageBox>
 #include<QApplication>
 #include<QTimer>
+#include<QMessageBox>
 
 class msgBox:public QObject
 {
@@ -23,12 +24,14 @@ public:
 public:
     explicit msgBox(QObject *parent = nullptr);
 	msgBox(const QString& title, const QString& msg, const msgBoxType type);
-	static void show(const QString& title, const QString& msg, const msgBoxType type);
+	static QMessageBox::StandardButton show(const QString& title, const QString& msg, const msgBoxType type);
+	static QMessageBox::StandardButton LastUserSelectButton();
 	void msgBox::testDemo();
 
 private:
     const QString title;
     const QString msg;
+	static QMessageBox::StandardButton m_LastUserSelectButton;
     int type;
     void readyShow(void);
 

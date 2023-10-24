@@ -3,6 +3,7 @@
 #include "ExcelDataUploadDbOperate.h"
 #include "IniOperation.h"
 #include "ExcelOperation.h"
+#include "msgBox.h"
 #include <QThread>
 #include <QProgressDialog>
 #include <QtXlsx>
@@ -103,6 +104,13 @@ void DatabaseDataExportWorker::DoWork(DatabaseDataExportApp* const& pApp)
 			break;
 		}
 
+		/*auto useUserSelectBtn = msgBox::show("Question", QString::fromStdWString(L"即将导出%1条数据，请问是否继续？").arg(outputData.RowList.size()), msgBox::question);
+		if (useUserSelectBtn != QMessageBox::Yes)
+		{
+			strErrorMsg = QString::fromStdWString(L"用户取消操作。");
+			break;
+		}*/
+
 		emit toSetLabelText(QString::fromStdWString(L"正在过滤全空列..."));
 		RemoveAllEmptyFieldData(pApp->getExportConfig(), outputData);
 
@@ -172,6 +180,7 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 	format1.setFontBold(false);
 	format1.setFontColor(QColor(Qt::black));
 	rowIndex = 2;
+	int iDataIndex = 0;
 	for each (auto row in data.RowList)
 	{
 		ColumnsIndex = 1;
@@ -195,9 +204,12 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 			ColumnsIndex++;
 		}
 
+		Sleep(500);
+
 		xlsx.setRowHeight(rowIndex, 22);
-		rowIndex++;
 		emit toSetValue(ProgressValue++);
+		emit toSetLabelText(QString::fromStdWString(L"正在生成Excel【%1/%2】...").arg(++iDataIndex).arg(data.RowList.size()));
+		rowIndex++;
 		if (progressDialog->wasCanceled())
 		{
 			strErrorMsg = QString::fromStdWString(L"用户取消操作。");
