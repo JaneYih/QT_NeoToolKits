@@ -7,6 +7,7 @@
 #include <QThread>
 #include <QProgressDialog>
 #include <QtXlsx>
+#include <QFileInfo>
 using namespace QXlsx;
 
 using namespace NAMESPACENAME_DATABASE_DATA_EXPORT;
@@ -215,7 +216,12 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 		}
 	}
 
-	if (!xlsx.saveAs(queryCfg.excelName))
+	QFileInfo fileInfo(queryCfg.excelName);
+	if (!xlsx.saveAs(QString("%1/%2[%3].%4")
+		.arg(fileInfo.absoluteDir().absolutePath())
+		.arg(fileInfo.baseName())
+		.arg(data.RowList.size())
+		.arg(fileInfo.suffix())))
 	{
 		strErrorMsg = QString::fromStdWString(L"excelÎÄ¼þ±£´æÊ§°Ü£º%1").arg(queryCfg.excelName);
 		return false;
