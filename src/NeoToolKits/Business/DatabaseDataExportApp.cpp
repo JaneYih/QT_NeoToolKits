@@ -187,7 +187,7 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 		ColumnsIndex = 1;
 		for each (auto var in row.FieldListValue)
 		{
-			QString strText = QString::fromStdString(var);
+			QString strText = QString::fromLocal8Bit(var.c_str());
 			if (!strText.isEmpty())
 			{
 				int newColumnWidth = strText.length() + 5;
@@ -262,7 +262,7 @@ void DatabaseDataExportWorker::RemoveAllEmptyFieldData(const ExportConfig& query
 					{
 						if (cols == colIndex) //这一列的每一行数据
 						{
-							QString dbValue = QString::fromStdString(var);
+							QString dbValue = QString::fromLocal8Bit(var.c_str());
 							if (!dbValue.isEmpty())
 							{
 								isAllEmpty = false;
