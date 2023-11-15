@@ -217,16 +217,21 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 	}
 
 	QFileInfo fileInfo(queryCfg.excelName);
-	if (!xlsx.saveAs(QString("%1/%2[%3].%4")
+	QString fileFullName = QString("%1/%2[%3].%4")
 		.arg(fileInfo.absoluteDir().absolutePath())
 		.arg(fileInfo.baseName())
 		.arg(data.RowList.size())
-		.arg(fileInfo.suffix())))
+		.arg(fileInfo.suffix());
+	if (!xlsx.saveAs(fileFullName))
 	{
-		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(queryCfg.excelName);
+		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(fileFullName);
 		return false;
 	}
 	emit toSetValue(ProgressValue++);
+
+	//自动调用缺省的电脑应用软件打开文件
+	//bool bOpenUrlSucceed = QDesktopServices::openUrl(QUrl(fileFullName, QUrl::TolerantMode)); 
+	
 	return true;
 }
 

@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include <QProgressDialog>
+#include <QDesktopServices>
 #include "msgbox.h"
 #include "IniOperation.h"
 
