@@ -60,6 +60,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Win32'">
     <IncludePath>.\UI\Class;.\Common\Unit\DataBase\MySQLPackage\include;.\Common\Unit\DataBase;.\Common;.\Common\Unit\xlsx;.\Common\Unit\xlsx\header;.\Business;.\$(Configuration)\uic;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <QtDeploy>true</QtDeploy>
+  </PropertyGroup>
+  <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <QtDeploy>true</QtDeploy>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Link>
       <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
