@@ -25,6 +25,7 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void setTestItemExcelInfo(const TestItemExcelInfo& src);
 		static QList<TestItem> TestItemsTextConverter(const QString& testItemsText,
 			const QMap<QString, TestItem>& testItemDictionary);
+		static bool ExportTestItems_SaveAsExcel(const QString& excelName, const QList<TestItem>& testitemList, QString& strErrorMsg);
 
 		QString getSQLiteDbPath() const;
 		QString getDbScriptDefaultDirPath() const;
@@ -36,7 +37,9 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 	private:
 		void setSQLiteDbPath(const QString& src);
 		void setDbScriptDefaultDirPath(const QString& src);
-
+		static bool setExcelColumnContent(void* xlsx, void* format, const QString& strText,
+			int rowIndex, int columnsIndex, int widthOffset, int& WrapCountMax);
+	
 	private:
 		QString m_strIniFileName;
 		IniOperation* m_pCfg;

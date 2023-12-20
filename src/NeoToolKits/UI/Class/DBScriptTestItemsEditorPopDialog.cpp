@@ -5,9 +5,12 @@
 #include <QKeyEvent>
 #include <QGuiApplication>
 #include <QClipboard>
+#include <QFileDialog>
+#include <QDateTime>
 #include "DBScriptTestItemsModel.h"
 #include "DBScriptTestItemsDelegate.h"
 #include "DbScriptEditorApp.h"
+#include <QMessageBox>
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
@@ -29,6 +32,7 @@ DBScriptTestItemsEditorPopDialog::DBScriptTestItemsEditorPopDialog(const QString
 
 	connect(ui->btn_ok, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_cancel, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
+	connect(ui->btn_export, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_add, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_delete, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
 	connect(ui->btn_refresh, &QPushButton::clicked, this, &DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot);
@@ -238,6 +242,26 @@ void DBScriptTestItemsEditorPopDialog::TextEditTextChangedSlot()
 	refresh();
 }
 
+void DBScriptTestItemsEditorPopDialog::setTestmodeText(const QString& testmode)
+{
+	m_testmodeText = testmode;
+}
+
+QString DBScriptTestItemsEditorPopDialog::getTestmodeText() const
+{
+	return m_testmodeText;
+}
+
+void DBScriptTestItemsEditorPopDialog::setModelText(const QString& model)
+{
+	m_modelText = model;
+}
+
+QString DBScriptTestItemsEditorPopDialog::getModelText() const
+{
+	return m_modelText;
+}
+
 void DBScriptTestItemsEditorPopDialog::setTestItemsText(const QString& text)
 {
 	m_testItemsText = text;
@@ -279,6 +303,31 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 		setAppliedFlag(false);
 		setResult(QDialog::Rejected);
 		close();
+	}
+	else if (curBtn == ui->btn_export)
+	{
+		QString excelFileName = QFileDialog::getSaveFileName(this,
+			QString::fromStdWString(L"保存文件"),
+			QString("%1/[%2]_[%3]_[%4]")
+			.arg(QDir::homePath())
+			.arg(getModelText())
+			.arg(getTestmodeText())
+			.arg(QDateTime::currentDateTime().toString("yyyyMMdd_hh_mm_ss")),
+			"Excel File(*.xlsx)");
+		if (!excelFileName.isEmpty())
+		{
+			ui->btn_export->setEnabled(false);
+			QString strErrorMsg;
+			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, m_testItemsModel->getTestItems(), strErrorMsg))
+			{
+				QMessageBox::information(this, "tip", QString::fromStdWString(L"导出成功！！"));
+			}
+			else
+			{
+				QMessageBox::warning(this, "error", QString::fromStdWString(L"导出失败：%1").arg(strErrorMsg));
+			}
+		}
+		ui->btn_export->setEnabled(true);
 	}
 	else if (curBtn == ui->btn_add)
 	{

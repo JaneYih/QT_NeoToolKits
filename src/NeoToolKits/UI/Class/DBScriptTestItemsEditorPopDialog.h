@@ -22,6 +22,10 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		QString getTestItemsText() const {
 			return m_testItemsText;
 		}
+		void setTestmodeText(const QString& testmode);
+		QString getTestmodeText() const;
+		void setModelText(const QString& model);
+		QString getModelText() const;
 
 	public slots:
 		void PushbuttonClickedSlot(bool checked = false);
@@ -52,7 +56,9 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 
 	private:
 		Ui::DBScriptTestItemsEditorPopDlg* ui;
-		QString m_testItemsText;
+		QString m_testItemsText; //测试列表文本
+		QString m_testmodeText; //站位
+		QString m_modelText; //型号
 		QMap<QString, TestItem>* m_hTestItemDictionary;
 		DBScriptTestItemsModel* m_testItemsModel;
 		DBScriptTestItemsDelegate* m_testItemsDelegate;

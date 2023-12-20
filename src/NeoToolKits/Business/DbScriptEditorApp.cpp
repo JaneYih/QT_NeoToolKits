@@ -1,12 +1,13 @@
 #include "DbScriptEditorApp.h"
 #include "Database_def.h"
-#include "DataTableTest.h"
 #include "ExcelOperation.h"
+#include "DataTableTest.h"
 #include "IniOperation.h"
 #include "DbScriptOperate.h"
 #include "DbScriptDataModel.h"
 #include <QMessageBox>
 #include <QDir>
+#include <QDesktopServices>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
 //ini prefixs
@@ -233,7 +234,7 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 		return false;
 	}
 
-	Document xlsx(m_stTestItemExcelInfo.strExcelPath);
+	QXlsx::Document xlsx(m_stTestItemExcelInfo.strExcelPath);
 	CellRange cellRange = ExcelOperation::OpenExcelSheet(xlsx);
 	if (cellRange.isValid())
 	{
@@ -297,4 +298,106 @@ QList<TestItem> DbScriptEditorApp::TestItemsTextConverter(const QString& testIte
 		testitems.push_back(invalidItem);
 	}
 	return testitems;
+}
+
+bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, const QList<TestItem>& testitemList, QString& strErrorMsg)
+{
+	using namespace QXlsx;
+
+	if (testitemList.size() <= 0)
+	{
+		strErrorMsg = QString::fromStdWString(L"测试项列表为空，无法导出数据！");
+		return false;
+	}
+
+	QXlsx::Document xlsx;
+	QXlsx::Format format1;
+	format1.setFontBold(true);
+	format1.setFontColor(QColor(Qt::black));
+	format1.setBorderStyle(Format::BorderThin);
+	format1.setFontSize(12);
+	format1.setVerticalAlignment(Format::AlignVCenter);
+	format1.setHorizontalAlignment(Format::AlignLeft);
+	format1.setTextWarp(true); //自动换行
+
+	//标题
+	int ColumnsIndex = 1;
+	int rowIndex = 1;
+	int widthOffset = 10;
+	QString strText = QString::fromStdWString(L"代号");
+	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+
+	strText = QString::fromStdWString(L"测试项名称");
+	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+
+	strText = QString::fromStdWString(L"测试指令");
+	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+
+	strText = QString::fromStdWString(L"备注");
+	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+
+	xlsx.setRowHeight(rowIndex, 25);
+
+
+	//内容
+	format1.setFontBold(false);
+	format1.setFontColor(QColor(Qt::black));
+	rowIndex = 2;
+	int iDataIndex = 0;
+	for each (auto testItem in testitemList)
+	{
+		ColumnsIndex = 1;
+		int WrapCountMax = 1; //内容换行符个数最大值
+		setExcelColumnContent(&xlsx, &format1, testItem.code(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(&xlsx, &format1, testItem.name(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(&xlsx, &format1, testItem.atComand(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(&xlsx, &format1, testItem.remark(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		xlsx.setRowHeight(rowIndex++, 25 * WrapCountMax);
+	}
+
+	QFileInfo fileInfo(excelName);
+	QString fileFullName = QString("%1/%2.%4")
+		.arg(fileInfo.absoluteDir().absolutePath())
+		.arg(fileInfo.baseName())
+		.arg(fileInfo.suffix());
+	if (!xlsx.saveAs(fileFullName))
+	{
+		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(fileFullName);
+		return false;
+	}
+
+	//自动调用缺省的电脑应用软件打开文件
+	bool bOpenUrlSucceed = QDesktopServices::openUrl(QUrl(fileFullName, QUrl::TolerantMode));
+
+	return true;
+}
+
+bool DbScriptEditorApp::setExcelColumnContent(void* xlsx, void* format,
+	const QString& strText, int rowIndex, int columnsIndex, int widthOffset, int& WrapCountMax)
+{
+	QXlsx::Document* pxlsx = static_cast<QXlsx::Document*>(xlsx);
+	QXlsx::Format* format1 = static_cast<QXlsx::Format*>(format);
+
+	if (pxlsx != nullptr)
+	{
+		if (!strText.isEmpty())
+		{
+			int newColumnWidth = strText.length() + widthOffset;
+			int oldColumnWidth = pxlsx->columnWidth(columnsIndex);
+			if (newColumnWidth > oldColumnWidth)
+			{
+				pxlsx->setColumnWidth(columnsIndex, newColumnWidth);
+			}
+		}
+
+		int WrapCount = strText.count('\n') + 1;
+		WrapCountMax = WrapCount > WrapCountMax ? WrapCount : WrapCountMax;
+		return pxlsx->write(rowIndex, columnsIndex, strText, *format1);
+	}
+
+	return false;
 }
