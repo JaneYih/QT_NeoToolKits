@@ -317,7 +317,9 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 		{
 			ui->btn_export->setEnabled(false);
 			QString strErrorMsg;
-			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, QString("<%1><%2>").arg(getTestmodeText()).arg(getModelText()), m_testItemsModel->getTestItems(), strErrorMsg))
+			QMap<QString, QList<TestItem>> testItemListSheets;
+			testItemListSheets[QString("<%1><%2>").arg(getTestmodeText()).arg(getModelText())] = m_testItemsModel->getTestItems();
+			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, testItemListSheets, strErrorMsg))
 			{
 				QMessageBox::information(this, "tip", QString::fromStdWString(L"导出成功！！"));
 			}

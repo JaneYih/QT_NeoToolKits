@@ -301,17 +301,16 @@ QList<TestItem> DbScriptEditorApp::TestItemsTextConverter(const QString& testIte
 	return testitems;
 }
 
-bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, const QString& sheetName,
-	const QList<TestItem>& testitemList, QString& strErrorMsg)
+bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName,
+	const QMap<QString, QList<TestItem>>& testItemListSheets, QString& strErrorMsg)
 {
-	using namespace QXlsx;
-
-	if (testitemList.size() <= 0)
+	if (testItemListSheets.size() <= 0)
 	{
-		strErrorMsg = QString::fromStdWString(L"测试项列表为空，无法导出数据！");
+		strErrorMsg = QString::fromStdWString(L"请选择%1列！").arg(DbScriptDataModel::s_TestListHeaderName);
 		return false;
 	}
 
+	using namespace QXlsx;
 	QFileInfo fileInfo(excelName);
 	QSharedPointer<QXlsx::Document> xlsx = nullptr;
 	if (fileInfo.exists())
@@ -322,59 +321,75 @@ bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, co
 	{
 		xlsx = QSharedPointer<QXlsx::Document>(new QXlsx::Document());
 	}
-	auto sheetNames = xlsx->sheetNames();
-	if (sheetNames.contains(sheetName))
+
+	QMapIterator<QString, QList<TestItem>> i(testItemListSheets);
+	while (i.hasNext())
 	{
-		xlsx->deleteSheet(sheetName);
-	}
-	xlsx->addSheet(sheetName);
-	xlsx->selectSheet(sheetName);
+		i.next();
+		const QList<TestItem> testitemList = i.value();
+		const QString sheetName = i.key();
 
-	QXlsx::Format format1;
-	format1.setFontBold(true);
-	format1.setFontColor(QColor(Qt::black));
-	format1.setBorderStyle(Format::BorderThin);
-	format1.setFontSize(12);
-	format1.setVerticalAlignment(Format::AlignVCenter);
-	format1.setHorizontalAlignment(Format::AlignLeft);
-	format1.setTextWarp(true); //自动换行
+		auto sheetNames = xlsx->sheetNames();
+		if (sheetNames.contains(sheetName))
+		{
+			xlsx->deleteSheet(sheetName);
+		}
+		xlsx->addSheet(sheetName);
+		xlsx->selectSheet(sheetName);
 
-	//标题
-	int ColumnsIndex = 1;
-	int rowIndex = 1;
-	int widthOffset = 10;
-	QString strText = QString::fromStdWString(L"代号");
-	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
+		QXlsx::Format format1;
+		format1.setFontBold(true);
+		format1.setFontColor(QColor(Qt::black));
+		format1.setBorderStyle(Format::BorderThin);
+		format1.setFontSize(12);
+		format1.setVerticalAlignment(Format::AlignVCenter);
+		format1.setHorizontalAlignment(Format::AlignLeft);
+		format1.setTextWarp(true); //自动换行
 
-	strText = QString::fromStdWString(L"测试项名称");
-	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
+		if (testitemList.size() <= 0)
+		{
+			strErrorMsg = QString::fromStdWString(L"测试项列表为空，无法导出数据！");
+			xlsx->write(1, 1, strErrorMsg, format1);
+			continue;
+		}
 
-	strText = QString::fromStdWString(L"测试指令");
-	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
+		//标题
+		int ColumnsIndex = 1;
+		int rowIndex = 1;
+		int widthOffset = 10;
+		QString strText = QString::fromStdWString(L"代号");
+		xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+		xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
-	strText = QString::fromStdWString(L"备注");
-	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
+		strText = QString::fromStdWString(L"测试项名称");
+		xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+		xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
-	xlsx->setRowHeight(rowIndex, 25);
+		strText = QString::fromStdWString(L"测试指令");
+		xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+		xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
-	//内容
-	format1.setFontBold(false);
-	format1.setFontColor(QColor(Qt::black));
-	rowIndex = 2;
-	int iDataIndex = 0;
-	for each (auto testItem in testitemList)
-	{
-		ColumnsIndex = 1;
-		int WrapCountMax = 1; //内容换行符个数最大值
-		setExcelColumnContent(xlsx.get(), &format1, testItem.code(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(xlsx.get(), &format1, testItem.name(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(xlsx.get(), &format1, testItem.atComand(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(xlsx.get(), &format1, testItem.remark(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		xlsx->setRowHeight(rowIndex++, 25 * WrapCountMax);
+		strText = QString::fromStdWString(L"备注");
+		xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+		xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
+
+		xlsx->setRowHeight(rowIndex, 25);
+
+		//内容
+		format1.setFontBold(false);
+		format1.setFontColor(QColor(Qt::black));
+		rowIndex = 2;
+		int iDataIndex = 0;
+		for each (auto testItem in testitemList)
+		{
+			ColumnsIndex = 1;
+			int WrapCountMax = 1; //内容换行符个数最大值
+			setExcelColumnContent(xlsx.get(), &format1, testItem.code(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+			setExcelColumnContent(xlsx.get(), &format1, testItem.name(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+			setExcelColumnContent(xlsx.get(), &format1, testItem.atComand(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+			setExcelColumnContent(xlsx.get(), &format1, testItem.remark(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+			xlsx->setRowHeight(rowIndex++, 25 * WrapCountMax);
+		}
 	}
 
 	QString fileFullName = QString("%1/%2.%4")

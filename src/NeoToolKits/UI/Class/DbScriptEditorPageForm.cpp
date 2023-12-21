@@ -9,6 +9,7 @@
 #include <QMimeData>
 #include <QGuiApplication>
 #include <QClipboard>
+#include <QDateTime>
 #include "DBScriptTestItemsEditorPopDialog.h"
 
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
@@ -32,6 +33,7 @@ DbScriptEditorPageForm::DbScriptEditorPageForm(QWidget* parent)
 	connect(ui->btn_add, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_delete, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_refresh, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
+	connect(ui->btn_export, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->btn_save, &QPushButton::clicked, this, &DbScriptEditorPageForm::PushbuttonClickedSlot);
 	connect(ui->comboBox_testCodeCol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot);
 	connect(ui->comboBox_testNameCol, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DbScriptEditorPageForm::ComboBoxCurrentIndexChangedSlot);
@@ -195,6 +197,7 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 				QMessageBox::warning(this, "warning", QString::fromStdWString(L"请先点击加载关系表"));
 				return;
 			}
+
 			DBScriptTestItemsEditorPopDialog dlg(m_pDataModel->getItemData(index), &map, this);
 			DbData dbdata = m_pDataModel->getDbScriptData();
 			int rowIndex = index.row();
@@ -330,6 +333,62 @@ void DbScriptEditorPageForm::PushbuttonClickedSlot(bool checked)
 			return;
 		}
 		Refresh();
+	}
+	else if (curBtn == ui->btn_export)
+	{
+		QString excelFileName = QFileDialog::getSaveFileName(this,
+			QString::fromStdWString(L"保存文件"),
+			QString::fromStdWString(L"%1/生产工具测试项清单_[%2]")
+			.arg(QDir::currentPath())
+			.arg(QDateTime::currentDateTime().toString("yyyyMMdd_hh_mm_ss")),
+			"Excel File(*.xlsx)");
+		if (!excelFileName.isEmpty())
+		{
+			QMap<QString, TestItem> map = m_pApp->getTestItemDictionary();
+			if (map.count() <= 0)
+			{
+				QMessageBox::warning(this, "warning", QString::fromStdWString(L"请先点击加载关系表"));
+				return;
+			}
+			ui->btn_export->setEnabled(false);
+
+			auto selectedIndexes = ui->tableView_DBDataTable->selectionModel()->selectedIndexes();
+			QMap<QString,QList<TestItem>> selectedTestItemListSheets;
+			DbData dbdata = m_pDataModel->getDbScriptData();
+			foreach (auto index, selectedIndexes)
+			{
+				if (index.isValid())
+				{
+					QString horizontalHeaderName = m_pDataModel->GetHorizontalHeaderName(index.column());
+					if (DbScriptDataModel::s_TestListHeaderName == horizontalHeaderName)
+					{
+						int rowIndex = index.row();
+						if (dbdata.rows.count() > rowIndex)
+						{
+							pDbFieldGroup rowdata = dbdata.rows[rowIndex];
+							if (rowdata && rowdata->fields.count() > 2)
+							{
+								QString testmodeText(rowdata->fields[1].value());
+								QString modelText(rowdata->fields[2].value());
+								QList<TestItem> testitems = DbScriptEditorApp::TestItemsTextConverter(m_pDataModel->getItemData(index), map);
+								selectedTestItemListSheets[QString("<%1><%2>").arg(testmodeText).arg(modelText)] = testitems;
+							}
+						}
+					}
+				}
+			}
+	
+			QString strErrorMsg;
+			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, selectedTestItemListSheets, strErrorMsg))
+			{
+				QMessageBox::information(this, "tip", QString::fromStdWString(L"导出成功！！"));
+			}
+			else
+			{
+				QMessageBox::warning(this, "error", QString::fromStdWString(L"导出失败：%1").arg(strErrorMsg));
+			}
+		}
+		ui->btn_export->setEnabled(true);
 	}
 }
 
