@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QDesktopServices>
+#include <QSharedPointer>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
 
 //ini prefixs
@@ -300,7 +301,8 @@ QList<TestItem> DbScriptEditorApp::TestItemsTextConverter(const QString& testIte
 	return testitems;
 }
 
-bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, const QList<TestItem>& testitemList, QString& strErrorMsg)
+bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, const QString& sheetName,
+	const QList<TestItem>& testitemList, QString& strErrorMsg)
 {
 	using namespace QXlsx;
 
@@ -310,7 +312,24 @@ bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, co
 		return false;
 	}
 
-	QXlsx::Document xlsx;
+	QFileInfo fileInfo(excelName);
+	QSharedPointer<QXlsx::Document> xlsx = nullptr;
+	if (fileInfo.exists())
+	{
+		xlsx = QSharedPointer<QXlsx::Document>(new QXlsx::Document(excelName));
+	}
+	else
+	{
+		xlsx = QSharedPointer<QXlsx::Document>(new QXlsx::Document());
+	}
+	auto sheetNames = xlsx->sheetNames();
+	if (sheetNames.contains(sheetName))
+	{
+		xlsx->deleteSheet(sheetName);
+	}
+	xlsx->addSheet(sheetName);
+	xlsx->selectSheet(sheetName);
+
 	QXlsx::Format format1;
 	format1.setFontBold(true);
 	format1.setFontColor(QColor(Qt::black));
@@ -325,23 +344,22 @@ bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, co
 	int rowIndex = 1;
 	int widthOffset = 10;
 	QString strText = QString::fromStdWString(L"代号");
-	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
 	strText = QString::fromStdWString(L"测试项名称");
-	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
 	strText = QString::fromStdWString(L"测试指令");
-	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
 	strText = QString::fromStdWString(L"备注");
-	xlsx.setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
-	xlsx.write(rowIndex, ColumnsIndex++, strText, format1);
+	xlsx->setColumnWidth(ColumnsIndex, strText.length() + widthOffset);
+	xlsx->write(rowIndex, ColumnsIndex++, strText, format1);
 
-	xlsx.setRowHeight(rowIndex, 25);
-
+	xlsx->setRowHeight(rowIndex, 25);
 
 	//内容
 	format1.setFontBold(false);
@@ -352,19 +370,18 @@ bool DbScriptEditorApp::ExportTestItems_SaveAsExcel(const QString& excelName, co
 	{
 		ColumnsIndex = 1;
 		int WrapCountMax = 1; //内容换行符个数最大值
-		setExcelColumnContent(&xlsx, &format1, testItem.code(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(&xlsx, &format1, testItem.name(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(&xlsx, &format1, testItem.atComand(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		setExcelColumnContent(&xlsx, &format1, testItem.remark(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
-		xlsx.setRowHeight(rowIndex++, 25 * WrapCountMax);
+		setExcelColumnContent(xlsx.get(), &format1, testItem.code(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(xlsx.get(), &format1, testItem.name(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(xlsx.get(), &format1, testItem.atComand(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		setExcelColumnContent(xlsx.get(), &format1, testItem.remark(), rowIndex, ColumnsIndex++, widthOffset, WrapCountMax);
+		xlsx->setRowHeight(rowIndex++, 25 * WrapCountMax);
 	}
 
-	QFileInfo fileInfo(excelName);
 	QString fileFullName = QString("%1/%2.%4")
 		.arg(fileInfo.absoluteDir().absolutePath())
 		.arg(fileInfo.baseName())
 		.arg(fileInfo.suffix());
-	if (!xlsx.saveAs(fileFullName))
+	if (!xlsx->saveAs(fileFullName))
 	{
 		strErrorMsg = QString::fromStdWString(L"excel文件保存失败：%1").arg(fileFullName);
 		return false;

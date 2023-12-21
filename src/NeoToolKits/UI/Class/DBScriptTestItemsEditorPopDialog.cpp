@@ -308,17 +308,16 @@ void DBScriptTestItemsEditorPopDialog::PushbuttonClickedSlot(bool checked)
 	{
 		QString excelFileName = QFileDialog::getSaveFileName(this,
 			QString::fromStdWString(L"保存文件"),
-			QString("%1/[%2]_[%3]_[%4]")
+			QString::fromStdWString(L"%1/[%2]生产测试项清单_[%3]")
 			.arg(QDir::homePath())
 			.arg(getModelText())
-			.arg(getTestmodeText())
 			.arg(QDateTime::currentDateTime().toString("yyyyMMdd_hh_mm_ss")),
 			"Excel File(*.xlsx)");
 		if (!excelFileName.isEmpty())
 		{
 			ui->btn_export->setEnabled(false);
 			QString strErrorMsg;
-			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, m_testItemsModel->getTestItems(), strErrorMsg))
+			if (DbScriptEditorApp::ExportTestItems_SaveAsExcel(excelFileName, QString("<%1><%2>").arg(getTestmodeText()).arg(getModelText()), m_testItemsModel->getTestItems(), strErrorMsg))
 			{
 				QMessageBox::information(this, "tip", QString::fromStdWString(L"导出成功！！"));
 			}
