@@ -3,6 +3,7 @@
 #include <QObject>
 #include <QMap>
 #include "DbScriptEditor_def.h"
+#include "ExcelOperation.h"
 
 class IniOperation;
 class DbScriptDataModel;
@@ -40,7 +41,10 @@ namespace NAMESPACENAME_DB_SCRIPT_EDITOR
 		void setDbScriptDefaultDirPath(const QString& src);
 		static bool setExcelColumnContent(void* xlsx, void* format, const QString& strText,
 			int rowIndex, int columnsIndex, int widthOffset, int& WrapCountMax);
-	
+		QString GetExcelCellValue(const QXlsx::Document& xlsx,
+			const QList<QXlsx::CellRange>& qMergedCellsList,
+			int row, int col);
+
 	private:
 		QString m_strIniFileName;
 		IniOperation* m_pCfg;

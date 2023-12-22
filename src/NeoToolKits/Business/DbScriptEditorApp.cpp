@@ -225,6 +225,37 @@ void DbScriptEditorApp::LoadExcelColumns(const QString& fileName)
 	m_stTestItemExcelInfo.listExcelColumns = ExcelOperation::LoadExcelColumns(fileName);
 }
 
+QString DbScriptEditorApp::GetExcelCellValue(const QXlsx::Document& xlsx,
+	const QList<QXlsx::CellRange>& qMergedCellsList,
+	int row, int col)
+{
+	using namespace QXlsx;
+	QString value("");
+	Cell* cell = nullptr;
+	cell = xlsx.cellAt(row, col);
+	foreach(QXlsx::CellRange cellR, qMergedCellsList)
+	{
+		//合并单元格可通过第一行，最后一行，第一列，最后一列四个参数来确定合并的区域
+		int nFirstRow = cellR.firstRow();
+		int nLastRow = cellR.lastRow();
+		int nFirstCol = cellR.firstColumn();
+		int nLastCol = cellR.lastColumn();
+		//判断该单元格是否处于合并单元格中
+		if (nFirstRow <= row && row <= nLastRow
+			&& nFirstCol <= col && col <= nLastCol)
+		{
+			cell = xlsx.cellAt(nFirstRow, nFirstCol);
+			break;
+		}
+	}
+	if (cell != nullptr)
+	{
+		value = cell->value().toString();
+	}
+
+	return value;
+}
+
 bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 {
 	using namespace QXlsx;
@@ -246,21 +277,24 @@ bool DbScriptEditorApp::LoadExcelTestItemDictionary()
 		for (int row = StartRowIndex; row < rowCount; ++row)
 		{
 			TestItem curTestItem;
+			auto qMergedCellsList = xlsx.currentWorksheet()->mergedCells();
 
-			Cell* cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemCode);
-			QString strCurCode(cell->value().toString());
+			QString strCurCode = GetExcelCellValue(xlsx, qMergedCellsList,
+				row, m_stTestItemExcelInfo.nColIndex_ItemCode);
 			curTestItem.setCode(strCurCode);
 
-			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemName);
-			QString strCurName(cell->value().toString());
+			QString strCurName = GetExcelCellValue(xlsx, qMergedCellsList,
+				row, m_stTestItemExcelInfo.nColIndex_ItemName);
 			curTestItem.setName(strCurName);
 
-			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemATCommand);
-			curTestItem.setATComand(cell->value().toString());
+			QString strCurATComand = GetExcelCellValue(xlsx, qMergedCellsList,
+				row, m_stTestItemExcelInfo.nColIndex_ItemATCommand);
+			curTestItem.setATComand(strCurATComand);
 
-			cell = xlsx.cellAt(row, m_stTestItemExcelInfo.nColIndex_ItemRemark);
-			curTestItem.setRemark(cell->value().toString());
-
+			QString strCurRemark = GetExcelCellValue(xlsx, qMergedCellsList,
+				row, m_stTestItemExcelInfo.nColIndex_ItemRemark);
+			curTestItem.setRemark(strCurRemark);
+			
 			if (m_mapTestItemDictionary.find(strCurCode) == m_mapTestItemDictionary.end())
 			{
 				m_mapTestItemDictionary[strCurCode] = curTestItem;
