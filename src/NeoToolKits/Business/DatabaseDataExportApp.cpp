@@ -182,6 +182,8 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 	format1.setFontColor(QColor(Qt::black));
 	rowIndex = 2;
 	int iDataIndex = 0;
+	int progressOffset = 5; //每到5%就更新一下进度条
+	int lastPercentage = -progressOffset;
 	for each (auto row in data.RowList)
 	{
 		ColumnsIndex = 1;
@@ -206,8 +208,15 @@ bool DatabaseDataExportWorker::SaveAsExcelSheet(const ExportConfig& queryCfg, co
 		}
 
 		xlsx.setRowHeight(rowIndex, 22);
-		emit toSetValue(ProgressValue++);
-		emit toSetLabelText(QString::fromStdWString(L"正在生成Excel【%1/%2】...").arg(++iDataIndex).arg(data.RowList.size()));
+		int percentage = (++iDataIndex * 1.0 / data.RowList.size()) * 100;
+		if (percentage % progressOffset == 0
+			&& percentage > lastPercentage) //每到5%就更新一下界面
+		{
+			emit toSetValue(ProgressValue); //在循环里面过快调用会导致堆栈内存不足崩溃
+			emit toSetLabelText(QString::fromStdWString(L"正在生成Excel【%1/%2】...").arg(iDataIndex).arg(data.RowList.size()));
+			lastPercentage += progressOffset;
+		}
+		ProgressValue++;
 		rowIndex++;
 		if (progressDialog->wasCanceled())
 		{
