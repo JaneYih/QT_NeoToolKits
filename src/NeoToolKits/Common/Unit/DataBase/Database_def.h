@@ -145,6 +145,17 @@ typedef struct _DbFieldGroup_
 		}
 		return *this;
 	}
+	bool isEmptyRow() const
+	{
+		for (const auto& var : fields) 
+		{
+			if (!var.value().isEmpty())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	void clear()
 	{
 		this->fields.clear();

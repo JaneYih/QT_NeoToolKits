@@ -172,9 +172,10 @@ bool DbScriptEditorApp::SaveSQLiteData(DbScriptDataModel* model, QString& strErr
 
 	foreach (auto row, SQLiteData.rows)
 	{
-		foreach (auto cell, row->fields)
+		bool isEmptyRow = row->isEmptyRow();
+		foreach(auto cell, row->fields)
 		{
-			if (cell.isWaitingInsert())
+			if (cell.isWaitingInsert() && !isEmptyRow)
 			{
 				WaitingInsertData.rows.push_back(new DbFieldGroup(*row));
 				break;
