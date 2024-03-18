@@ -41,6 +41,7 @@ private:
 
 public:
 	static const QString s_TestListHeaderName;
+	static const QString s_IDHeaderName;
 };
 
 

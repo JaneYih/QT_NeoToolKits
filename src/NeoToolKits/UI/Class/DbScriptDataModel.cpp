@@ -3,6 +3,7 @@
 #include "DbScriptEditorApp.h"
 
 const QString DbScriptDataModel::s_TestListHeaderName("TESTLIST");
+const QString DbScriptDataModel::s_IDHeaderName("ID");
 
 DbScriptDataModel::DbScriptDataModel(QObject* parent)
 	: QAbstractTableModel(parent)
@@ -30,6 +31,27 @@ void DbScriptDataModel::setDbScriptData(const DbData& data)
 		beginInsertRows(QModelIndex(), 0, rowCount);
 		beginInsertColumns(QModelIndex(), 0, columnCount);
 		m_DbScriptData = data;
+		//¹ýÂËIDÁÐ
+		int IdIndex = -1;
+		auto pos = std::find_if(m_DbScriptData.fieldGroup.fields.begin(),
+			m_DbScriptData.fieldGroup.fields.end(),
+			[=, &IdIndex](const decltype(m_DbScriptData.fieldGroup.fields)::value_type & item) {
+				++IdIndex;
+				return item.value() == s_IDHeaderName;
+			});
+		if (pos != m_DbScriptData.fieldGroup.fields.end())
+		{
+			m_DbScriptData.fieldGroup.fields.erase(pos);
+			for (auto row : m_DbScriptData.rows)
+			{
+				auto iter = row->fields.begin() + IdIndex;
+				if (IdIndex < row->fields.size()
+					&& iter != row->fields.end())
+				{
+					row->fields.erase(iter);
+				}
+			}
+		}
 		endInsertColumns();
 		endInsertRows();
 	}
