@@ -25,20 +25,29 @@ void DbScriptDataModel::setDbScriptData(const DbData& data)
 {
 	int rowCount = data.rows.count() - 1;
 	int columnCount = data.fieldGroup.fields.size() - 1;
+
+	int IdIndex = -1;
+	auto op = [=, &IdIndex](const decltype(m_DbScriptData.fieldGroup.fields)::value_type& item) {
+		++IdIndex;
+		return item.value() == s_IDHeaderName;
+	};
+
 	if (rowCount >= 0 && columnCount >= 0)
 	{
+		//查找ID列
+		if (std::find_if(data.fieldGroup.fields.begin(), data.fieldGroup.fields.end(), op) != data.fieldGroup.fields.end())
+		{
+			columnCount--;
+		}
+
 		ClearDbScriptData();
 		beginInsertRows(QModelIndex(), 0, rowCount);
 		beginInsertColumns(QModelIndex(), 0, columnCount);
 		m_DbScriptData = data;
+
 		//过滤ID列
-		int IdIndex = -1;
-		auto pos = std::find_if(m_DbScriptData.fieldGroup.fields.begin(),
-			m_DbScriptData.fieldGroup.fields.end(),
-			[=, &IdIndex](const decltype(m_DbScriptData.fieldGroup.fields)::value_type & item) {
-				++IdIndex;
-				return item.value() == s_IDHeaderName;
-			});
+		IdIndex = -1;
+		auto pos = std::find_if(m_DbScriptData.fieldGroup.fields.begin(), m_DbScriptData.fieldGroup.fields.end(), op);
 		if (pos != m_DbScriptData.fieldGroup.fields.end())
 		{
 			m_DbScriptData.fieldGroup.fields.erase(pos);
