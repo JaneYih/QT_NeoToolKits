@@ -206,8 +206,8 @@ void DbScriptEditorPageForm::DBDataTableItemDoubleClickedSlot(const QModelIndex&
 				pDbFieldGroup rowdata = dbdata.rows[rowIndex];
 				if (rowdata && rowdata->fields.count() > 2)
 				{
-					dlg.setTestmodeText(rowdata->fields[1].value());
-					dlg.setModelText(rowdata->fields[2].value());
+					dlg.setTestmodeText(rowdata->fields[0].value());
+					dlg.setModelText(rowdata->fields[1].value());
 					dlg.setWindowTitle(dlg.windowTitle() + QString::fromStdWString(L" <%1> <%2>").arg(dlg.getModelText()).arg(dlg.getTestmodeText()));
 				}
 			}

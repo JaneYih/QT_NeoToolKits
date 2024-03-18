@@ -172,8 +172,8 @@ QVariant DbScriptDataModel::data(const QModelIndex& index, int role) const
 				{
 					QList<TestItem> testItems = NAMESPACENAME_DB_SCRIPT_EDITOR::DbScriptEditorApp::TestItemsTextConverter(cellValue->value(), m_mapTestItemDictionary);
 					QString strTipText("");
-					strTipText += pRowData->fields[2].value() + "\r\n";
 					strTipText += pRowData->fields[1].value() + "\r\n";
+					strTipText += pRowData->fields[0].value() + "\r\n";
 					int index = 0;
 					for each (TestItem var in testItems)
 					{
