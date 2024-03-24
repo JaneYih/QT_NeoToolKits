@@ -7,6 +7,7 @@
 #include "DbScriptDataModel.h"
 #include <QMessageBox>
 #include <QDir>
+#include <QUrl>
 #include <QDesktopServices>
 #include <QSharedPointer>
 using namespace NAMESPACENAME_DB_SCRIPT_EDITOR;
